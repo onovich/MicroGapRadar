@@ -1,0 +1,44 @@
+[
+  {
+    "name": "GameDev Microtools",
+    "domainDescription": "Steam, Unity, indie game launch, game localization, game marketing microtools",
+    "seedExamples": [
+      "steam short description generator",
+      "steam tag checker",
+      "game localization cost calculator",
+      "unity error explainer"
+    ],
+    "countries": ["US", "JP", "DE"],
+    "languages": ["en", "ja", "de"],
+    "userAdvantages": ["GameDev", "Unity", "AI automation", "multi-language SEO"],
+    "monetizationPreferences": ["ads", "affiliate", "paid_export"],
+    "riskPreferences": {
+      "maxRisk": "medium",
+      "avoidYMYLConclusions": true
+    },
+    "excludedTopics": ["medical", "adult", "gambling", "tax conclusions"],
+    "dailyLimit": 10,
+    "isActive": true
+  },
+  {
+    "name": "Small Business Startup Packets",
+    "domainDescription": "Local small business permit checklist, startup cost calculator, waiver and policy generator tools",
+    "seedExamples": [
+      "food truck permit checklist",
+      "home bakery startup checklist",
+      "dog grooming waiver template",
+      "mobile car wash startup cost calculator"
+    ],
+    "countries": ["US", "CA", "GB"],
+    "languages": ["en"],
+    "userAdvantages": ["AI automation", "template generation", "SEO"],
+    "monetizationPreferences": ["ads", "affiliate", "paid_export", "lead_gen"],
+    "riskPreferences": {
+      "maxRisk": "medium",
+      "avoidYMYLConclusions": true
+    },
+    "excludedTopics": ["medical", "tax conclusions", "legal guarantee"],
+    "dailyLimit": 10,
+    "isActive": true
+  }
+]

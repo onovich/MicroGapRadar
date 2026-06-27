@@ -1,0 +1,68 @@
+[
+  {
+    "keyword": "steam short description generator",
+    "country": "US",
+    "language": "en",
+    "title": "Steam Short Description Generator",
+    "summary": "A narrow AI generator for indie developers preparing Steam store pages.",
+    "toolType": "generator",
+    "targetUser": "Solo indie developers preparing a Steam page.",
+    "searchIntent": "The user wants usable Steam short description copy, not a generic guide.",
+    "serpWeaknessSummary": "Top results are mostly generic articles; no focused interactive generator appears.",
+    "monetizationSummary": "Paid export for a Steam Page Fix Pack, plus ads and affiliate links to game marketing/localization tools.",
+    "riskSummary": "Low risk. Avoid claiming it will increase wishlists or guarantee conversions.",
+    "buildComplexity": "low",
+    "totalScore": 87,
+    "scoreBreakdown": {
+      "intentScore": 92,
+      "monetizationScore": 76,
+      "serpWeaknessScore": 82,
+      "toolabilityScore": 95,
+      "userFitScore": 90,
+      "buildSpeedScore": 95,
+      "riskPenalty": 8
+    },
+    "toolConcept": {
+      "oneLiner": "Input your game hook and genre, get 3 Steam-ready short descriptions.",
+      "inputFields": ["game genre", "gameplay hook", "tone", "target audience", "word limit"],
+      "outputModules": ["3 short description versions", "capsule tagline", "tag suggestions", "common mistakes"]
+    },
+    "killCriteria": [
+      "Discard if manual SERP review finds 3+ strong existing generators.",
+      "Do not claim it will increase wishlists."
+    ]
+  },
+  {
+    "keyword": "shopify accessibility checklist",
+    "country": "US",
+    "language": "en",
+    "title": "Shopify Accessibility Checklist Generator",
+    "summary": "A self-assessment checklist for Shopify store owners to review accessibility basics.",
+    "toolType": "checker",
+    "targetUser": "Small Shopify merchants and agencies.",
+    "searchIntent": "The user wants a practical checklist for their store, not a broad WCAG article.",
+    "serpWeaknessSummary": "Results are educational but not tailored to store type or platform setup.",
+    "monetizationSummary": "Paid export, accessibility scanner affiliate, and agency lead-gen.",
+    "riskSummary": "Medium risk. Must avoid saying the store is legally compliant.",
+    "buildComplexity": "medium",
+    "totalScore": 81,
+    "scoreBreakdown": {
+      "intentScore": 86,
+      "monetizationScore": 88,
+      "serpWeaknessScore": 74,
+      "toolabilityScore": 84,
+      "userFitScore": 75,
+      "buildSpeedScore": 78,
+      "riskPenalty": 28
+    },
+    "toolConcept": {
+      "oneLiner": "Answer store setup questions and get a prioritized accessibility review checklist.",
+      "inputFields": ["store platform", "theme type", "country", "product categories", "current accessibility tools"],
+      "outputModules": ["priority checklist", "common risks", "recommended tools", "disclaimer"]
+    },
+    "killCriteria": [
+      "Do not build if the page implies legal compliance certification.",
+      "Discard if SERP is dominated by mature scanners for the exact query."
+    ]
+  }
+]
