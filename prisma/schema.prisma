@@ -1,0 +1,145 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model RadarTask {
+  id                      String   @id @default(cuid())
+  userId                  String?  @map("user_id")
+  name                    String
+  domainDescription       String   @map("domain_description")
+  seedExamples            Json     @map("seed_examples")
+  countries               Json
+  languages               Json
+  userAdvantages          Json     @map("user_advantages")
+  monetizationPreferences Json     @map("monetization_preferences")
+  riskPreferences         Json     @map("risk_preferences")
+  excludedTopics          Json     @map("excluded_topics")
+  dailyLimit              Int      @default(10) @map("daily_limit")
+  isActive                Boolean  @default(true) @map("is_active")
+  createdAt               DateTime @default(now()) @map("created_at")
+  updatedAt               DateTime @updatedAt @map("updated_at")
+
+  searchRuns    SearchRun[]
+  opportunities Opportunity[]
+
+  @@index([userId])
+  @@index([isActive])
+  @@map("radar_tasks")
+}
+
+model SearchRun {
+  id                String    @id @default(cuid())
+  radarTaskId       String    @map("radar_task_id")
+  status            String    @default("pending")
+  startedAt         DateTime  @default(now()) @map("started_at")
+  completedAt       DateTime? @map("completed_at")
+  keywordCount      Int       @default(0) @map("keyword_count")
+  serpSuccessCount  Int       @default(0) @map("serp_success_count")
+  opportunityCount  Int       @default(0) @map("opportunity_count")
+  estimatedCost     Decimal?  @map("estimated_cost")
+  errorMessage      String?   @map("error_message")
+  createdAt         DateTime  @default(now()) @map("created_at")
+
+  radarTask         RadarTask          @relation(fields: [radarTaskId], references: [id], onDelete: Cascade)
+  keywordCandidates KeywordCandidate[]
+  opportunities     Opportunity[]
+
+  @@index([radarTaskId])
+  @@index([status])
+  @@map("search_runs")
+}
+
+model KeywordCandidate {
+  id          String   @id @default(cuid())
+  searchRunId String   @map("search_run_id")
+  keyword     String
+  country     String
+  language    String
+  intentType  String   @map("intent_type")
+  rationale   String
+  status      String   @default("pending")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  searchRun   SearchRun    @relation(fields: [searchRunId], references: [id], onDelete: Cascade)
+  serpResults SerpResult[]
+
+  @@index([searchRunId])
+  @@index([keyword])
+  @@unique([searchRunId, keyword, country, language])
+  @@map("keyword_candidates")
+}
+
+model SerpResult {
+  id                 String   @id @default(cuid())
+  keywordCandidateId String   @map("keyword_candidate_id")
+  provider           String
+  position           Int
+  title              String
+  url                String
+  domain             String
+  snippet            String?
+  resultType         String   @default("organic") @map("result_type")
+  rawJson            Json?    @map("raw_json")
+  createdAt          DateTime @default(now()) @map("created_at")
+
+  keywordCandidate KeywordCandidate @relation(fields: [keywordCandidateId], references: [id], onDelete: Cascade)
+
+  @@index([keywordCandidateId])
+  @@index([domain])
+  @@unique([keywordCandidateId, provider, position])
+  @@map("serp_results")
+}
+
+model Opportunity {
+  id                    String   @id @default(cuid())
+  searchRunId           String   @map("search_run_id")
+  radarTaskId           String   @map("radar_task_id")
+  keyword               String
+  country               String
+  language              String
+  title                 String
+  summary               String
+  toolType              String   @map("tool_type")
+  targetUser            String   @map("target_user")
+  searchIntent          String   @map("search_intent")
+  serpWeaknessSummary   String   @map("serp_weakness_summary")
+  monetizationSummary   String   @map("monetization_summary")
+  riskSummary           String   @map("risk_summary")
+  buildComplexity       String   @default("low") @map("build_complexity")
+  status                String   @default("new")
+  totalScore            Int      @map("total_score")
+  scoreBreakdown        Json     @map("score_breakdown")
+  scoreExplanation      Json     @map("score_explanation")
+  rawAnalysis           Json?    @map("raw_analysis")
+  killCriteria          Json?    @map("kill_criteria")
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+
+  searchRun SearchRun @relation(fields: [searchRunId], references: [id], onDelete: Cascade)
+  radarTask RadarTask @relation(fields: [radarTaskId], references: [id], onDelete: Cascade)
+  mvpSpec   MvpSpec?
+
+  @@index([searchRunId])
+  @@index([radarTaskId])
+  @@index([status])
+  @@index([totalScore])
+  @@map("opportunities")
+}
+
+model MvpSpec {
+  id               String   @id @default(cuid())
+  opportunityId    String   @unique @map("opportunity_id")
+  markdown         String
+  generatedByModel String   @map("generated_by_model")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  opportunity Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+
+  @@map("mvp_specs")
+}

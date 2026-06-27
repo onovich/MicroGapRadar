@@ -47,6 +47,29 @@ npm run start
 
 The scaffold can build without secrets. When runtime features need configuration, copy `.env.example` to `.env.local` and keep secret reads on the server through `lib/env.ts`.
 
+## Database Setup
+
+This MVP uses Prisma with local SQLite by default. The Prisma schema points at `file:./dev.db`, so the CLI can run from a clean checkout without creating a root `.env` file. Runtime features may still read `DATABASE_URL` from `.env.local` when they need it.
+
+```bash
+npm run db:validate
+npm run db:generate
+```
+
+Create or update the local database with a non-destructive Prisma migration:
+
+```bash
+npm run db:migrate -- --name init
+```
+
+Seed sample radar tasks from `mock-data/sample_radar_tasks.json` without modifying the mock data file:
+
+```bash
+npm run db:seed
+```
+
+The default SQLite URL is `file:./dev.db`, which Prisma resolves under the `prisma/` directory. For hosted PostgreSQL later, switch the Prisma datasource provider to PostgreSQL, use the PostgreSQL `DATABASE_URL`, and keep the model fields aligned with the existing schema maps.
+
 ## 包内文档
 
 | 文件 | 用途 |

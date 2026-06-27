@@ -1,0 +1,70 @@
+{
+  "id": "M1-DB-SCHEMA-SEED-001",
+  "summary": "Add ORM configuration, MVP data models, Prisma client, and seed data for sample radar tasks.",
+  "milestone": "M1",
+  "status": "ACCEPTED",
+  "owner_role": "implementation_engineer",
+  "reviewer_role": "qa_reviewer",
+  "risk_level": "R2",
+  "dependencies": [
+    "M0-SCAFFOLD-NEXT-001"
+  ],
+  "scope": {
+    "allowed_paths": [
+      "prisma/**",
+      "lib/db.ts",
+      "lib/schemas.ts",
+      "tests/**",
+      "package.json",
+      "package-lock.json",
+      ".env.example",
+      "README.md"
+    ],
+    "forbidden_paths": [
+      ".git/**",
+      ".agents/**",
+      ".codex/**",
+      "project/**",
+      "skills/**",
+      "docs/**",
+      "mock-data/**",
+      "app/**",
+      "components/**",
+      "services/**",
+      "agents/**"
+    ]
+  },
+  "acceptance_criteria": [
+    "Prisma is configured for local SQLite development while keeping the schema straightforward to migrate to PostgreSQL later.",
+    "The MVP models exist for RadarTask, SearchRun, KeywordCandidate, SerpResult, Opportunity, and MvpSpec.",
+    "The schema preserves optional future user ownership without requiring a full users table in the MVP.",
+    "A Prisma client helper exists at lib/db.ts and avoids creating excessive clients during development.",
+    "A seed script imports or mirrors the sample radar task data from mock-data/sample_radar_tasks.json without modifying mock-data.",
+    "README documents the database setup, migration, generate, and seed commands.",
+    "No admin auth, UI CRUD, SERP provider, LLM, or scan orchestration is implemented in this task."
+  ],
+  "required_tests": [
+    "npx prisma validate",
+    "npx prisma generate",
+    "npm run build"
+  ],
+  "branch_or_worktree": "feat/m1-db-schema-seed",
+  "threads": {
+    "implementation_engineer": "019f0a73-1488-7d62-b705-8557b7edbb83",
+    "qa_reviewer": "019f0a82-167d-7140-a25b-0e5a77ea085d"
+  },
+  "route_to": "qa_reviewer",
+  "notes": [
+    "Prefer Prisma because the existing M1 plan explicitly names Prisma or Drizzle and the project already uses npm.",
+    "Do not run destructive database commands. It is acceptable to add migration scripts, but avoid deleting local data."
+  ],
+  "non_goals": [
+    "No Radar Task UI or CRUD routes.",
+    "No admin login.",
+    "No scan orchestration.",
+    "No real SERP or LLM provider integration.",
+    "No paid service, deployment, or external database setup."
+  ],
+  "created_at": "2026-06-27T18:56:29Z",
+  "updated_at": "2026-06-27T19:21:33.746Z"
+}
