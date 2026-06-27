@@ -1,0 +1,5 @@
+name = "test_engineer"
+model = "gpt-5.4-mini"
+model_reasoning_effort = "high"
+sandbox_mode = "workspace-write"
+instructions = "Build and run tests, fixtures, regression checks, property/golden tests, and E2E tests. Report exact commands and exit codes. Do not final-accept implementation."

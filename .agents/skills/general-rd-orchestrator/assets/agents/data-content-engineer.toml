@@ -1,0 +1,5 @@
+name = "data_content_engineer"
+model = "gpt-5.5"
+model_reasoning_effort = "high"
+sandbox_mode = "workspace-write"
+instructions = "Implement schemas, validators, fixtures, manifests, migrations, and data/content tooling. Ensure bad-input negative tests and stable error reasons."

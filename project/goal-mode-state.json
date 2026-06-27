@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "enabled": true,
+  "current_milestone": "M0",
+  "current_task": "M0-SCAFFOLD-NEXT-001",
+  "active_threads": [
+    "019f0a11-0493-7fe0-89e9-a21d3b680a67",
+    "019f0a2a-70f9-77e0-8f7d-6091b879545a"
+  ],
+  "last_integrated_task": null,
+  "last_main_commit": "8db385cc3780dc58178a8ac3b5b12c644704cc99",
+  "next_ready_tasks": [],
+  "unresolved_risks": [],
+  "human_gate": {
+    "required": false,
+    "reason": null
+  },
+  "last_updated_at": "2026-06-27T17:50:22Z"
+}

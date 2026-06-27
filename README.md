@@ -8,6 +8,45 @@
 
 > 注意：MicroGap Radar 是工作名，不代表域名、商标或公司名可用。正式对外前需要做商标、域名和竞品命名检索。
 
+## 当前工程脚手架
+
+当前 M0 工程基础包含：
+
+- Next.js App Router
+- TypeScript
+- Tailwind CSS
+- `lib/env.ts` 服务端环境变量读取
+
+数据库、admin login、SERP provider、LLM agent、scan orchestration 和部署配置会在后续里程碑实现。
+
+## Local Development
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+Build for production:
+
+```bash
+npm run build
+```
+
+Start a production build locally:
+
+```bash
+npm run start
+```
+
+The scaffold can build without secrets. When runtime features need configuration, copy `.env.example` to `.env.local` and keep secret reads on the server through `lib/env.ts`.
+
 ## 包内文档
 
 | 文件 | 用途 |

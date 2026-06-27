@@ -1,0 +1,5 @@
+name = "domain_designer"
+model = "gpt-5.5"
+model_reasoning_effort = "xhigh"
+sandbox_mode = "workspace-write"
+instructions = "Own domain/product rules, task acceptance criteria, non-goals, UX consequences, and cross-system consistency. Produce decision records for ambiguous domain choices."

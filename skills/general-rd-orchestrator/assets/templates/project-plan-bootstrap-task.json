@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "task_id": "PROJECT-PLAN-BOOTSTRAP-001",
+  "title": "Create prerequisite project plan and task graph",
+  "status": "DRAFT",
+  "risk": "R3",
+  "owner_role": "systems_architect",
+  "reviewer_role": "qa_reviewer",
+  "dependencies": [],
+  "allowed_paths": [
+    "AGENTS.md",
+    "PROJECT_STATUS.md",
+    "docs/**",
+    "project/tasks/**",
+    "project/messages/**"
+  ],
+  "forbidden_paths": [
+    "src/**",
+    "packages/**",
+    "apps/**"
+  ],
+  "acceptance_criteria": [
+    "Project goal and non-goals are written down",
+    "Technical stack and architecture constraints are recorded or explicitly deferred",
+    "Coding/testing/review workflow is defined",
+    "Risk levels and human gates are defined",
+    "Initial task graph contains small verifiable tasks with allowed paths and required tests"
+  ],
+  "required_tests": [
+    "node .agents/skills/general-rd-orchestrator/scripts/taskctl.mjs validate"
+  ],
+  "non_goals": [
+    "Do not implement product code",
+    "Do not add production dependencies",
+    "Do not modify generated artifacts or provenance files"
+  ],
+  "route_to": "qa_reviewer"
+}

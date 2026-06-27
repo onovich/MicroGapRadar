@@ -1,0 +1,17 @@
+{
+  "message_id": "MSG-YYYYMMDD-TASK-ROLE",
+  "task_id": "TASK-ID",
+  "from_role": "role_name",
+  "status": "REVIEW",
+  "summary": "",
+  "artifacts": [],
+  "branch_or_worktree": "",
+  "commit": null,
+  "tests_run": [],
+  "decisions": [],
+  "risks": [],
+  "blockers": [],
+  "route_to": "qa_reviewer",
+  "requested_action": "",
+  "created_at": "YYYY-MM-DDTHH:mm:ssZ"
+}

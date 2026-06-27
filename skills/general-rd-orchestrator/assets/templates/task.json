@@ -1,0 +1,23 @@
+{
+  "id": "TASK-ID",
+  "summary": "One observable outcome.",
+  "milestone": "M0",
+  "status": "DRAFT",
+  "owner_role": "implementation_engineer",
+  "reviewer_role": "qa_reviewer",
+  "risk_level": "R1",
+  "dependencies": [],
+  "scope": {
+    "allowed_paths": [],
+    "forbidden_paths": []
+  },
+  "acceptance_criteria": [],
+  "required_tests": [],
+  "branch_or_worktree": null,
+  "threads": {},
+  "route_to": "qa_reviewer",
+  "notes": [],
+  "non_goals": [],
+  "created_at": "YYYY-MM-DDTHH:mm:ssZ",
+  "updated_at": "YYYY-MM-DDTHH:mm:ssZ"
+}

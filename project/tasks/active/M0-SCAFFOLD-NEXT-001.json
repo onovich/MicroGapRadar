@@ -1,0 +1,72 @@
+{
+  "id": "M0-SCAFFOLD-NEXT-001",
+  "summary": "Scaffold the Next.js, TypeScript, and Tailwind foundation for MicroGap Radar.",
+  "milestone": "M0",
+  "status": "ACCEPTED",
+  "owner_role": "implementation_engineer",
+  "reviewer_role": "qa_reviewer",
+  "risk_level": "R1",
+  "dependencies": [],
+  "scope": {
+    "allowed_paths": [
+      "app/**",
+      "components/**",
+      "lib/**",
+      "public/**",
+      "styles/**",
+      "tests/**",
+      "package.json",
+      "package-lock.json",
+      "pnpm-lock.yaml",
+      "yarn.lock",
+      "next.config.*",
+      "postcss.config.*",
+      "tailwind.config.*",
+      "tsconfig.json",
+      "eslint.config.*",
+      ".eslintrc*",
+      ".gitignore",
+      "README.md"
+    ],
+    "forbidden_paths": [
+      ".git/**",
+      ".agents/**",
+      ".codex/**",
+      "project/**",
+      "skills/**",
+      "docs/**",
+      "mock-data/**"
+    ]
+  },
+  "acceptance_criteria": [
+    "A Next.js App Router project exists with TypeScript enabled.",
+    "Tailwind CSS is configured and used by the base app.",
+    "The home page renders the MicroGap Radar name and positioning.",
+    "`lib/env.ts` exists and provides typed/safe access for core environment variables without exposing secrets to the client.",
+    "README contains accurate local development commands for the scaffolded app.",
+    "The app can start locally with the package manager commands added by this task.",
+    "The production build command succeeds or any failure is documented with a concrete blocker."
+  ],
+  "required_tests": [
+    "npm run build"
+  ],
+  "branch_or_worktree": "feat/m0-scaffold-next",
+  "threads": {
+    "implementation_engineer": "019f0a11-0493-7fe0-89e9-a21d3b680a67",
+    "qa_reviewer": "019f0a2a-70f9-77e0-8f7d-6091b879545a"
+  },
+  "route_to": "qa_reviewer",
+  "notes": [
+    "Do not implement Radar Task CRUD, database schema, SERP providers, LLM agents, scan orchestration, or auth in this task.",
+    "Prefer a conservative scaffold that aligns with docs/03_technical_architecture.md and docs/11_development_plan.md."
+  ],
+  "non_goals": [
+    "No database setup.",
+    "No admin login implementation.",
+    "No SERP or LLM integration.",
+    "No deployment or public release.",
+    "No paid service setup."
+  ],
+  "created_at": "2026-06-27T17:00:07Z",
+  "updated_at": "2026-06-27T17:49:26.904Z"
+}
