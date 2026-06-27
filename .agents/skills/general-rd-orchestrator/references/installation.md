@@ -46,7 +46,7 @@ node .agents/skills/general-rd-orchestrator/scripts/taskctl.mjs init
 
 ## Delegation authorization
 
-Installing or invoking this Skill for repository execution authorizes its standard orchestration behavior: spawn writer/reviewer subagents when native tools are available, route messages with `send_input`, and continue READY tasks in goal mode after the Project Knowledge Gate passes. Do not add an extra confirmation step solely for subagent spawning or autonomous goal-mode execution. Stop only for human gates, missing project readiness, unavailable/blocked tooling, or explicit user limits.
+Installing or invoking this Skill for repository execution authorizes its standard orchestration behavior: spawn writer/reviewer subagents when native tools are available, route messages with `send_input`, create the next ordinary scoped task when the queue is empty, and continue tasks in goal mode after the Project Knowledge Gate passes. Do not add an extra confirmation step solely for subagent spawning, task creation from accepted docs, or autonomous goal-mode execution. Stop only for human gates, missing project readiness, unavailable/blocked tooling, explicit user limits, completed project goals, or unavoidable execution-window handoff.
 
 ## Project Knowledge Gate
 
@@ -59,11 +59,11 @@ If these are missing, the first task is not coding. Create `PROJECT-PLAN-BOOTSTR
 ```text
 You are the sole active lead_orchestrator for this repository.
 Use $general-rd-orchestrator.
-Recover repository state from Git and project files, verify CHECKSUMS.sha256 for the installed Skill, apply the Project Knowledge Gate, initialize orchestration directories if absent, validate any existing task graph, and either select the next READY task or create the smallest prerequisite planning task if project context is insufficient. Treat this prompt as authorization to use dynamic subagents and goal mode for READY tasks; if spawn_agent is unavailable or blocked, write startup packets and tell me exactly which roles/models to create. Do not overwrite human work and do not proceed beyond a human gate.
+Recover repository state from Git and project files, verify CHECKSUMS.sha256 for the installed Skill, apply the Project Knowledge Gate, initialize orchestration directories if absent, validate any existing task graph, and either select the next READY task or create the smallest prerequisite planning task if project context is insufficient. Treat this prompt as authorization to use dynamic subagents, create ordinary scoped tasks from accepted docs, and run goal mode until the project goal, human gate, blocker, or unavoidable execution-window handoff. If spawn_agent is unavailable or blocked, write startup packets and tell me exactly which roles/models to create. Do not overwrite human work and do not proceed beyond a human gate.
 ```
 
 ## Continuing prompt
 
 ```text
-Continue Autonomous Goal Mode if enabled. Sync main, close integrated accepted tasks, choose the next dependency-ready task, spawn writer/reviewer roles, execute, validate handoff, route review, integrate accepted work, update goal-mode-state, and continue until a human gate or execution-window stop. Do not stop merely because one task or PR is done.
+Continue Autonomous Goal Mode if enabled. Sync main, close integrated accepted tasks, choose the next dependency-ready task, or create the next smallest verifiable task when none is READY. Spawn writer/reviewer roles, execute, validate handoff, route review, integrate accepted work, update goal-mode-state, and continue until the project goal, human gate, blocker, or unavoidable execution-window handoff. Do not stop merely because one task or PR is done, main is clean, or the READY queue is empty.
 ```

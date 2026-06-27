@@ -16,16 +16,17 @@ recover state
 → route review
 → integrate only after acceptance
 → close task after it reaches main
-→ continue next dependency-ready task
+→ create or continue the next dependency-ready task
+→ repeat until the project goal, human gate, blocker, or execution-window handoff
 ```
 
 Treat the repository as the source of truth. Conversation memory is advisory only.
 
 ## Delegation and goal-mode authorization
 
-Using this Skill is authorization to use its normal orchestration machinery: spawn writer/reviewer subagents when native multi-agent tools are available, route handoffs with `send_input`, and run READY tasks through `EXECUTE` or `AUTONOMOUS_GOAL` mode. Do not ask for separate permission merely to spawn subagents, continue goal mode, or execute a dependency-ready task that already satisfies this Skill's gates.
+Using this Skill is authorization to use its normal orchestration machinery: spawn writer/reviewer subagents when native multi-agent tools are available, route handoffs with `send_input`, create the next scoped task when the queue is empty, and run tasks through `EXECUTE` or `AUTONOMOUS_GOAL` mode. Do not ask for separate permission merely to spawn subagents, continue goal mode, create the next ordinary task from accepted project docs, or execute a dependency-ready task that already satisfies this Skill's gates.
 
-Still obey higher-priority platform/tool rules and the Skill's own safety boundaries. Stop only when a defined human gate triggers, native spawning is unavailable, a required decision is missing, or the task would exceed approved scope. If the human explicitly states a different expectation for this Skill, treat that expectation as the project policy and update the Skill/checksums before continuing.
+Still obey higher-priority platform/tool rules and the Skill's own safety boundaries. Stop only when a defined human gate triggers, native spawning is unavailable, a required decision is missing, the task would exceed approved scope, the project goal is complete, or the execution window must be handed off because of platform/context limits. If the human explicitly states a different expectation for this Skill, treat that expectation as the project policy and update the Skill/checksums before continuing.
 
 
 ## Project Knowledge Gate
@@ -160,7 +161,7 @@ Only the lead closes tasks. Reviewers do not mark `CLOSED`; writers never mark `
 2. **Select next task**
    - First verify project readiness. If docs/context cannot justify implementation, select or create the planning prerequisite task and do not code.
    - Choose the highest-priority dependency-ready task in the current milestone.
-   - If no task exists, create the smallest verifiable task from the roadmap and acceptance matrix.
+   - If no READY task exists and no human gate is active, create the smallest verifiable task from the roadmap, current milestone, acceptance matrix, or continuation state, validate it, set it `READY`, and immediately continue to thread planning.
    - Do not create giant “implement whole system” tasks.
 
 3. **Validate task packet**
@@ -242,7 +243,8 @@ node .agents/skills/general-rd-orchestrator/scripts/render-route-message.mjs <ha
    - Update `project/goal-mode-state.json`.
    - Close stale agents.
    - Write or update `project/messages/outbox/GOAL-MODE-CONTINUATION.json`.
-   - Immediately continue to the next READY task unless a defined human gate triggers.
+   - Immediately continue to the next READY task. If no READY task exists, create the next smallest verifiable task from accepted project docs and continue.
+   - Do not produce a final human response after routine task closure, a clean `main`, an empty READY queue, or a continuation-file update. Those are loop checkpoints, not stopping conditions.
 
 ## Autonomous goal mode
 
@@ -258,7 +260,7 @@ When enabled, the lead may automatically:
 - pass non-human milestone gates;
 - continue to the next milestone.
 
-The lead must stop for human input when any `R4` human gate triggers.
+The lead must stop for human input when any `R4` human gate triggers. Otherwise, continue until the accepted project goal is complete, an explicit blocker prevents progress, or platform/context limits require a lead handoff.
 
 ## Human gates
 
@@ -304,6 +306,8 @@ Children must not guess. They stop with `PARTIAL` or `BLOCKED` when:
 - they need credentials or external access not provided.
 
 ## Final human response
+
+In `AUTONOMOUS_GOAL`, send a final human response only when the project goal is complete, a human gate/blocker is active, or an execution-window/lead-handoff stop is unavoidable. Before responding, verify that no task can be created or continued without crossing a gate.
 
 Report only evidence-backed facts:
 
