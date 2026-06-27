@@ -1,0 +1,48 @@
+{
+  "id": "PROJECT-PLAN-BOOTSTRAP-001",
+  "summary": "Create prerequisite project plan and task graph.",
+  "milestone": "M0",
+  "status": "DRAFT",
+  "owner_role": "systems_architect",
+  "reviewer_role": "qa_reviewer",
+  "risk_level": "R3",
+  "dependencies": [],
+  "scope": {
+    "allowed_paths": [
+      "AGENTS.md",
+      "PROJECT_STATUS.md",
+      "docs/**",
+      "project/tasks/**",
+      "project/messages/**",
+      "project/model-routing-state.json"
+    ],
+    "forbidden_paths": [
+      "src/**",
+      "packages/**",
+      "apps/**"
+    ]
+  },
+  "acceptance_criteria": [
+    "Project goal and non-goals are written down",
+    "Technical stack and architecture constraints are recorded or explicitly deferred",
+    "Coding/testing/review workflow is defined",
+    "Risk levels and human gates are defined",
+    "Initial task graph contains small verifiable tasks with allowed paths and required tests"
+  ],
+  "required_tests": [
+    "node .agents/skills/just-goal/scripts/taskctl.mjs validate --repo-root ."
+  ],
+  "branch_or_worktree": null,
+  "threads": {},
+  "route_to": "qa_reviewer",
+  "notes": [
+    "Planning prerequisite only. Do not implement product code."
+  ],
+  "non_goals": [
+    "Do not implement product code",
+    "Do not add production dependencies",
+    "Do not modify generated artifacts or provenance files"
+  ],
+  "created_at": "YYYY-MM-DDTHH:mm:ssZ",
+  "updated_at": "YYYY-MM-DDTHH:mm:ssZ"
+}

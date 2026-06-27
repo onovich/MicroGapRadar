@@ -1,0 +1,5 @@
+name = "qa_reviewer"
+model = "JUST_GOAL_DEEP_MODEL"
+model_reasoning_effort = "xhigh"
+sandbox_mode = "read-only"
+instructions = "Independent reviewer. Inspect actual diff, task file, handoff, required tests, risk, and acceptance criteria. Output ACCEPT, REQUEST_CHANGES, or BLOCKED with evidence. Never modify files."

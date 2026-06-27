@@ -1,0 +1,78 @@
+{
+  "id": "M1-RADAR-TASK-MANAGEMENT-001",
+  "summary": "Add the smallest verifiable Radar Task management API slice on top of the Prisma schema.",
+  "milestone": "M1",
+  "status": "ACCEPTED",
+  "owner_role": "implementation_engineer",
+  "reviewer_role": "qa_reviewer",
+  "required_reviewers": [
+    "systems_architect"
+  ],
+  "risk_level": "R2",
+  "dependencies": [
+    "M1-DB-SCHEMA-SEED-001"
+  ],
+  "scope": {
+    "allowed_paths": [
+      "app/api/radar-tasks/**",
+      "lib/radar-tasks.ts",
+      "lib/schemas.ts",
+      "tests/**",
+      "package.json",
+      "package-lock.json",
+      "README.md"
+    ],
+    "forbidden_paths": [
+      ".git/**",
+      ".agents/**",
+      ".codex/**",
+      "project/**",
+      "skills/**",
+      "docs/**",
+      "mock-data/**",
+      "app/page.tsx",
+      "app/layout.tsx",
+      "app/globals.css",
+      "components/**",
+      "services/**",
+      "agents/**",
+      "prisma/**"
+    ]
+  },
+  "acceptance_criteria": [
+    "Radar Task list/create/read/update/delete operations are available through Next.js route handlers or a server-only helper layer backed by Prisma.",
+    "Inputs are validated with Zod and reuse or extend the existing radar task schemas without weakening existing validation.",
+    "The implementation returns structured JSON errors for invalid input, missing records, and unexpected failures without leaking secrets.",
+    "The API slice preserves the current MVP single-admin assumption and does not implement authentication or sessions in this task.",
+    "No UI CRUD, admin gate, scan orchestration, SERP provider, LLM integration, or deployment work is implemented.",
+    "README documents the local API slice and the commands needed to validate it if new scripts are added."
+  ],
+  "required_tests": [
+    "npx prisma validate",
+    "npx prisma generate",
+    "npm run build"
+  ],
+  "branch_or_worktree": "main",
+  "threads": {
+    "implementation_engineer": "019f0aa6-2f46-75f3-9a1c-1080a5033dd5",
+    "systems_architect": "019f0ab3-4ece-7d33-a749-81e57e567784",
+    "qa_reviewer": "019f0ac1-b47e-74b2-aea6-95f0a9b83b4c"
+  },
+  "route_to": "lead_orchestrator",
+  "notes": [
+    "Role resolver selected implementation_engineer because this is server/API logic on top of existing persistence.",
+    "systems_architect is required because route contracts and persistence boundaries are introduced.",
+    "qa_reviewer remains the independent final acceptance reviewer.",
+    "Keep this to the smallest API/management slice; full admin protection and UI CRUD belong to a later task."
+  ],
+  "non_goals": [
+    "No login page or session cookie.",
+    "No dashboard, form, or UI CRUD pages.",
+    "No scan orchestration or provider integration.",
+    "No LLM calls or AI agents.",
+    "No Prisma schema migration or mock-data edits.",
+    "No paid service, deployment, or external database setup."
+  ],
+  "created_at": "2026-06-27T19:53:39Z",
+  "updated_at": "2026-06-27T20:37:54.324Z"
+}

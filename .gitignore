@@ -25,3 +25,6 @@ pnpm-debug.log*
 Thumbs.db
 .vscode/
 .idea/
+
+# local checkout of standalone skill repository
+skills/JustGoal.skill/

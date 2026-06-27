@@ -52,12 +52,12 @@
   "commit": null,
   "tests_run": [
     {
-      "command": "node .agents/skills/general-rd-orchestrator/scripts/validate-handoff.mjs D:\\WebProjects\\MicroGapRadar\\project\\messages\\outbox\\M0-SCAFFOLD-NEXT-001__MSG-20260627-IMPLEMENTATION_ENGINEER.json",
+      "command": "node .agents/skills/just-goal/scripts/validate-handoff.mjs D:\\WebProjects\\MicroGapRadar\\project\\messages\\outbox\\M0-SCAFFOLD-NEXT-001__MSG-20260627-IMPLEMENTATION_ENGINEER.json",
       "exit_code": 0,
       "result": "Writer handoff schema validated."
     },
     {
-      "command": "Set-Location D:\\WebProjects\\MicroGapRadar\\.agents\\skills\\general-rd-orchestrator; node scripts/verify-skill-checksums.mjs",
+      "command": "Set-Location D:\\WebProjects\\MicroGapRadar\\.agents\\skills\\just-goal; node scripts/verify-skill-checksums.mjs",
       "exit_code": 0,
       "result": "Skill checksum verification OK for 36 files."
     },

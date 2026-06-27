@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-06-27T19:24:00Z",
+  "updated_at": "2026-06-27T20:25:08.447Z",
   "threads": {
     "019f0a11-0493-7fe0-89e9-a21d3b680a67": {
       "role": "implementation_engineer",
@@ -25,6 +25,24 @@
       "task_id": "M1-DB-SCHEMA-SEED-001",
       "status": "closed",
       "updated_at": "2026-06-27T19:24:00Z"
+    },
+    "019f0aa6-2f46-75f3-9a1c-1080a5033dd5": {
+      "role": "implementation_engineer",
+      "task_id": "M1-RADAR-TASK-MANAGEMENT-001",
+      "status": "accepted",
+      "updated_at": "2026-06-27T20:38:30Z"
+    },
+    "019f0ab3-4ece-7d33-a749-81e57e567784": {
+      "role": "systems_architect",
+      "task_id": "M1-RADAR-TASK-MANAGEMENT-001",
+      "status": "accepted",
+      "updated_at": "2026-06-27T20:38:30Z"
+    },
+    "019f0ac1-b47e-74b2-aea6-95f0a9b83b4c": {
+      "role": "qa_reviewer",
+      "task_id": "M1-RADAR-TASK-MANAGEMENT-001",
+      "status": "accepted",
+      "updated_at": "2026-06-27T20:38:30Z"
     }
   }
 }

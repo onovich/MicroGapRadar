@@ -1,0 +1,10 @@
+# Local project state generated while testing the skill from this repo root.
+/project/
+/.agent-profiles/
+/.codex/agents/
+
+# Common local noise.
+node_modules/
+.DS_Store
+*.tmp
+*.log

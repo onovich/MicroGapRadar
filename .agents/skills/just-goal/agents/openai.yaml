@@ -1,0 +1,6 @@
+interface:
+  display_name: "JustGoal"
+  short_description: "Run projects through model-aware agents, scoped tasks, handoffs, and review gates."
+  default_prompt: "Use $just-goal to initialize model routing, recover project state, select or create the next scoped task, route validated handoffs, enforce review/test gates, and continue until a human gate."
+policy:
+  allow_implicit_invocation: false

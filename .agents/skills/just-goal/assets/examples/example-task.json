@@ -1,0 +1,27 @@
+{
+  "id": "EXAMPLE-001",
+  "summary": "Create a hello-world package and verify the orchestration loop.",
+  "milestone": "M0",
+  "status": "READY",
+  "owner_role": "release_engineer",
+  "reviewer_role": "qa_reviewer",
+  "risk_level": "R0",
+  "dependencies": [],
+  "scope": {
+    "allowed_paths": ["package.json", "pnpm-workspace.yaml", "packages/hello/**", "project/messages/**", "project/tasks/**"],
+    "forbidden_paths": ["docs/provenance/**", "secrets/**"]
+  },
+  "acceptance_criteria": [
+    "Package manager install succeeds.",
+    "Hello package has one passing test.",
+    "Writer and reviewer handoffs validate."
+  ],
+  "required_tests": ["pnpm install --frozen-lockfile", "pnpm test"],
+  "branch_or_worktree": null,
+  "threads": {},
+  "route_to": "qa_reviewer",
+  "notes": ["Example only. Do not import blindly into real projects."],
+  "non_goals": ["No product feature implementation."],
+  "created_at": "2026-01-01T00:00:00Z",
+  "updated_at": "2026-01-01T00:00:00Z"
+}

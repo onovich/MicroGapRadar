@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "status": "needs_discovery",
+  "source": null,
+  "available_models": [],
+  "tiers": {
+    "deep": null,
+    "balanced": null,
+    "fast": null
+  },
+  "role_assignments": {
+    "lead_orchestrator": "deep",
+    "systems_architect": "deep",
+    "domain_designer": "deep",
+    "implementation_engineer": "balanced",
+    "client_engineer": "balanced",
+    "data_content_engineer": "balanced",
+    "test_engineer": "balanced",
+    "qa_reviewer": "deep",
+    "security_reviewer": "deep",
+    "research_scout": "fast",
+    "release_engineer": "fast",
+    "spark_worker": "fast"
+  },
+  "notes": [
+    "Discover available models before assigning roles.",
+    "Use deep for lead/review/architecture/security, balanced for implementation/tests, and fast for scoped scans or mechanical tasks."
+  ],
+  "last_updated_at": "YYYY-MM-DDTHH:mm:ssZ"
+}

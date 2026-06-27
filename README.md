@@ -47,6 +47,53 @@ npm run start
 
 The scaffold can build without secrets. When runtime features need configuration, copy `.env.example` to `.env.local` and keep secret reads on the server through `lib/env.ts`.
 
+## Local Radar Task API
+
+The MVP exposes a single-admin, unauthenticated local API slice for Radar Task management. It is intended for local development and later admin UI integration; it does not add sessions, public auth, scans, SERP providers, or LLM calls.
+
+Endpoints:
+
+```text
+GET    /api/radar-tasks?limit=50&isActive=true
+POST   /api/radar-tasks
+GET    /api/radar-tasks/{id}
+PATCH  /api/radar-tasks/{id}
+DELETE /api/radar-tasks/{id}  # deactivates the task without deleting historical runs
+```
+
+`DELETE /api/radar-tasks/{id}` is intentionally non-destructive for the MVP. It sets `isActive` to `false` and returns a payload with `action: "deactivated"` and `historyPreserved: true`; related SearchRun, KeywordCandidate, SerpResult, Opportunity, and MvpSpec records are left intact.
+
+Create requests use the shared strict Radar Task schema. Patch requests accept one or more of the same fields:
+
+```json
+{
+  "name": "GameDev Microtools",
+  "domainDescription": "Steam, Unity, indie game launch, game localization, game marketing microtools",
+  "seedExamples": ["steam short description generator"],
+  "countries": ["US"],
+  "languages": ["en"],
+  "userAdvantages": ["GameDev", "AI automation"],
+  "monetizationPreferences": ["ads", "affiliate"],
+  "riskPreferences": {
+    "maxRisk": "medium",
+    "avoidYMYLConclusions": true
+  },
+  "excludedTopics": ["medical", "adult", "gambling"],
+  "dailyLimit": 10,
+  "isActive": true
+}
+```
+
+API responses use `{ "data": ... }` on success and `{ "error": { "code": "...", "message": "...", "issues": [...] } }` for invalid JSON, validation failures, missing records, or unexpected failures.
+
+Validate the local API slice with:
+
+```bash
+npx prisma validate
+npx prisma generate
+npm run build
+```
+
 ## Database Setup
 
 This MVP uses Prisma with local SQLite by default. The Prisma schema points at `file:./dev.db`, so the CLI can run from a clean checkout without creating a root `.env` file. Runtime features may still read `DATABASE_URL` from `.env.local` when they need it.

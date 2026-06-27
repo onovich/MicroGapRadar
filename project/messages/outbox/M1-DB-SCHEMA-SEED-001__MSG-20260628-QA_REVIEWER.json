@@ -20,7 +20,7 @@
   "commit": null,
   "tests_run": [
     {
-      "command": "node .agents/skills/general-rd-orchestrator/scripts/validate-handoff.mjs project/messages/outbox/M1-DB-SCHEMA-SEED-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+      "command": "node .agents/skills/just-goal/scripts/validate-handoff.mjs project/messages/outbox/M1-DB-SCHEMA-SEED-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
       "exit_code": 0,
       "result": "Writer handoff schema validated."
     },
@@ -47,7 +47,7 @@
   ],
   "risks": [
     "Next.js still reports a local Windows native SWC binary warning before succeeding through fallback behavior.",
-    "Unrelated untracked skills/project-relay remains outside this task and should not be staged with M1 work."
+    "Unrelated untracked JustGoal.skill source work remains outside this task and should not be staged with M1 product work."
   ],
   "blockers": [],
   "route_to": "lead_orchestrator",

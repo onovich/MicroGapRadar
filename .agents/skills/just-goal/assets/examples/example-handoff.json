@@ -1,0 +1,19 @@
+{
+  "message_id": "MSG-20260101-EXAMPLE-001-RELEASE",
+  "task_id": "EXAMPLE-001",
+  "from_role": "release_engineer",
+  "status": "REVIEW",
+  "summary": "Example handoff; no real implementation.",
+  "artifacts": ["packages/hello/src/index.ts"],
+  "branch_or_worktree": "feat/example-001",
+  "commit": null,
+  "tests_run": [
+    {"command": "pnpm test", "exit_code": 0, "result": "example only"}
+  ],
+  "decisions": [],
+  "risks": ["Example data; not a real project result."],
+  "blockers": [],
+  "route_to": "qa_reviewer",
+  "requested_action": "Validate schema only.",
+  "created_at": "2026-01-01T00:00:00Z"
+}
