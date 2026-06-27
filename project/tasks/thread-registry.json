@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-06-27T19:15:37.347Z",
+  "updated_at": "2026-06-27T19:24:00Z",
   "threads": {
     "019f0a11-0493-7fe0-89e9-a21d3b680a67": {
       "role": "implementation_engineer",
@@ -17,14 +17,14 @@
     "019f0a73-1488-7d62-b705-8557b7edbb83": {
       "role": "implementation_engineer",
       "task_id": "M1-DB-SCHEMA-SEED-001",
-      "status": "active",
-      "updated_at": "2026-06-27T18:59:14.103Z"
+      "status": "closed",
+      "updated_at": "2026-06-27T19:24:00Z"
     },
     "019f0a82-167d-7140-a25b-0e5a77ea085d": {
       "role": "qa_reviewer",
       "task_id": "M1-DB-SCHEMA-SEED-001",
-      "status": "active",
-      "updated_at": "2026-06-27T19:15:37.347Z"
+      "status": "closed",
+      "updated_at": "2026-06-27T19:24:00Z"
     }
   }
 }

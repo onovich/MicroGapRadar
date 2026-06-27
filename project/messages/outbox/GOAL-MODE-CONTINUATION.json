@@ -1,18 +1,20 @@
 {
   "version": 1,
-  "created_at": "2026-06-27T17:51:40Z",
-  "main_commit": "e18fab0f829baa779b4ba2be3ea0e2a645c65d0b",
+  "created_at": "2026-06-27T19:24:00Z",
+  "main_commit": "a4b15a549df4bd086f38cce2ed62e88acf750d86",
   "current_milestone": "M1",
   "current_task": null,
-  "last_integrated_task": "M0-SCAFFOLD-NEXT-001",
+  "last_integrated_task": "M1-DB-SCHEMA-SEED-001",
   "closed_threads": {
-    "implementation_engineer": "019f0a11-0493-7fe0-89e9-a21d3b680a67",
-    "qa_reviewer": "019f0a2a-70f9-77e0-8f7d-6091b879545a"
+    "m0_implementation_engineer": "019f0a11-0493-7fe0-89e9-a21d3b680a67",
+    "m0_qa_reviewer": "019f0a2a-70f9-77e0-8f7d-6091b879545a",
+    "m1_db_implementation_engineer": "019f0a73-1488-7d62-b705-8557b7edbb83",
+    "m1_db_qa_reviewer": "019f0a82-167d-7140-a25b-0e5a77ea085d"
   },
   "next_ready_tasks": [],
   "recommended_next_task": {
-    "id": "M1-DB-SCHEMA-SEED-001",
-    "summary": "Add ORM configuration, MVP data models, migrations, db client, and seed data for sample radar tasks.",
+    "id": "M1-RADAR-TASK-MANAGEMENT-001",
+    "summary": "Add the smallest verifiable Radar Task management/API slice on top of the Prisma schema, or choose the mock provider slice if the lead prioritizes scan plumbing.",
     "source_docs": [
       "docs/03_technical_architecture.md",
       "docs/07_data_model_and_scoring.md",
@@ -20,10 +22,20 @@
     ]
   },
   "recent_handoffs": [
-    "project/messages/outbox/M0-SCAFFOLD-NEXT-001__MSG-20260627-IMPLEMENTATION_ENGINEER.json",
-    "project/messages/outbox/M0-SCAFFOLD-NEXT-001__MSG-20260628-QA_REVIEWER.json"
+    "project/messages/outbox/M1-DB-SCHEMA-SEED-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+    "project/messages/outbox/M1-DB-SCHEMA-SEED-001__MSG-20260628-QA_REVIEWER.json"
   ],
   "validation_evidence": [
+    {
+      "command": "npx prisma validate",
+      "exit_code": 0,
+      "note": "Prisma schema validated successfully."
+    },
+    {
+      "command": "npx prisma generate",
+      "exit_code": 0,
+      "note": "Prisma Client generated successfully."
+    },
     {
       "command": "npm run build",
       "exit_code": 0,
@@ -34,14 +46,14 @@
       "exit_code": 0
     },
     {
-      "command": "node scripts/verify-skill-checksums.mjs",
+      "command": "node .agents/skills/general-rd-orchestrator/scripts/validate-handoff.mjs project/messages/outbox/M1-DB-SCHEMA-SEED-001__MSG-20260628-QA_REVIEWER.json",
       "exit_code": 0,
-      "note": "Verified both project-installed and source general-rd-orchestrator skill copies."
+      "note": "QA handoff validated."
     }
   ],
   "human_gate": {
     "required": false,
     "reason": null
   },
-  "next_prompt": "Use $general-rd-orchestrator to recover state, verify task closure, create the smallest M1 READY task for database/ORM/schema/seed setup, spawn writer/reviewer agents, and continue until a human gate."
+  "next_prompt": "Use $general-rd-orchestrator to recover state, verify M1-DB-SCHEMA-SEED-001 closure, create the smallest next M1 READY task from docs/11_development_plan.md, spawn writer/reviewer agents, and continue until a human gate."
 }

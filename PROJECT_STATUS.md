@@ -1,6 +1,6 @@
 # Project Status
 
-Updated at: 2026-06-27T17:51:40Z
+Updated at: 2026-06-27T19:24:00Z
 
 ## Current Milestone
 
@@ -8,12 +8,14 @@ Updated at: 2026-06-27T17:51:40Z
 
 ## Current Outcome
 
-Completed the M0 scaffold and project orchestration setup:
+Completed the M0 scaffold and the first M1 database task:
 
 - The orchestrator skill is installed globally and in the repository.
 - Project orchestration state exists under `project/`.
 - `M0-SCAFFOLD-NEXT-001` is accepted and integrated.
 - The Next.js App Router, TypeScript, Tailwind CSS scaffold builds successfully.
+- `M1-DB-SCHEMA-SEED-001` is accepted, integrated, and pushed at `a4b15a549df4bd086f38cce2ed62e88acf750d86`.
+- Prisma SQLite schema, Prisma Client helper, shared validation schemas, and seed data import are in place.
 
 ## Product Summary
 
@@ -31,7 +33,7 @@ MicroGap Radar is a self-use-first AI microtool opportunity radar. The 48-hour M
 
 ## Active Task
 
-- None. The next task should start M1: database and ORM setup.
+- None. The next M1 task should add Radar Task management/API or the mock scan/provider path from `docs/11_development_plan.md`.
 
 ## Human Gates
 
