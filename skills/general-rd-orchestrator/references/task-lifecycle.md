@@ -20,6 +20,7 @@ Every task file under `project/tasks/active/<TASK_ID>.json` should include:
 - `status`: lifecycle status.
 - `owner_role`: writer or primary owner.
 - `reviewer_role`: independent reviewer.
+- `required_reviewers`: optional specialist reviewers implied by role resolution or risk.
 - `risk_level`: `R0` to `R4`.
 - `dependencies`: task IDs that must be `CLOSED`.
 - `scope.allowed_paths`: exact files/globs writer may touch.
@@ -44,9 +45,9 @@ A good task is:
 
 Avoid:
 
-- “Implement the whole system.”
-- “Refactor everything.”
-- “Make UI better.”
+- "Implement the whole system."
+- "Refactor everything."
+- "Make UI better."
 - tasks without tests;
 - tasks with overlapping writers;
 - tasks that silently alter product direction.
@@ -54,6 +55,7 @@ Avoid:
 ## Status transitions
 
 - `DRAFT -> READY`: lead verifies dependencies and scope.
+- Role resolution must be complete before `READY`.
 - `READY -> IN_PROGRESS`: writer spawned and registered.
 - `IN_PROGRESS -> REVIEW`: writer handoff validates.
 - `REVIEW -> IN_PROGRESS`: reviewer requests changes.

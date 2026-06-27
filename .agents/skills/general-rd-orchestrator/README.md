@@ -1,8 +1,16 @@
 # General R&D Orchestrator Skill
 
-A generic Codex Skill for running software/R&D projects with dynamic subagents, scoped tasks, structured handoffs, independent reviews, test gates, autonomous milestone execution, and lead-thread transitions.
+A generic Codex Skill for running software/R&D projects with dynamic role assignment, automatic subagent spawning, scoped tasks, structured handoffs, independent reviews, test gates, autonomous milestone execution, stop-gate enforcement, and lead-thread transitions.
 
 Invoking this Skill for execution authorizes its standard subagent spawning and goal-mode loop after project readiness passes. It should stop for human gates, missing context, unavailable tooling, or explicit user limits, not for an extra spawn/goal-mode confirmation.
+
+Autonomous execution is a stage loop, not a one-task runner. Before a final response in goal mode, run:
+
+```bash
+node scripts/verify-autonomous-stop.mjs
+```
+
+`BLOCK_CONTINUE` means there is still machine-visible work, a recommended next task, or a missing completion/blocker record.
 
 ## Verify the installed Skill
 
@@ -82,6 +90,7 @@ See `references/project-knowledge-gate.md` and `assets/templates/project-plan-bo
 - `taskctl.mjs`: create/list/validate/set-status/register threads/ready/archive.
 - `validate-handoff.mjs`: validate handoff JSON.
 - `render-route-message.mjs`: compact route message for `send_input`.
+- `verify-autonomous-stop.mjs`: block premature final responses while autonomous work can continue.
 - `verify-skill-checksums.mjs`: validate `CHECKSUMS.sha256` cross-platform.
 
 ## Philosophy

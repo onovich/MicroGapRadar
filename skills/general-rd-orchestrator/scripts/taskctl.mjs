@@ -90,6 +90,9 @@ function validateTask(task) {
   for (const key of ["dependencies", "acceptance_criteria", "required_tests", "notes"]) {
     if (!Array.isArray(task[key])) errors.push(`${key} must be array`);
   }
+  if (task.required_reviewers !== undefined && !Array.isArray(task.required_reviewers)) {
+    errors.push("required_reviewers must be array when present");
+  }
   if (task.non_goals !== undefined && !Array.isArray(task.non_goals)) errors.push("non_goals must be array when present");
   if (!task.scope || typeof task.scope !== "object" || !Array.isArray(task.scope.allowed_paths) || !Array.isArray(task.scope.forbidden_paths)) {
     errors.push("scope must contain allowed_paths and forbidden_paths arrays");
@@ -158,6 +161,7 @@ try {
         status: "DRAFT",
         owner_role: f.owner,
         reviewer_role: f.reviewer ?? "qa_reviewer",
+        required_reviewers: [],
         risk_level: f.risk ?? "R1",
         dependencies: [],
         scope: { allowed_paths: [], forbidden_paths: [] },

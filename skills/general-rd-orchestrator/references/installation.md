@@ -48,6 +48,14 @@ node .agents/skills/general-rd-orchestrator/scripts/taskctl.mjs init
 
 Installing or invoking this Skill for repository execution authorizes its standard orchestration behavior: spawn writer/reviewer subagents when native tools are available, route messages with `send_input`, create the next ordinary scoped task when the queue is empty, and continue tasks in goal mode after the Project Knowledge Gate passes. Do not add an extra confirmation step solely for subagent spawning, task creation from accepted docs, or autonomous goal-mode execution. Stop only for human gates, missing project readiness, unavailable/blocked tooling, explicit user limits, completed project goals, or unavoidable execution-window handoff.
 
+Autonomous runs must pass the stop gate before any final human response:
+
+```bash
+node .agents/skills/general-rd-orchestrator/scripts/verify-autonomous-stop.mjs
+```
+
+If it prints `BLOCK_CONTINUE`, continue the loop or persist a blocker/human gate. Do not treat a clean main, an empty READY queue, or a written continuation file as completion.
+
 ## Project Knowledge Gate
 
 This Skill can execute and coordinate work only when project-specific context is sufficient. At minimum, the repository or current conversation must provide what is being built, the current milestone, architecture/constraints, coding/testing rules, acceptance criteria, and human gates.
@@ -59,11 +67,11 @@ If these are missing, the first task is not coding. Create `PROJECT-PLAN-BOOTSTR
 ```text
 You are the sole active lead_orchestrator for this repository.
 Use $general-rd-orchestrator.
-Recover repository state from Git and project files, verify CHECKSUMS.sha256 for the installed Skill, apply the Project Knowledge Gate, initialize orchestration directories if absent, validate any existing task graph, and either select the next READY task or create the smallest prerequisite planning task if project context is insufficient. Treat this prompt as authorization to use dynamic subagents, create ordinary scoped tasks from accepted docs, and run goal mode until the project goal, human gate, blocker, or unavoidable execution-window handoff. If spawn_agent is unavailable or blocked, write startup packets and tell me exactly which roles/models to create. Do not overwrite human work and do not proceed beyond a human gate.
+Recover repository state from Git and project files, verify CHECKSUMS.sha256 for the installed Skill, apply the Project Knowledge Gate, initialize orchestration directories if absent, validate any existing task graph, and either select the next READY task or create the smallest prerequisite planning task if project context is insufficient. Treat this prompt as authorization to use dynamic subagents, create ordinary scoped tasks from accepted docs, resolve roles automatically, and run goal mode until all planned or safely creatable work in the current autonomous scope is complete, a human gate/blocker appears, or unavoidable execution-window handoff is required. Before any final response, run scripts/verify-autonomous-stop.mjs and continue on BLOCK_CONTINUE. If spawn_agent is unavailable or blocked, write startup packets and tell me exactly which roles/models to create. Do not overwrite human work and do not proceed beyond a human gate.
 ```
 
 ## Continuing prompt
 
 ```text
-Continue Autonomous Goal Mode if enabled. Sync main, close integrated accepted tasks, choose the next dependency-ready task, or create the next smallest verifiable task when none is READY. Spawn writer/reviewer roles, execute, validate handoff, route review, integrate accepted work, update goal-mode-state, and continue until the project goal, human gate, blocker, or unavoidable execution-window handoff. Do not stop merely because one task or PR is done, main is clean, or the READY queue is empty.
+Continue Autonomous Goal Mode if enabled. Sync main, close integrated accepted tasks, choose the next dependency-ready task, or create the next smallest verifiable task when none is READY. Resolve roles automatically, spawn writer/reviewer roles, execute, validate handoff, route review, integrate accepted work, update goal-mode-state, run scripts/verify-autonomous-stop.mjs, and continue on BLOCK_CONTINUE. Do not stop merely because one task or PR is done, main is clean, the READY queue is empty, or a continuation file was updated.
 ```

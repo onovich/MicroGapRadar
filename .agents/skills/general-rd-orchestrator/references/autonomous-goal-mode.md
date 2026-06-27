@@ -2,6 +2,16 @@
 
 Autonomous Goal Mode lets the lead continue beyond single tasks while preserving review gates. It is a loop, not a one-task runner.
 
+## Goal binding
+
+When host `/goal` mode or an equivalent long-running objective is available, bind the goal to the current phase or milestone outcome, not to "run one task" or "validate one workflow." The objective should mean:
+
+```text
+Complete every planned or safely creatable task in the current autonomous scope that does not require human input, or record the exact blocker/human gate that prevents continuation.
+```
+
+Do not mark that goal complete after a single task, clean checkout, accepted review, merged PR, or continuation-file update. Those are checkpoints inside the loop.
+
 ## Enabling
 
 Require project readiness plus one of:
@@ -41,7 +51,8 @@ Record state in `project/goal-mode-state.json`:
 6. Run writer/reviewer loop.
 7. Integrate accepted work and close the task after it reaches main.
 8. Update state and continuation.
-9. Repeat until the project goal is complete, a human gate/blocker appears, or an execution-window handoff is unavoidable.
+9. Run the autonomous stop gate before any final response.
+10. Repeat until the project goal is complete, a human gate/blocker appears, or an execution-window handoff is unavoidable.
 
 ## Empty queue rule
 
@@ -51,6 +62,23 @@ An empty READY queue is not a stopping condition. In autonomous mode, the lead m
 - record a concrete blocker/human gate explaining why no next task can safely be created.
 
 Do not stop merely because a task was closed, main is clean, the continuation file was updated, or the READY list is empty.
+
+If a continuation file contains `recommended_next_task`, convert it into a normal task packet and continue unless a human gate or blocker prevents that conversion. `recommended_next_task` is not a stopping record.
+
+## Stop gate
+
+Before final response, run:
+
+```bash
+node .agents/skills/general-rd-orchestrator/scripts/verify-autonomous-stop.mjs
+```
+
+Interpret the result:
+
+- `BLOCK_CONTINUE`: continue the loop. Create or execute the next task, route the active review, reconcile stale state, or write a real blocker/human gate.
+- `ALLOW_STOP`: final response may be allowed, but only if the lead can explain the concrete completion, blocker, human gate, tool/platform restriction, or lead-handoff reason.
+
+If the script cannot see a READY task but also cannot see `project_goal_complete: true`, a human gate, or a blocker, it should block finalization. The lead must either derive the next smallest task from accepted docs or persist a blocker.
 
 ## Milestone gates
 

@@ -5,6 +5,7 @@
   "status": "DRAFT",
   "owner_role": "implementation_engineer",
   "reviewer_role": "qa_reviewer",
+  "required_reviewers": [],
   "risk_level": "R1",
   "dependencies": [],
   "scope": {

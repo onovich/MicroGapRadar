@@ -1,6 +1,6 @@
 ---
 name: general-rd-orchestrator
-description: Generic Codex multi-agent orchestration for software and R&D repositories. Use when a project needs dynamic subagents, scoped tasks, plan-execute-test-review loops, structured handoffs, autonomous milestone execution, reviewer gates, and leadership handoff. Works across domains; configure project-specific docs, milestones, roles, and human gates in the repository.
+description: Generic Codex multi-agent orchestration for software and R&D repositories. Use when a project needs dynamic role assignment, scoped task creation, automatic subagent spawning, plan-execute-test-review loops, structured handoffs, autonomous /goal-style milestone execution, reviewer gates, stop-gate enforcement, and leadership handoff. Works across domains; configure project-specific docs, milestones, roles, and human gates in the repository.
 ---
 
 # General R&D Orchestrator
@@ -9,18 +9,41 @@ This Skill turns a vague project goal into a controlled multi-agent engineering 
 
 ```text
 recover state
-→ plan scoped task
-→ spawn writer/reviewer subagents
-→ execute in branch/worktree
-→ validate tests and handoff
-→ route review
-→ integrate only after acceptance
-→ close task after it reaches main
-→ create or continue the next dependency-ready task
-→ repeat until the project goal, human gate, blocker, or execution-window handoff
+-> plan scoped task
+-> resolve roles
+-> spawn writer/reviewer subagents
+-> execute in branch/worktree
+-> validate tests and handoff
+-> route review
+-> integrate only after acceptance
+-> close task after it reaches main
+-> create or continue the next dependency-ready task
+-> repeat until the project goal, human gate, blocker, or execution-window handoff
 ```
 
 Treat the repository as the source of truth. Conversation memory is advisory only.
+
+## Operating contract
+
+When this Skill is invoked for execution, the lead is not running a one-task helper. The lead is running an autonomous stage loop:
+
+- recover facts from Git and project files;
+- resolve roles from the task and project docs;
+- create or select the next dependency-ready task;
+- spawn the required writer/reviewer subagents;
+- drive review/fix/integration until the task is closed on main;
+- immediately continue to the next dependency-ready or creatable task;
+- stop only for recorded project-goal completion, a human gate, a real blocker, a platform/tool restriction, or controlled lead handoff.
+
+Do not mark a host `/goal` complete merely because one task, PR, review, or validation run finished. Bind host goal-mode objectives to the current project phase or milestone: complete all planned work that does not require human input, or record the blocker/human gate. A one-task workflow validation is a test mode only when the human explicitly asks for a bounded validation run.
+
+Before any final human response in `AUTONOMOUS_GOAL`, run:
+
+```bash
+node .agents/skills/general-rd-orchestrator/scripts/verify-autonomous-stop.mjs
+```
+
+If it reports `BLOCK_CONTINUE`, do not respond with a final status. Create or execute the next task, or record the concrete blocker/human gate that makes continuation unsafe.
 
 ## Delegation and goal-mode authorization
 
@@ -45,6 +68,8 @@ Before executing implementation work, the lead must prove that the repository or
 If those facts are missing, contradictory, or only implied, do **not** start coding and do **not** invent the product plan. The first executable task is a `PLAN` prerequisite, usually named `PROJECT-PLAN-BOOTSTRAP-001` or similar, whose output is a reviewed project plan/task graph. Only after that plan is accepted may the Skill enter `EXECUTE` or `AUTONOMOUS_GOAL` mode.
 
 Minimum acceptable planning artifacts can be repository documents or conversation-provided context, but they must be persisted before sustained autonomous execution. Recommended files are `AGENTS.md`, `PROJECT_STATUS.md`, `docs/roadmap.md`, `docs/architecture.md`, `docs/delivery-workflow.md`, `docs/risk-register.md`, and scoped task JSON files.
+
+For autonomous execution details, read `references/autonomous-goal-mode.md`. For final-response stop checks, read `references/autonomy-stop-gate.md`. For role assignment, read `references/role-catalog.md`.
 
 
 ## Required first actions
@@ -106,6 +131,21 @@ Classify the current request:
 - `LEAD_HANDOFF`: retire long-context lead and transfer to a fresh lead thread.
 - `AUTONOMOUS_GOAL`: continue milestone-by-milestone until a human gate.
 
+## Role resolution
+
+Before creating or executing a task, resolve roles from the task content and project docs. If the task file already names `owner_role`, `reviewer_role`, or `required_reviewers`, treat those as authoritative unless they conflict with the project role catalog or a human gate. If roles are missing while creating a task, infer them before setting the task `READY`.
+
+Use `references/role-catalog.md` for the full resolver. Minimum rules:
+
+- UI/client/web/app/read-model work -> `client_engineer` writer and `qa_reviewer`; add `systems_architect` if client state boundaries or public contracts change.
+- database/schema/migration/seed/content/import work -> `data_content_engineer` or `implementation_engineer`; add `systems_architect` when persistence or compatibility changes.
+- core runtime/domain/algorithm work -> `implementation_engineer`; add `domain_designer` for domain-rule semantics and `systems_architect` for public APIs.
+- planning/roadmap/task graph/architecture docs -> `systems_architect` or `domain_designer` writer plus `qa_reviewer`.
+- tests/performance/harness/regression work -> `test_engineer` writer plus `qa_reviewer`; add `systems_architect` for benchmark policy.
+- CI/package/release/deployment work -> `release_engineer` plus `qa_reviewer`; add `security_reviewer` for secrets, auth, permissions, IPC, supply chain, or deployment.
+
+Always reserve one independent reviewer slot. Use at most two concurrent writers, and only when their allowed paths do not overlap. Never let a writer final-accept its own work.
+
 ## Role defaults
 
 Use these defaults unless the repository overrides them in `.codex/agents`, `project/model-routing-state.json`, or project docs.
@@ -132,9 +172,9 @@ Spark roles are fast executors, not decision makers. They require `ALLOWED_PATHS
 Task statuses:
 
 ```text
-DRAFT → READY → IN_PROGRESS → REVIEW → ACCEPTED → CLOSED
-                           ↘ REQUEST_CHANGES loop
-                           ↘ PARTIAL / BLOCKED
+DRAFT -> READY -> IN_PROGRESS -> REVIEW -> ACCEPTED -> CLOSED
+                           -> REQUEST_CHANGES loop
+                           -> PARTIAL / BLOCKED
 ```
 
 Rules:
@@ -162,14 +202,15 @@ Only the lead closes tasks. Reviewers do not mark `CLOSED`; writers never mark `
    - First verify project readiness. If docs/context cannot justify implementation, select or create the planning prerequisite task and do not code.
    - Choose the highest-priority dependency-ready task in the current milestone.
    - If no READY task exists and no human gate is active, create the smallest verifiable task from the roadmap, current milestone, acceptance matrix, or continuation state, validate it, set it `READY`, and immediately continue to thread planning.
-   - Do not create giant “implement whole system” tasks.
+   - Do not create giant "implement whole system" tasks.
 
 3. **Validate task packet**
    Every task must specify:
    - one owner/writer role;
    - one independent reviewer role;
+   - any extra required reviewers implied by role resolution or risk;
    - dependencies;
-   - risk level `R0`–`R4`;
+   - risk level `R0` to `R4`;
    - allowed and forbidden paths;
    - acceptance criteria;
    - required tests;
@@ -214,7 +255,7 @@ node .agents/skills/general-rd-orchestrator/scripts/taskctl.mjs set-thread <TASK
 node .agents/skills/general-rd-orchestrator/scripts/validate-handoff.mjs <handoff.json>
 ```
 
-   Then verify claimed tests, files, branches, and commits against the actual workspace. Do not trust “tests passed” without commands and exit codes.
+   Then verify claimed tests, files, branches, and commits against the actual workspace. Do not trust "tests passed" without commands and exit codes.
 
 9. **Route review**
    - Generate compact route message:
@@ -243,6 +284,7 @@ node .agents/skills/general-rd-orchestrator/scripts/render-route-message.mjs <ha
    - Update `project/goal-mode-state.json`.
    - Close stale agents.
    - Write or update `project/messages/outbox/GOAL-MODE-CONTINUATION.json`.
+   - Run `node .agents/skills/general-rd-orchestrator/scripts/verify-autonomous-stop.mjs` before any final response.
    - Immediately continue to the next READY task. If no READY task exists, create the next smallest verifiable task from accepted project docs and continue.
    - Do not produce a final human response after routine task closure, a clean `main`, an empty READY queue, or a continuation-file update. Those are loop checkpoints, not stopping conditions.
 
@@ -308,6 +350,8 @@ Children must not guess. They stop with `PARTIAL` or `BLOCKED` when:
 ## Final human response
 
 In `AUTONOMOUS_GOAL`, send a final human response only when the project goal is complete, a human gate/blocker is active, or an execution-window/lead-handoff stop is unavoidable. Before responding, verify that no task can be created or continued without crossing a gate.
+
+Run `scripts/verify-autonomous-stop.mjs` first. A `BLOCK_CONTINUE` result means the Skill has found machine-visible work or a missing stop record; continue the loop instead of finalizing. An `ALLOW_STOP` result is necessary but not sufficient: the lead must still explain the concrete project goal completion, human gate, blocker, or handoff reason.
 
 Report only evidence-backed facts:
 

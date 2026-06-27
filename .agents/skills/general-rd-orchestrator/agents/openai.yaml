@@ -1,6 +1,6 @@
 interface:
   display_name: "General R&D Orchestrator"
-  short_description: "Run generic R&D projects through scoped Codex subagents, review gates, and task handoffs."
-  default_prompt: "Use $general-rd-orchestrator to recover project state, treat this invocation as authorization for standard subagent spawning and goal-mode execution, create the next scoped task when none is ready, enforce review/test gates, integrate accepted work, and continue until the project goal or a human gate."
+  short_description: "Run generic R&D projects through role-resolved subagents, review gates, and autonomous stop checks."
+  default_prompt: "Use $general-rd-orchestrator to recover project state, treat this invocation as authorization for standard subagent spawning and autonomous goal-mode execution, resolve roles automatically, create the next scoped task when none is ready, enforce review/test gates, integrate accepted work, run the autonomous stop gate before any final response, and continue until all no-human-input work in the current scope is complete or a human gate/blocker appears."
 policy:
   allow_implicit_invocation: false
