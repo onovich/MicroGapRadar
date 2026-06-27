@@ -1,18 +1,19 @@
 # Project Status
 
-Updated at: 2026-06-27T17:00:07Z
+Updated at: 2026-06-27T17:51:40Z
 
 ## Current Milestone
 
-`M0`: scaffold the runnable MicroGap Radar engineering foundation.
+`M1`: database and base data model.
 
 ## Current Outcome
 
-Prepare the repository for implementation using `general-rd-orchestrator`:
+Completed the M0 scaffold and project orchestration setup:
 
 - The orchestrator skill is installed globally and in the repository.
 - Project orchestration state exists under `project/`.
-- The first dependency-ready task is `M0-SCAFFOLD-NEXT-001`.
+- `M0-SCAFFOLD-NEXT-001` is accepted and integrated.
+- The Next.js App Router, TypeScript, Tailwind CSS scaffold builds successfully.
 
 ## Product Summary
 
@@ -30,7 +31,7 @@ MicroGap Radar is a self-use-first AI microtool opportunity radar. The 48-hour M
 
 ## Active Task
 
-- `M0-SCAFFOLD-NEXT-001`: scaffold the Next.js app foundation.
+- None. The next task should start M1: database and ORM setup.
 
 ## Human Gates
 
