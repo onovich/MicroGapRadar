@@ -111,6 +111,30 @@ The required build check is:
 npm run build
 ```
 
+## SERP Analysis Agent
+
+The M3 SERP Analysis Agent slice lives under `agents/` and exposes reusable typed boundaries:
+
+- `analyzeSerpResults()` accepts a keyword, market, language, and SERP-like result array, then returns `serpWeaknessSummary`, `weakSignals`, `strongSignals`, and a clamped `serpWeaknessScoreHint` from 0 to 100.
+- `SerpAnalysisInputSchema`, `SerpAnalysisOutputSchema`, `SerpWeakSignalSchema`, and `SerpStrongSignalSchema` validate the agent contract with Zod.
+- `buildSerpAnalysisMessages()` centralizes the docs-aligned prompt for Agent 2 in `docs/08_ai_agents_and_prompts.md`.
+- When an injected `LlmClient` is provided, the agent calls `safeJsonCompletion()` and validates the returned JSON.
+- When no client is provided, or when LLM output is malformed or rejected after repair, the agent uses a deterministic heuristic fallback.
+
+The fallback is side-effect free and does not read `process.env`, load secrets, call the network, write to the database, or use paid services. It recognizes empty result sets, generic articles, forum/community pages, PDFs/static documents, government/official pages, old or poor-UX pages, missing interactive tools, broad/outdated tools, and mature SaaS or specialized-tool competition.
+
+Focused coverage for LLM success, failed-output fallback, score clamping, weak SERP signals, strong competition signals, and empty SERP behavior runs with:
+
+```bash
+npm test
+```
+
+The required build check is:
+
+```bash
+npm run build
+```
+
 ## Local Radar Task API
 
 The MVP exposes a single-admin, unauthenticated local API slice for Radar Task management. It is intended for local development and later admin UI integration; it does not add sessions, public auth, scans, SERP providers, or LLM calls.

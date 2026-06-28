@@ -19,3 +19,29 @@ export type {
   KeywordIntentType,
   KeywordToolTypeGuess,
 } from "./keyword-expansion-agent";
+export {
+  analyzeSerpResults,
+  buildSerpAnalysisMessages,
+  generateHeuristicSerpAnalysis,
+  normalizeSerpSignalStrength,
+  normalizeSerpWeaknessScoreHint,
+  SERP_ANALYSIS_PROMPT_VERSION,
+  SERP_STRONG_SIGNAL_TYPES,
+  SERP_WEAK_SIGNAL_TYPES,
+  SerpAnalysisInputSchema,
+  SerpAnalysisOutputSchema,
+  SerpAnalysisResponseSchema,
+  SerpResultInputSchema,
+  SerpStrongSignalSchema,
+  SerpWeakSignalSchema,
+} from "./serp-analysis-agent";
+export type {
+  SerpAnalysisAgentOptions,
+  SerpAnalysisInput,
+  SerpAnalysisOutput,
+  SerpAnalysisResponse,
+  SerpStrongSignal,
+  SerpStrongSignalType,
+  SerpWeakSignal,
+  SerpWeakSignalType,
+} from "./serp-analysis-agent";
