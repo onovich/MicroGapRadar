@@ -2,7 +2,7 @@
   "id": "M5-DASHBOARD-OPPORTUNITY-LIST-001",
   "summary": "Add the Dashboard and Opportunity List UI slice with Top 5 opportunities, score-sorted list, filters, reusable OpportunityCard and ScoreBadge components, and focused tests.",
   "milestone": "M5",
-  "status": "READY",
+  "status": "IN_PROGRESS",
   "owner_role": "implementation_engineer",
   "reviewer_role": "qa_reviewer",
   "risk_level": "R2",
@@ -57,7 +57,12 @@
     "npm run build"
   ],
   "branch_or_worktree": "main",
-  "threads": {},
+  "threads": {
+    "implementation_engineer": "019f0e26-be4e-7ad2-b00f-d536cc0f02a1",
+    "systems_architect": "019f0e26-d257-78a3-8d78-b4f594c511a3",
+    "domain_designer": "019f0e26-e716-78c0-b1fc-b1196006cae1",
+    "qa_reviewer": "019f0e26-ee4f-7973-967a-3c934f7bd3bb"
+  },
   "route_to": "implementation_engineer",
   "notes": [
     "Derived from docs/09_codex_implementation_tasks.md Task 12 and docs/11_development_plan.md M5.",
@@ -72,7 +77,7 @@
     "No changes to agents, services, scan orchestrator, scoring formula, Radar Task CRUD API, app shell, global styles, or landing page unless required only for import paths."
   ],
   "created_at": "2026-06-28T12:11:54.213Z",
-  "updated_at": "2026-06-28T12:12:32.688Z",
+  "updated_at": "2026-06-28T12:14:57.187Z",
   "required_reviewers": [
     "systems_architect",
     "domain_designer"

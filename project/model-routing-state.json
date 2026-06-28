@@ -69,22 +69,30 @@
     "implementation_engineer": {
       "model": "gpt-5.5",
       "effort": "high",
-      "status": "idle"
+      "status": "active",
+      "thread_id": "019f0e26-be4e-7ad2-b00f-d536cc0f02a1",
+      "task_id": "M5-DASHBOARD-OPPORTUNITY-LIST-001"
     },
     "systems_architect": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "idle"
+      "status": "active",
+      "thread_id": "019f0e26-d257-78a3-8d78-b4f594c511a3",
+      "task_id": "M5-DASHBOARD-OPPORTUNITY-LIST-001"
     },
     "domain_designer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "idle"
+      "status": "active",
+      "thread_id": "019f0e26-e716-78c0-b1fc-b1196006cae1",
+      "task_id": "M5-DASHBOARD-OPPORTUNITY-LIST-001"
     },
     "qa_reviewer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "idle"
+      "status": "active",
+      "thread_id": "019f0e26-ee4f-7973-967a-3c934f7bd3bb",
+      "task_id": "M5-DASHBOARD-OPPORTUNITY-LIST-001"
     },
     "security_reviewer": {
       "model": "gpt-5.5",
@@ -92,5 +100,5 @@
       "status": "idle"
     }
   },
-  "last_updated_at": "2026-06-28T12:13:03Z"
+  "last_updated_at": "2026-06-28T12:15:43Z"
 }
