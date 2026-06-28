@@ -1,14 +1,14 @@
 # Project Status
 
-Updated at: 2026-06-27T19:24:00Z
+Updated at: 2026-06-27T20:45:05Z
 
 ## Current Milestone
 
-`M1`: database and base data model.
+`M3`: provider interface and mock data source foundation.
 
 ## Current Outcome
 
-Completed the M0 scaffold and the first M1 database task:
+Completed the M0 scaffold, the M1 database base, and the Radar Task API slice:
 
 - The orchestrator skill is installed globally and in the repository.
 - Project orchestration state exists under `project/`.
@@ -16,6 +16,9 @@ Completed the M0 scaffold and the first M1 database task:
 - The Next.js App Router, TypeScript, Tailwind CSS scaffold builds successfully.
 - `M1-DB-SCHEMA-SEED-001` is accepted, integrated, and pushed at `a4b15a549df4bd086f38cce2ed62e88acf750d86`.
 - Prisma SQLite schema, Prisma Client helper, shared validation schemas, and seed data import are in place.
+- `M1-RADAR-TASK-MANAGEMENT-001` is accepted, integrated, and pushed at `e7563fdf49607a6000ac484728bf7c8811c53d3e`.
+- Local Radar Task API routes now support list/create/read/update/non-destructive delete, with strict Zod validation and structured JSON errors.
+- `JustGoal` is installed at `.agents/skills/just-goal` and its source repository is published at `git@github.com:onovich/JustGoal.skill.git`.
 
 ## Product Summary
 
@@ -33,7 +36,7 @@ MicroGap Radar is a self-use-first AI microtool opportunity radar. The 48-hour M
 
 ## Active Task
 
-- None. The next M1 task should add Radar Task management/API or the mock scan/provider path from `docs/11_development_plan.md`.
+- `M3-SERP-MOCK-PROVIDER-001`: add the SERP provider interface, deterministic mock provider, provider factory, and focused tests. This task must not add real external providers, scan orchestration, persistence, API routes, LLM calls, UI, auth, or deployment.
 
 ## Human Gates
 

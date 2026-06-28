@@ -1,0 +1,69 @@
+{
+  "id": "M3-SERP-MOCK-PROVIDER-001",
+  "summary": "Add the SERP provider interface, deterministic mock provider, provider factory, and focused tests.",
+  "milestone": "M3",
+  "status": "READY",
+  "owner_role": "implementation_engineer",
+  "reviewer_role": "qa_reviewer",
+  "required_reviewers": [
+    "systems_architect"
+  ],
+  "risk_level": "R2",
+  "dependencies": [
+    "M1-RADAR-TASK-MANAGEMENT-001"
+  ],
+  "scope": {
+    "allowed_paths": [
+      "services/serp/**",
+      "tests/**",
+      "package.json",
+      "package-lock.json",
+      "README.md"
+    ],
+    "forbidden_paths": [
+      ".git/**",
+      ".codex/**",
+      ".agents/**",
+      "project/**",
+      "skills/**",
+      "docs/**",
+      "mock-data/**",
+      "app/**",
+      "components/**",
+      "agents/**",
+      "lib/**",
+      "prisma/**"
+    ]
+  },
+  "acceptance_criteria": [
+    "A reusable SerpProvider interface exists with typed search input and normalized result fields aligned with the architecture docs.",
+    "A deterministic MockSerpProvider returns stable SERP-like results for keyword, country, language, and limit inputs without network calls, secrets, environment variables, or paid services.",
+    "A provider factory or index module exports the mock provider and fails fast for unsupported provider names without silently calling external services.",
+    "Focused automated tests cover deterministic output, limit handling, and required result shape.",
+    "README documents the mock provider slice and any new test command added to package scripts.",
+    "No scan orchestration, database writes, API route, LLM client, real SERP provider, cron, UI, auth, or deployment work is implemented."
+  ],
+  "required_tests": [
+    "npm test",
+    "npm run build"
+  ],
+  "branch_or_worktree": "main",
+  "threads": {},
+  "route_to": "implementation_engineer",
+  "notes": [
+    "Derived from docs/03_technical_architecture.md provider adapter guidance and docs/11_development_plan.md recommended execution order after Radar Task CRUD.",
+    "systems_architect is required because this introduces a service boundary and future provider contract.",
+    "qa_reviewer remains the independent acceptance reviewer.",
+    "Keep this task to provider interface/mock/test infrastructure only; scan orchestration and persistence belong to a later task."
+  ],
+  "non_goals": [
+    "No /api/scans/run route.",
+    "No SearchRun, KeywordCandidate, SerpResult, or Opportunity persistence.",
+    "No LLM client or agent analysis.",
+    "No real SerpApi, DataForSEO, Brave Search, or external HTTP calls.",
+    "No dashboard or Run Scan UI.",
+    "No auth, cron, deployment, or paid service setup."
+  ],
+  "created_at": "2026-06-27T20:45:05.7603770Z",
+  "updated_at": "2026-06-27T20:45:05.7603770Z"
+}
