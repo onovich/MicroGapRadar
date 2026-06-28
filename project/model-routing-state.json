@@ -39,7 +39,10 @@
     "m3_llm_json_implementation_engineer": "019f0ca3-cd06-7100-aedd-34e155e298c2",
     "m3_llm_json_systems_architect": "019f0cad-8090-7672-a1f4-3fb50a67cd2a",
     "m3_llm_json_security_reviewer": "019f0cad-88bf-7252-9512-37f5923b8935",
-    "m3_llm_json_qa_reviewer": "019f0cb9-40ee-7f20-9aa9-8c384b8812a9"
+    "m3_llm_json_qa_reviewer": "019f0cb9-40ee-7f20-9aa9-8c384b8812a9",
+    "m3_keyword_expansion_implementation_engineer": "019f0cc5-8705-7c83-b19a-c85867608c06",
+    "m3_keyword_expansion_systems_architect": "019f0cd0-fdea-7590-b691-4e3643e16331",
+    "m3_keyword_expansion_qa_reviewer": "019f0cd7-56e4-7252-bf05-b82828e5c429"
   },
   "roles": {
     "lead_orchestrator": {
@@ -50,23 +53,17 @@
     "implementation_engineer": {
       "model": "gpt-5.5",
       "effort": "high",
-      "status": "accepted",
-      "thread_id": "019f0cc5-8705-7c83-b19a-c85867608c06",
-      "task_id": "M3-KEYWORD-EXPANSION-AGENT-001"
+      "status": "idle"
     },
     "systems_architect": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "accepted",
-      "thread_id": "019f0cd0-fdea-7590-b691-4e3643e16331",
-      "task_id": "M3-KEYWORD-EXPANSION-AGENT-001"
+      "status": "idle"
     },
     "qa_reviewer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "accepted",
-      "thread_id": "019f0cd7-56e4-7252-bf05-b82828e5c429",
-      "task_id": "M3-KEYWORD-EXPANSION-AGENT-001"
+      "status": "idle"
     },
     "security_reviewer": {
       "model": "gpt-5.5",
@@ -74,5 +71,5 @@
       "status": "idle"
     }
   },
-  "last_updated_at": "2026-06-28T06:13:58Z"
+  "last_updated_at": "2026-06-28T06:16:15Z"
 }

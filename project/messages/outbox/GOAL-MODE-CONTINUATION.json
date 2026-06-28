@@ -1,11 +1,11 @@
 {
   "version": 1,
   "created_at": "2026-06-27T19:24:00Z",
-  "updated_at": "2026-06-28T06:13:58Z",
-  "main_commit": "b4c13084e6235fac66bca2277d58db2ff7cd1d39",
+  "updated_at": "2026-06-28T06:16:15Z",
+  "main_commit": "de431deb3bcd98d4abc4b5158c35ee14c2ec25e1",
   "current_milestone": "M3",
-  "current_task": "M3-KEYWORD-EXPANSION-AGENT-001",
-  "last_integrated_task": "M3-LLM-JSON-CLIENT-001",
+  "current_task": "M3-SERP-ANALYSIS-AGENT-001",
+  "last_integrated_task": "M3-KEYWORD-EXPANSION-AGENT-001",
   "closed_threads": {
     "m0_implementation_engineer": "019f0a11-0493-7fe0-89e9-a21d3b680a67",
     "m0_qa_reviewer": "019f0a2a-70f9-77e0-8f7d-6091b879545a",
@@ -20,32 +20,18 @@
     "m3_llm_json_implementation_engineer": "019f0ca3-cd06-7100-aedd-34e155e298c2",
     "m3_llm_json_systems_architect": "019f0cad-8090-7672-a1f4-3fb50a67cd2a",
     "m3_llm_json_security_reviewer": "019f0cad-88bf-7252-9512-37f5923b8935",
-    "m3_llm_json_qa_reviewer": "019f0cb9-40ee-7f20-9aa9-8c384b8812a9"
+    "m3_llm_json_qa_reviewer": "019f0cb9-40ee-7f20-9aa9-8c384b8812a9",
+    "m3_keyword_expansion_implementation_engineer": "019f0cc5-8705-7c83-b19a-c85867608c06",
+    "m3_keyword_expansion_systems_architect": "019f0cd0-fdea-7590-b691-4e3643e16331",
+    "m3_keyword_expansion_qa_reviewer": "019f0cd7-56e4-7252-bf05-b82828e5c429"
   },
-  "active_threads": [
-    {
-      "role": "implementation_engineer",
-      "task_id": "M3-KEYWORD-EXPANSION-AGENT-001",
-      "thread_id": "019f0cc5-8705-7c83-b19a-c85867608c06",
-      "status": "accepted"
-    },
-    {
-      "role": "systems_architect",
-      "task_id": "M3-KEYWORD-EXPANSION-AGENT-001",
-      "thread_id": "019f0cd0-fdea-7590-b691-4e3643e16331",
-      "status": "accepted"
-    },
-    {
-      "role": "qa_reviewer",
-      "task_id": "M3-KEYWORD-EXPANSION-AGENT-001",
-      "thread_id": "019f0cd7-56e4-7252-bf05-b82828e5c429",
-      "status": "accepted"
-    }
+  "active_threads": [],
+  "next_ready_tasks": [
+    "M3-SERP-ANALYSIS-AGENT-001"
   ],
-  "next_ready_tasks": [],
   "recommended_next_task": {
-    "id": "M3-KEYWORD-EXPANSION-AGENT-001",
-    "summary": "Add the Keyword Expansion Agent with typed schemas, prompt construction, safe JSON completion wiring, and deterministic mock fallback.",
+    "id": "M3-SERP-ANALYSIS-AGENT-001",
+    "summary": "Add the SERP Analysis Agent with typed schemas, docs-aligned prompt construction, injected safe JSON completion, and deterministic heuristic fallback.",
     "source_docs": [
       "docs/08_ai_agents_and_prompts.md",
       "docs/09_codex_implementation_tasks.md",
@@ -53,18 +39,15 @@
     ]
   },
   "recent_handoffs": [
-    "project/messages/outbox/M3-LLM-JSON-CLIENT-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
-    "project/messages/outbox/M3-LLM-JSON-CLIENT-001__MSG-20260628-SYSTEMS_ARCHITECT.json",
-    "project/messages/outbox/M3-LLM-JSON-CLIENT-001__MSG-20260628-SECURITY_REVIEWER.json",
-    "project/messages/outbox/M3-LLM-JSON-CLIENT-001__MSG-20260628-IMPLEMENTATION_ENGINEER-R2.json",
-    "project/messages/outbox/M3-LLM-JSON-CLIENT-001__MSG-20260628-SECURITY_REVIEWER-R2.json",
-    "project/messages/outbox/M3-LLM-JSON-CLIENT-001__MSG-20260628-QA_REVIEWER.json"
+    "project/messages/outbox/M3-KEYWORD-EXPANSION-AGENT-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+    "project/messages/outbox/M3-KEYWORD-EXPANSION-AGENT-001__MSG-20260628-SYSTEMS_ARCHITECT.json",
+    "project/messages/outbox/M3-KEYWORD-EXPANSION-AGENT-001__MSG-20260628-QA_REVIEWER.json"
   ],
   "validation_evidence": [
     {
       "command": "npm test",
       "exit_code": 0,
-      "note": "M3 LLM JSON client tests passed before integration."
+      "note": "M3 Keyword Expansion Agent tests passed before integration."
     },
     {
       "command": "npm run build",
@@ -74,12 +57,12 @@
     {
       "command": "node .agents/skills/just-goal/scripts/taskctl.mjs validate --repo-root .",
       "exit_code": 0,
-      "note": "Task graph validated before closing M3 LLM JSON client and queueing the next task."
+      "note": "Task graph validated before closing Keyword Expansion Agent and queueing SERP Analysis Agent."
     }
   ],
   "human_gate": {
     "required": false,
     "reason": null
   },
-  "next_prompt": "Use $just-goal to execute M3-KEYWORD-EXPANSION-AGENT-001 with implementation_engineer, systems_architect, and qa_reviewer gates, then continue to the next task until a human gate."
+  "next_prompt": "Use $just-goal to execute M3-SERP-ANALYSIS-AGENT-001 with implementation_engineer, systems_architect, and qa_reviewer gates, then continue to the next task until a human gate."
 }

@@ -1,0 +1,71 @@
+{
+  "id": "M3-SERP-ANALYSIS-AGENT-001",
+  "summary": "Add the SERP Analysis Agent with typed schemas, docs-aligned prompt construction, injected safe JSON completion, and deterministic heuristic fallback.",
+  "milestone": "M3",
+  "status": "READY",
+  "owner_role": "implementation_engineer",
+  "reviewer_role": "qa_reviewer",
+  "required_reviewers": [
+    "systems_architect"
+  ],
+  "risk_level": "R2",
+  "dependencies": [
+    "M3-KEYWORD-EXPANSION-AGENT-001"
+  ],
+  "scope": {
+    "allowed_paths": [
+      "agents/**",
+      "tests/**",
+      "README.md"
+    ],
+    "forbidden_paths": [
+      ".git/**",
+      ".codex/**",
+      ".agents/**",
+      "project/**",
+      "skills/**",
+      "docs/**",
+      "mock-data/**",
+      "app/**",
+      "components/**",
+      "lib/**",
+      "prisma/**",
+      "services/serp/**",
+      "services/llm/**",
+      "services/scan-orchestrator.ts",
+      "package.json",
+      "package-lock.json"
+    ]
+  },
+  "acceptance_criteria": [
+    "A reusable SERP Analysis Agent module exists under agents/ with typed input, output, signal, Zod schemas, and a stable public function for analyzing SERP results.",
+    "The agent builds a prompt aligned with docs/08_ai_agents_and_prompts.md Agent 2 and calls the existing safeJsonCompletion() utility through an injected LlmClient when one is provided.",
+    "The agent provides a deterministic heuristic fallback that analyzes mock SERP-like results without external API keys, process.env reads, network calls, database writes, or paid services.",
+    "The analysis output includes serpWeaknessSummary, weakSignals, strongSignals, and a clamped 0-100 serpWeaknessScoreHint.",
+    "The fallback recognizes generic articles, forum/community results, PDF/government/old-page/poor-UX signals, missing interactive tools, mature SaaS/tool competition, and empty SERP results in a deterministic way.",
+    "Focused automated tests cover LLM success, malformed or rejected LLM output falling back to heuristics, score clamping/normalization, generic article/no-tool weak signals on mock SERP, strong competition signals, and empty SERP behavior.",
+    "README documents the SERP Analysis Agent slice, heuristic fallback behavior, no-secret/no-network policy, and the test command.",
+    "No opportunity analysis, scoring engine, scan orchestration, database persistence, API route, UI, auth, cron, deployment, real LLM provider wiring, SERP provider changes, or paid service setup is implemented."
+  ],
+  "required_tests": [
+    "npm test",
+    "npm run build"
+  ],
+  "branch_or_worktree": "main",
+  "threads": {},
+  "route_to": "implementation_engineer",
+  "notes": [
+    "Derived from docs/08_ai_agents_and_prompts.md Agent 2 prompt/schema and docs/11_development_plan.md M3 agent foundation.",
+    "systems_architect is required because this extends the agents/ boundary and feeds later Opportunity Analysis and scoring work.",
+    "Keep this task side-effect free. Persistence, scan orchestration, scoring, and API integration belong to later M4 tasks."
+  ],
+  "non_goals": [
+    "No Opportunity Analysis Agent, scoring engine, MVP Spec Agent, or scan orchestrator.",
+    "No SerpResult or Opportunity database writes and no Prisma/lib changes.",
+    "No /api/scans/run route, dashboard integration, or UI changes.",
+    "No real LLM provider configuration, environment-variable secret loading, real network calls in tests, or paid service setup.",
+    "No changes to services/llm or services/serp contracts."
+  ],
+  "created_at": "2026-06-28T06:16:15Z",
+  "updated_at": "2026-06-28T06:16:15Z"
+}
