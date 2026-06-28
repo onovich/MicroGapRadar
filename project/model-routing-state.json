@@ -73,28 +73,38 @@
     "implementation_engineer": {
       "model": "gpt-5.5",
       "effort": "high",
-      "status": "idle"
+      "status": "active",
+      "thread_id": "019f0e47-c4c4-73c3-9fdf-dca48e487bb0",
+      "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001"
     },
     "systems_architect": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "idle"
+      "status": "active",
+      "thread_id": "019f0e47-d8d3-7bc1-9c74-47578dccb2cd",
+      "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001"
     },
     "domain_designer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "idle"
+      "status": "active",
+      "thread_id": "019f0e47-ed90-7562-8bcb-3a3fd464ef1f",
+      "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001"
     },
     "qa_reviewer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "idle"
+      "status": "active",
+      "thread_id": "019f0e48-0a02-7b42-9430-e65e13a5849f",
+      "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001"
     },
     "security_reviewer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "idle"
+      "status": "active",
+      "thread_id": "019f0e48-0286-7c83-a3aa-05a6b158fb57",
+      "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001"
     }
   },
-  "last_updated_at": "2026-06-28T12:55:00Z"
+  "last_updated_at": "2026-06-28T13:00:00Z"
 }

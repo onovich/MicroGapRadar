@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-06-28T12:46:22.315Z",
+  "updated_at": "2026-06-28T12:50:45.447Z",
   "threads": {
     "019f0a11-0493-7fe0-89e9-a21d3b680a67": {
       "role": "implementation_engineer",
@@ -235,6 +235,36 @@
       "task_id": "M5-DASHBOARD-OPPORTUNITY-LIST-001",
       "status": "closed",
       "updated_at": "2026-06-28T12:46:22.315Z"
+    },
+    "019f0e47-c4c4-73c3-9fdf-dca48e487bb0": {
+      "role": "implementation_engineer",
+      "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001",
+      "status": "active",
+      "updated_at": "2026-06-28T12:50:45.277Z"
+    },
+    "019f0e47-d8d3-7bc1-9c74-47578dccb2cd": {
+      "role": "systems_architect",
+      "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001",
+      "status": "active",
+      "updated_at": "2026-06-28T12:50:45.320Z"
+    },
+    "019f0e47-ed90-7562-8bcb-3a3fd464ef1f": {
+      "role": "domain_designer",
+      "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001",
+      "status": "active",
+      "updated_at": "2026-06-28T12:50:45.360Z"
+    },
+    "019f0e48-0286-7c83-a3aa-05a6b158fb57": {
+      "role": "security_reviewer",
+      "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001",
+      "status": "active",
+      "updated_at": "2026-06-28T12:50:45.403Z"
+    },
+    "019f0e48-0a02-7b42-9430-e65e13a5849f": {
+      "role": "qa_reviewer",
+      "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001",
+      "status": "active",
+      "updated_at": "2026-06-28T12:50:45.447Z"
     }
   }
 }
