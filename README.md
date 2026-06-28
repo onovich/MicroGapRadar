@@ -87,6 +87,30 @@ The required build check is:
 npm run build
 ```
 
+## Keyword Expansion Agent
+
+The M3 Keyword Expansion Agent slice lives under `agents/` and exposes reusable typed boundaries:
+
+- `generateKeywordCandidates()` accepts a Radar Task-like input shape and returns normalized keyword candidates.
+- `KeywordExpansionInputSchema`, `KeywordExpansionCandidateSchema`, and `KeywordExpansionResponseSchema` keep the agent input and JSON output validated with Zod.
+- `buildKeywordExpansionMessages()` centralizes the prompt based on `docs/08_ai_agents_and_prompts.md`.
+- When an injected `LlmClient` is provided, the agent calls `safeJsonCompletion()` and validates the returned candidate JSON.
+- When no client is provided, or when LLM output is malformed or rejected after repair, the agent uses a deterministic mock fallback.
+
+The fallback can generate 20 usable candidates without reading `process.env`, loading secrets, using the network, writing to the database, or calling paid services. It normalizes country/language/intent/tool/rationale fields, limits results to the requested count, and filters configured `excludedTopics` case-insensitively.
+
+Focused coverage for LLM success, bad-output fallback, excluded-topic filtering, deterministic fallback output, and count limits runs with:
+
+```bash
+npm test
+```
+
+The required build check is:
+
+```bash
+npm run build
+```
+
 ## Local Radar Task API
 
 The MVP exposes a single-admin, unauthenticated local API slice for Radar Task management. It is intended for local development and later admin UI integration; it does not add sessions, public auth, scans, SERP providers, or LLM calls.

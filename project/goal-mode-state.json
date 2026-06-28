@@ -8,7 +8,19 @@
       "role": "implementation_engineer",
       "task_id": "M3-KEYWORD-EXPANSION-AGENT-001",
       "thread_id": "019f0cc5-8705-7c83-b19a-c85867608c06",
-      "status": "active"
+      "status": "accepted"
+    },
+    {
+      "role": "systems_architect",
+      "task_id": "M3-KEYWORD-EXPANSION-AGENT-001",
+      "thread_id": "019f0cd0-fdea-7590-b691-4e3643e16331",
+      "status": "accepted"
+    },
+    {
+      "role": "qa_reviewer",
+      "task_id": "M3-KEYWORD-EXPANSION-AGENT-001",
+      "thread_id": "019f0cd7-56e4-7252-bf05-b82828e5c429",
+      "status": "accepted"
     }
   ],
   "last_integrated_task": "M3-LLM-JSON-CLIENT-001",
@@ -19,5 +31,5 @@
     "required": false,
     "reason": null
   },
-  "last_updated_at": "2026-06-28T05:48:46Z"
+  "last_updated_at": "2026-06-28T06:13:58Z"
 }

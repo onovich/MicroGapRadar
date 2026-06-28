@@ -1,7 +1,7 @@
 {
   "version": 1,
   "created_at": "2026-06-27T19:24:00Z",
-  "updated_at": "2026-06-28T05:48:46Z",
+  "updated_at": "2026-06-28T06:13:58Z",
   "main_commit": "b4c13084e6235fac66bca2277d58db2ff7cd1d39",
   "current_milestone": "M3",
   "current_task": "M3-KEYWORD-EXPANSION-AGENT-001",
@@ -27,7 +27,19 @@
       "role": "implementation_engineer",
       "task_id": "M3-KEYWORD-EXPANSION-AGENT-001",
       "thread_id": "019f0cc5-8705-7c83-b19a-c85867608c06",
-      "status": "active"
+      "status": "accepted"
+    },
+    {
+      "role": "systems_architect",
+      "task_id": "M3-KEYWORD-EXPANSION-AGENT-001",
+      "thread_id": "019f0cd0-fdea-7590-b691-4e3643e16331",
+      "status": "accepted"
+    },
+    {
+      "role": "qa_reviewer",
+      "task_id": "M3-KEYWORD-EXPANSION-AGENT-001",
+      "thread_id": "019f0cd7-56e4-7252-bf05-b82828e5c429",
+      "status": "accepted"
     }
   ],
   "next_ready_tasks": [],

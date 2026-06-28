@@ -2,7 +2,7 @@
   "id": "M3-KEYWORD-EXPANSION-AGENT-001",
   "summary": "Add the Keyword Expansion Agent with typed schemas, prompt construction, safe JSON completion wiring, and deterministic mock fallback.",
   "milestone": "M3",
-  "status": "IN_PROGRESS",
+  "status": "ACCEPTED",
   "owner_role": "implementation_engineer",
   "reviewer_role": "qa_reviewer",
   "required_reviewers": [
@@ -52,7 +52,9 @@
   ],
   "branch_or_worktree": "main",
   "threads": {
-    "implementation_engineer": "019f0cc5-8705-7c83-b19a-c85867608c06"
+    "implementation_engineer": "019f0cc5-8705-7c83-b19a-c85867608c06",
+    "systems_architect": "019f0cd0-fdea-7590-b691-4e3643e16331",
+    "qa_reviewer": "019f0cd7-56e4-7252-bf05-b82828e5c429"
   },
   "route_to": "implementation_engineer",
   "notes": [
@@ -69,5 +71,5 @@
     "No changes to services/llm or services/serp contracts."
   ],
   "created_at": "2026-06-28T05:45:22Z",
-  "updated_at": "2026-06-28T05:48:36.124Z"
+  "updated_at": "2026-06-28T06:13:51.525Z"
 }
