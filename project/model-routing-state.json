@@ -64,28 +64,38 @@
     "implementation_engineer": {
       "model": "gpt-5.5",
       "effort": "high",
-      "status": "idle"
+      "status": "active",
+      "thread_id": "019f0d72-c65e-7a43-9a44-72146c2b2319",
+      "task_id": "M4-RUN-SCAN-API-001"
     },
     "systems_architect": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "idle"
+      "status": "active",
+      "thread_id": "019f0d72-d836-7983-a20f-6df9854b95d6",
+      "task_id": "M4-RUN-SCAN-API-001"
     },
     "domain_designer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "idle"
+      "status": "active",
+      "thread_id": "019f0d72-da92-7f40-8ae4-0dfb3737f227",
+      "task_id": "M4-RUN-SCAN-API-001"
     },
     "qa_reviewer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "idle"
+      "status": "active",
+      "thread_id": "019f0d72-de9d-7091-9983-dc8e48404156",
+      "task_id": "M4-RUN-SCAN-API-001"
     },
     "security_reviewer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "idle"
+      "status": "active",
+      "thread_id": "019f0d72-dcc3-7831-97ae-15e7293fbd21",
+      "task_id": "M4-RUN-SCAN-API-001"
     }
   },
-  "last_updated_at": "2026-06-28T08:56:36Z"
+  "last_updated_at": "2026-06-28T08:58:39Z"
 }
