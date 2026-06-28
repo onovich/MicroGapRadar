@@ -1,0 +1,29 @@
+{
+  "message_id": "MSG-20260628-SYSTEMS_ARCHITECT",
+  "task_id": "M7-RADAR-TASK-UI-001",
+  "from_role": "systems_architect",
+  "status": "ACCEPT",
+  "summary": "Systems architecture accepts the Radar Task UI after R2. The duplicate-submit issue is fixed with explicit isRunning state around the mock scan fetch, action boundaries are testable and run through existing helpers, client/server imports remain separated, and scope stays within the approved UI/server-action paths.",
+  "findings": [],
+  "artifacts_reviewed": [
+    "components/RadarTaskRunScanControl.tsx",
+    "app/radar-tasks/actions.ts",
+    "app/radar-tasks/action-handlers.ts",
+    "lib/radar-task-view-models.ts",
+    "lib/radar-task-run-scan.ts",
+    "tests/radar-task-view-models.test.ts",
+    "project/messages/outbox/M7-RADAR-TASK-UI-001__MSG-20260628-CLIENT_ENGINEER.json",
+    "project/messages/outbox/M7-RADAR-TASK-UI-001__MSG-20260628-CLIENT_ENGINEER-R2.json"
+  ],
+  "decisions": [
+    "ACCEPT: The Run Scan control now uses explicit request lifecycle state and still forces useMockSerp=true through buildRunScanPayload().",
+    "ACCEPT: Server actions delegate to tested action handlers and reuse existing Radar Task helpers.",
+    "ACCEPT: Client components do not runtime-import Prisma/server-only helpers.",
+    "ACCEPT: The task scope now deliberately includes lib/radar-task-run-scan.ts."
+  ],
+  "requested_changes": [],
+  "blockers": [],
+  "route_to": "qa_reviewer",
+  "requested_action": "Proceed to final QA review.",
+  "created_at": "2026-06-28T21:12:00Z"
+}

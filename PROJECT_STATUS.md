@@ -36,7 +36,7 @@ The previous Phase 0 scope reconciliation gate is resolved for the following aut
 
 1. Record Phase 0A as complete and Phase 0B as approved. Done in `M7-PHASE0B-SCOPE-STATE-001`.
 2. Add a local-only single-admin password gate with session cookie and protected admin routes. Done in `M7-LOCAL-ADMIN-GATE-001`.
-3. Add protected Radar Task list/create/detail/edit/delete UI and mock Run Scan control using existing local APIs.
+3. Add protected Radar Task list/create/detail/edit/delete UI and mock Run Scan control using existing local APIs. Done in `M7-RADAR-TASK-UI-001`.
 4. Add final Phase 0B local smoke/docs proving login, Radar Task creation, mock scan, opportunity detail, and MVP Spec readiness.
 
 Phase 0B must not silently add production auth, multi-user ownership, public deployment, paid provider usage, CI/CD, DNS, real accounts, billing, telemetry, cron, email, or real secrets.
@@ -62,4 +62,4 @@ MicroGap Radar is a self-use-first AI microtool opportunity radar. The local MVP
 
 ## Active Task
 
-`M7-RADAR-TASK-UI-001`: implement protected Radar Task list/create/detail/edit/delete UI and mock Run Scan control.
+`M7-PHASE0B-RELEASE-SMOKE-001`: add final Phase 0B smoke/docs and record completion.

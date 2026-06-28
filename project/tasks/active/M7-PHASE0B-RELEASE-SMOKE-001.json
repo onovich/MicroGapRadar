@@ -2,7 +2,7 @@
   "id": "M7-PHASE0B-RELEASE-SMOKE-001",
   "summary": "Add Phase 0B local release smoke and documentation proving login, Radar Task UI, mock scan, opportunity, and MVP Spec flow.",
   "milestone": "M7",
-  "status": "DRAFT",
+  "status": "READY",
   "owner_role": "release_engineer",
   "reviewer_role": "qa_reviewer",
   "required_reviewers": [
@@ -67,5 +67,5 @@
     "No runtime product code changes unless a release smoke defect is found and separately tasked."
   ],
   "created_at": "2026-06-29T00:00:00Z",
-  "updated_at": "2026-06-29T00:00:00Z"
+  "updated_at": "2026-06-28T20:32:08.531Z"
 }

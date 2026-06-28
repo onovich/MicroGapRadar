@@ -104,18 +104,22 @@ With `npm run dev` running, `.env.local` configured, and the seed data loaded:
 1. Open `http://localhost:3000/dashboard`, confirm unauthenticated access
    redirects to `/login`, and sign in with the local admin password.
 2. Confirm the local dashboard renders after login.
-3. Run a mock scan for the seeded GameDev radar task from an authenticated
-   session or use the direct API with the session cookie:
+3. Open `http://localhost:3000/radar-tasks`, create or open a Radar Task, and
+   confirm the detail/edit/deactivate UI is available.
+4. Run a mock scan from the Radar Task detail page, or use the direct API with
+   an authenticated session cookie:
 
    ```powershell
-   Invoke-RestMethod -Method Post -Uri http://localhost:3000/api/scans/run -ContentType application/json -Body '{"radarTaskId":"seed-gamedev-microtools","useMockSerp":true,"keywordLimit":2,"serpLimit":1}'
+   $session = New-Object Microsoft.PowerShell.Commands.WebRequestSession
+   Invoke-WebRequest -Method Post -Uri http://localhost:3000/api/auth/login -WebSession $session -ContentType application/json -Headers @{ Accept = "application/json" } -Body '{"password":"<ADMIN_PASSWORD>","redirectTo":"/dashboard"}'
+   Invoke-RestMethod -Method Post -Uri http://localhost:3000/api/scans/run -WebSession $session -ContentType application/json -Body '{"radarTaskId":"seed-gamedev-microtools","useMockSerp":true,"keywordLimit":2,"serpLimit":1}'
    ```
 
-4. Open `http://localhost:3000/opportunities`, verify at least one scored
+5. Open `http://localhost:3000/opportunities`, verify at least one scored
    opportunity appears, then open an opportunity detail page.
-5. On the opportunity detail page, confirm score breakdown, SERP weakness,
+6. On the opportunity detail page, confirm score breakdown, SERP weakness,
    monetization, risk, radar task/run context, and status controls render.
-6. Generate the MVP Spec from the detail page and confirm the Markdown includes
+7. Generate the MVP Spec from the detail page and confirm the Markdown includes
    Page Structure, Form Fields, Data Model, API Routes, Monetization Entry
    Points, Risk Notes, 48-Hour Build Checklist, Acceptance Criteria, and Kill
    Criteria.
@@ -447,9 +451,29 @@ npm run build
 git diff --check
 ```
 
+## Local Radar Task UI
+
+The Phase 0B local admin UI is available at `/radar-tasks` after signing in.
+It provides active/inactive task listing, create and edit forms aligned with
+the existing Radar Task Zod schemas, a detail page with task profile, recent
+runs, latest opportunities, and a mock Run Scan control using `/api/scans/run`.
+Deactivate behavior preserves historical runs and opportunities.
+
+The UI intentionally does not add users, ownership, production auth, real
+providers, public sharing, deployment, billing, cron, or new package
+dependencies. Focused coverage for view models, form mapping, and the mock scan
+payload runs with:
+
+```bash
+npx tsx --test tests/radar-task-view-models.test.ts
+```
+
 ## Local Radar Task API
 
-The MVP exposes a single-admin, unauthenticated local API slice for Radar Task management. It is intended for local development and later admin UI integration; it does not add sessions, public auth, scans, SERP providers, or LLM calls.
+The MVP exposes a single-admin local API slice for Radar Task management. In
+the app runtime it is protected by the local admin middleware; focused handler
+tests may still call the route functions directly. It does not add public auth,
+multi-user ownership, SERP providers, LLM calls, or public deployment behavior.
 
 Endpoints:
 

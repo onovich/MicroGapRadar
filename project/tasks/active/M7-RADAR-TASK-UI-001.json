@@ -2,7 +2,7 @@
   "id": "M7-RADAR-TASK-UI-001",
   "summary": "Add protected Radar Task list, create, detail, edit, delete, and mock Run Scan UI on top of the existing API.",
   "milestone": "M7",
-  "status": "READY",
+  "status": "CLOSED",
   "owner_role": "client_engineer",
   "reviewer_role": "qa_reviewer",
   "required_reviewers": [
@@ -18,6 +18,7 @@
       "app/radar-tasks/**",
       "components/**",
       "lib/radar-task-view-models.ts",
+      "lib/radar-task-run-scan.ts",
       "tests/**",
       "README.md",
       "PROJECT_STATUS.md",
@@ -62,7 +63,11 @@
     "node .agents/skills/just-goal/scripts/taskctl.mjs validate --repo-root ."
   ],
   "branch_or_worktree": "main",
-  "threads": {},
+  "threads": {
+    "systems_architect": "019f0fd9-2515-7341-8c53-e047c2b36795",
+    "security_reviewer": "019f0fd9-36ca-7183-8abb-cd61b63cc5b0",
+    "qa_reviewer": "019f0fe4-cc05-7101-bd56-3df7d7d07104"
+  },
   "route_to": "client_engineer",
   "notes": [
     "Derived from docs/11_development_plan.md M2 and docs/10_acceptance_criteria_and_test_plan.md flows 2 and 3.",
@@ -76,5 +81,5 @@
     "No changes to scoring, opportunity analysis, LLM, SERP provider behavior, or MVP Spec generation."
   ],
   "created_at": "2026-06-29T00:00:00Z",
-  "updated_at": "2026-06-28T19:58:00.179Z"
+  "updated_at": "2026-06-28T20:32:08.443Z"
 }

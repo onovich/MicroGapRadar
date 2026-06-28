@@ -1,0 +1,76 @@
+{
+  "message_id": "MSG-20260628-CLIENT_ENGINEER",
+  "task_id": "M7-RADAR-TASK-UI-001",
+  "from_role": "client_engineer",
+  "status": "REVIEW",
+  "summary": "Implemented the protected Radar Task UI slice on top of the existing local admin gate and existing Radar Task/Run Scan boundaries. The slice adds list, create, detail, edit, deactivate, recent run/latest opportunity context, and a client-side mock Run Scan control that calls the existing /api/scans/run endpoint with useMockSerp=true.",
+  "artifacts": [
+    "app/radar-tasks/page.tsx",
+    "app/radar-tasks/new/page.tsx",
+    "app/radar-tasks/[id]/page.tsx",
+    "app/radar-tasks/[id]/edit/page.tsx",
+    "app/radar-tasks/actions.ts",
+    "components/RadarTaskForm.tsx",
+    "components/RadarTaskRunScanControl.tsx",
+    "components/RadarTaskDeleteControl.tsx",
+    "lib/radar-task-view-models.ts",
+    "lib/radar-task-run-scan.ts",
+    "tests/radar-task-view-models.test.ts",
+    "README.md",
+    "project/tasks/active/M7-RADAR-TASK-UI-001.json",
+    "project/messages/outbox/M7-RADAR-TASK-UI-001__MSG-20260628-CLIENT_ENGINEER.json"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "tests_run": [
+    {
+      "command": "npx tsx --test tests/radar-task-view-models.test.ts",
+      "exit_code": 0,
+      "result": "PASS: 4 focused Radar Task view-model/form/run-scan tests passed."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "PASS: 86 tests passed across 18 suites."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "result": "PASS: Next.js production build passed; known local Windows SWC optional-native warnings were nonfatal."
+    },
+    {
+      "command": "npx tsx --test tests/release-readiness-smoke.test.ts",
+      "exit_code": 0,
+      "result": "PASS: focused local release smoke passed."
+    },
+    {
+      "command": "node .agents/skills/just-goal/scripts/taskctl.mjs validate --repo-root .",
+      "exit_code": 0,
+      "result": "PASS: 18 task files validated."
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS: no whitespace errors; LF-to-CRLF warnings only."
+    }
+  ],
+  "decisions": [
+    "Used server actions for create/update/deactivate so the UI does not expand or depend on unauthenticated CRUD routes.",
+    "Kept /api/scans/run as the only client-side request and forced useMockSerp=true through a small client-safe helper.",
+    "Split client-safe run-scan helpers from server-side Radar Task view-model loaders to avoid bundling Prisma/server loaders into the client component.",
+    "Kept delete behavior as explicit deactivation with confirmation copy, matching the existing soft-delete API.",
+    "Documented the local-only Radar Task UI and kept provider/deployment/ownership scope human-gated."
+  ],
+  "risks": [
+    "The mock Run Scan control requires an authenticated session because /api/scans/run is protected by the local admin middleware.",
+    "The UI uses server actions and local APIs for self-use; production multi-user ownership remains out of scope.",
+    "Windows Next build still prints known nonfatal optional SWC warnings."
+  ],
+  "blockers": [],
+  "non_goal_confirmation": [
+    "No production auth, multi-user ownership, real provider setup, paid service, public deployment, CI/CD, DNS, cron, email, billing, telemetry, package dependency, package-lock, Prisma schema/migration, scoring, LLM, SERP provider, or MVP Spec behavior change was added."
+  ],
+  "route_to": "systems_architect",
+  "requested_action": "Review UI/server-action boundaries, client/server imports, existing API contract usage, and task acceptance criteria before QA.",
+  "created_at": "2026-06-28T20:45:00Z"
+}

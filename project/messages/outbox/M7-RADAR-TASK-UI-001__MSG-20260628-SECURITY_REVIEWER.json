@@ -1,0 +1,28 @@
+{
+  "message_id": "MSG-20260628-SECURITY_REVIEWER",
+  "task_id": "M7-RADAR-TASK-UI-001",
+  "from_role": "security_reviewer",
+  "status": "ACCEPT",
+  "summary": "Security accepts the Radar Task UI after R2. Server actions now perform an in-action local admin session check before mutations, the mock scan control still posts only to the protected /api/scans/run endpoint with useMockSerp=true, the README direct API example includes authenticated session handling, and no provider/deployment/ownership/security scope creep was found.",
+  "findings": [],
+  "artifacts_reviewed": [
+    "app/radar-tasks/actions.ts",
+    "app/radar-tasks/action-handlers.ts",
+    "components/RadarTaskRunScanControl.tsx",
+    "lib/radar-task-run-scan.ts",
+    "README.md",
+    "project/tasks/active/M7-RADAR-TASK-UI-001.json",
+    "project/messages/outbox/M7-RADAR-TASK-UI-001__MSG-20260628-CLIENT_ENGINEER-R2.json"
+  ],
+  "decisions": [
+    "ACCEPT: Server Actions verify local admin session with cookies(), adminSessionCookieName, and verifyAdminSessionToken() before create/update/deactivate mutations.",
+    "ACCEPT: Deactivate remains soft-delete behavior and requires explicit confirmation.",
+    "ACCEPT: The UI does not expose real secrets, public sharing, production ownership, provider setup, deployment, CI/CD, DNS, or paid service behavior.",
+    "ACCEPT: README shows authenticated session handling for the protected direct scan API call."
+  ],
+  "requested_changes": [],
+  "blockers": [],
+  "route_to": "qa_reviewer",
+  "requested_action": "Proceed to final QA review.",
+  "created_at": "2026-06-28T21:12:00Z"
+}
