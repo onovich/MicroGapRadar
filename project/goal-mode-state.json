@@ -1,18 +1,41 @@
 {
   "version": 1,
   "enabled": true,
-  "current_milestone": "M3",
+  "current_milestone": "M4",
   "current_task": "M4-SCORING-ENGINE-001",
-  "active_threads": [],
+  "active_threads": [
+    {
+      "role": "implementation_engineer",
+      "task_id": "M4-SCORING-ENGINE-001",
+      "thread_id": "019f0d55-0dee-7520-88fe-4ed971624b20",
+      "status": "active"
+    },
+    {
+      "role": "systems_architect",
+      "task_id": "M4-SCORING-ENGINE-001",
+      "thread_id": "019f0d55-6852-7b91-b520-461ea28a9e4f",
+      "status": "active"
+    },
+    {
+      "role": "domain_designer",
+      "task_id": "M4-SCORING-ENGINE-001",
+      "thread_id": "019f0d55-7678-7213-9bdd-c86f74e5baa8",
+      "status": "active"
+    },
+    {
+      "role": "qa_reviewer",
+      "task_id": "M4-SCORING-ENGINE-001",
+      "thread_id": "019f0d56-1bc9-7690-86b9-8dd2e8d9ed14",
+      "status": "active"
+    }
+  ],
   "last_integrated_task": "M3-OPPORTUNITY-ANALYSIS-AGENT-001",
   "last_main_commit": "da1e578",
-  "next_ready_tasks": [
-    "M4-SCORING-ENGINE-001"
-  ],
+  "next_ready_tasks": [],
   "unresolved_risks": [],
   "human_gate": {
     "required": false,
     "reason": null
   },
-  "last_updated_at": "2026-06-28T08:23:52Z"
+  "last_updated_at": "2026-06-28T08:27:48Z"
 }

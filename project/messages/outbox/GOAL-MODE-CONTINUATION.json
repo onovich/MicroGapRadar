@@ -1,7 +1,7 @@
 {
   "version": 1,
   "created_at": "2026-06-27T19:24:00Z",
-  "updated_at": "2026-06-28T08:23:52Z",
+  "updated_at": "2026-06-28T08:27:48Z",
   "main_commit": "da1e578",
   "current_milestone": "M4",
   "current_task": "M4-SCORING-ENGINE-001",
@@ -32,37 +32,65 @@
     "m3_opportunity_analysis_domain_designer": "019f0d15-a618-7da0-84d7-0334b0ffcbcc",
     "m3_opportunity_analysis_qa_reviewer": "019f0d45-b9c3-7002-86e0-826b5fb655b5"
   },
-  "active_threads": [],
-  "next_ready_tasks": [
-    "M4-SCORING-ENGINE-001"
+  "active_threads": [
+    {
+      "role": "implementation_engineer",
+      "task_id": "M4-SCORING-ENGINE-001",
+      "thread_id": "019f0d55-0dee-7520-88fe-4ed971624b20",
+      "status": "active"
+    },
+    {
+      "role": "systems_architect",
+      "task_id": "M4-SCORING-ENGINE-001",
+      "thread_id": "019f0d55-6852-7b91-b520-461ea28a9e4f",
+      "status": "active"
+    },
+    {
+      "role": "domain_designer",
+      "task_id": "M4-SCORING-ENGINE-001",
+      "thread_id": "019f0d55-7678-7213-9bdd-c86f74e5baa8",
+      "status": "active"
+    },
+    {
+      "role": "qa_reviewer",
+      "task_id": "M4-SCORING-ENGINE-001",
+      "thread_id": "019f0d56-1bc9-7690-86b9-8dd2e8d9ed14",
+      "status": "active"
+    }
   ],
-  "recommended_next_task": "M4-SCORING-ENGINE-001",
-  "recent_handoffs": [
-    "project/messages/outbox/M3-OPPORTUNITY-ANALYSIS-AGENT-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
-    "project/messages/outbox/M3-OPPORTUNITY-ANALYSIS-AGENT-001__MSG-20260628-SYSTEMS_ARCHITECT.json",
-    "project/messages/outbox/M3-OPPORTUNITY-ANALYSIS-AGENT-001__MSG-20260628-DOMAIN_DESIGNER.json",
-    "project/messages/outbox/M3-OPPORTUNITY-ANALYSIS-AGENT-001__MSG-20260628-QA_REVIEWER.json"
-  ],
+  "next_ready_tasks": [],
+  "recommended_next_task": null,
+  "recent_handoffs": [],
   "validation_evidence": [
     {
-      "command": "node .agents/skills/just-goal/scripts/taskctl.mjs set-status M3-OPPORTUNITY-ANALYSIS-AGENT-001 CLOSED --repo-root .",
+      "command": "multi_agent_v1.spawn_agent implementation_engineer",
       "exit_code": 0,
-      "note": "Opportunity Analysis Agent was accepted, integrated, pushed, and closed."
+      "note": "Spawned Herschel for scoring engine implementation."
     },
     {
-      "command": "node .agents/skills/just-goal/scripts/taskctl.mjs create --id M4-SCORING-ENGINE-001 ...",
+      "command": "multi_agent_v1.spawn_agent systems_architect",
       "exit_code": 0,
-      "note": "Created the next docs-aligned scoring engine task from Task 10 / M4."
+      "note": "Spawned Boyle for systems review preparation."
     },
     {
-      "command": "node .agents/skills/just-goal/scripts/taskctl.mjs set-status M4-SCORING-ENGINE-001 READY --repo-root .",
+      "command": "multi_agent_v1.spawn_agent domain_designer",
       "exit_code": 0,
-      "note": "Scoring Engine task is ready for autonomous execution."
+      "note": "Spawned Mendel for domain review preparation."
+    },
+    {
+      "command": "multi_agent_v1.spawn_agent qa_reviewer",
+      "exit_code": 0,
+      "note": "Spawned Feynman for QA plan and final review."
+    },
+    {
+      "command": "node .agents/skills/just-goal/scripts/taskctl.mjs check-registry --repo-root .",
+      "exit_code": 0,
+      "note": "Registry reports 4 active M4 role threads and no duplicates."
     }
   ],
   "human_gate": {
     "required": false,
     "reason": null
   },
-  "next_prompt": "Use -goal to start M4-SCORING-ENGINE-001 in goal mode: spawn implementation_engineer first, then route to systems_architect, domain_designer, and qa_reviewer before integration."
+  "next_prompt": "Continue JustGoal on M4-SCORING-ENGINE-001: wait for implementation handoff, route it to systems_architect/domain_designer/qa_reviewer, then integrate only after acceptance and required validation."
 }

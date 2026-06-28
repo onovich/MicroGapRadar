@@ -2,7 +2,7 @@
   "id": "M4-SCORING-ENGINE-001",
   "summary": "Add the scoring engine with docs-aligned calculateOpportunityScore(), score breakdown/explanation output, high-risk penalty behavior, and focused tests.",
   "milestone": "M4",
-  "status": "READY",
+  "status": "IN_PROGRESS",
   "owner_role": "implementation_engineer",
   "reviewer_role": "qa_reviewer",
   "risk_level": "R2",
@@ -47,7 +47,12 @@
     "npm run build"
   ],
   "branch_or_worktree": "main",
-  "threads": {},
+  "threads": {
+    "implementation_engineer": "019f0d55-0dee-7520-88fe-4ed971624b20",
+    "systems_architect": "019f0d55-6852-7b91-b520-461ea28a9e4f",
+    "qa_reviewer": "019f0d56-1bc9-7690-86b9-8dd2e8d9ed14",
+    "domain_designer": "019f0d55-7678-7213-9bdd-c86f74e5baa8"
+  },
   "route_to": "implementation_engineer",
   "notes": [
     "Derived from docs/09_codex_implementation_tasks.md Task 10, docs/11_development_plan.md M4, and docs/07_data_model_and_scoring.md score formula.",
@@ -62,7 +67,7 @@
     "No learned/model-based ranking, user feedback calibration, configurable weights UI, or Top 5 filtering implementation beyond deterministic scoring behavior tests."
   ],
   "created_at": "2026-06-28T08:22:11.105Z",
-  "updated_at": "2026-06-28T08:23:00.533Z",
+  "updated_at": "2026-06-28T08:26:46.640Z",
   "required_reviewers": [
     "systems_architect",
     "domain_designer"
