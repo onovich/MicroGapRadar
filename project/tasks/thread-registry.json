@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-06-28T08:26:46.644Z",
+  "updated_at": "2026-06-28T08:53:18Z",
   "threads": {
     "019f0a11-0493-7fe0-89e9-a21d3b680a67": {
       "role": "implementation_engineer",
@@ -161,26 +161,26 @@
     "019f0d55-0dee-7520-88fe-4ed971624b20": {
       "role": "implementation_engineer",
       "task_id": "M4-SCORING-ENGINE-001",
-      "status": "active",
-      "updated_at": "2026-06-28T08:26:46.581Z"
+      "status": "accepted",
+      "updated_at": "2026-06-28T08:53:18Z"
     },
     "019f0d55-6852-7b91-b520-461ea28a9e4f": {
       "role": "systems_architect",
       "task_id": "M4-SCORING-ENGINE-001",
-      "status": "active",
-      "updated_at": "2026-06-28T08:26:46.604Z"
+      "status": "accepted",
+      "updated_at": "2026-06-28T08:53:18Z"
     },
     "019f0d56-1bc9-7690-86b9-8dd2e8d9ed14": {
       "role": "qa_reviewer",
       "task_id": "M4-SCORING-ENGINE-001",
-      "status": "active",
-      "updated_at": "2026-06-28T08:26:46.615Z"
+      "status": "accepted",
+      "updated_at": "2026-06-28T08:53:18Z"
     },
     "019f0d55-7678-7213-9bdd-c86f74e5baa8": {
       "role": "domain_designer",
       "task_id": "M4-SCORING-ENGINE-001",
-      "status": "active",
-      "updated_at": "2026-06-28T08:26:46.644Z"
+      "status": "accepted",
+      "updated_at": "2026-06-28T08:53:18Z"
     }
   }
 }

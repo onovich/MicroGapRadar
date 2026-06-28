@@ -60,28 +60,28 @@
     "implementation_engineer": {
       "model": "gpt-5.5",
       "effort": "high",
-      "status": "active",
+      "status": "accepted",
       "thread_id": "019f0d55-0dee-7520-88fe-4ed971624b20",
       "task_id": "M4-SCORING-ENGINE-001"
     },
     "systems_architect": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "active",
+      "status": "accepted",
       "thread_id": "019f0d55-6852-7b91-b520-461ea28a9e4f",
       "task_id": "M4-SCORING-ENGINE-001"
     },
     "domain_designer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "active",
+      "status": "accepted",
       "thread_id": "019f0d55-7678-7213-9bdd-c86f74e5baa8",
       "task_id": "M4-SCORING-ENGINE-001"
     },
     "qa_reviewer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "active",
+      "status": "accepted",
       "thread_id": "019f0d56-1bc9-7690-86b9-8dd2e8d9ed14",
       "task_id": "M4-SCORING-ENGINE-001"
     },
@@ -91,5 +91,5 @@
       "status": "idle"
     }
   },
-  "last_updated_at": "2026-06-28T08:27:48Z"
+  "last_updated_at": "2026-06-28T08:53:18Z"
 }

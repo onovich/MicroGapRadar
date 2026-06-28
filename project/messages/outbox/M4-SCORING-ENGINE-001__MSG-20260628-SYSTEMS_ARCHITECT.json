@@ -1,0 +1,88 @@
+{
+  "message_id": "MSG-20260628-SYSTEMS_ARCHITECT",
+  "task_id": "M4-SCORING-ENGINE-001",
+  "from_role": "systems_architect",
+  "status": "ACCEPT",
+  "summary": "Systems architecture review accepts the M4 scoring engine slice. lib/scoring.ts is a pure synchronous shared boundary with no runtime imports from agents or services, accepts Opportunity scoreHints plus SERP serpWeaknessScoreHint-compatible input, applies the documented weighted formula with round-and-clamp behavior, normalizes inputs deterministically, and returns persistence-ready scoreBreakdown and scoreExplanation structures for later scan orchestration.",
+  "artifacts": [
+    "lib/scoring.ts",
+    "tests/scoring.test.ts",
+    "README.md",
+    "project/messages/outbox/M4-SCORING-ENGINE-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json"
+  ],
+  "artifacts_reviewed": [
+    "project/tasks/active/M4-SCORING-ENGINE-001.json",
+    "docs/07_data_model_and_scoring.md",
+    "docs/09_codex_implementation_tasks.md",
+    "docs/11_development_plan.md",
+    "agents/opportunity-analysis-agent.ts",
+    "agents/serp-analysis-agent.ts",
+    "lib/schemas.ts",
+    "lib/scoring.ts",
+    "tests/scoring.test.ts",
+    "README.md",
+    "project/messages/outbox/M4-SCORING-ENGINE-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "review_focus": {
+    "pure_boundary": "PASS: lib/scoring.ts has only a type-only import from lib/schemas and no runtime agents/services/provider/API/UI/DB/env/filesystem/network/Prisma/Next/React coupling.",
+    "shared_contract": "PASS: calculateOpportunityScore() accepts nested scoreHints compatible with OpportunityScoreHints plus top-level scoring values, and separately accepts serpWeaknessScore or serpWeaknessScoreHint for compatibility with SerpAnalysisOutput.serpWeaknessScoreHint.",
+    "formula": "PASS: totalScore uses intent 0.18, monetization 0.16, SERP weakness 0.18, toolability 0.18, user fit 0.14, build speed 0.10, minus risk penalty 0.06, followed by Math.round and 0-100 clamping.",
+    "normalization": "PASS: missing, null, empty, nonnumeric, NaN, Infinity, string-like numeric, fractional, negative, and over-100 inputs are handled deterministically and clamped to integer 0-100 values.",
+    "risk_behavior": "PASS: riskLevel minimum penalties for low, medium, high, and excluded preserve the documented formula while ensuring comparable high-risk opportunities rank below comparable safer opportunities; explanation text also flags high/excluded risk for later policy filtering.",
+    "persistence_shape": "PASS: scoreBreakdown matches the existing ScoreBreakdown persistence shape and scoreExplanation includes deterministic JSON-serializable text for every scoring dimension plus totalScore.",
+    "scope": "PASS: no scan orchestrator, API route, DB persistence, UI, provider setup, network call, cron, auth, paid service integration, agent change, schema change, or ranking page implementation was introduced."
+  },
+  "findings": [],
+  "decisions": [
+    "Accepted the lib/scoring.ts boundary as suitable for later scan orchestrator consumption without importing agent or service runtime code.",
+    "Accepted the input contract because it bridges Opportunity Analysis scoreHints and SERP Analysis serpWeaknessScoreHint without requiring current agents to change.",
+    "Accepted the numeric formula, final rounding, and clamping behavior as aligned with docs/07_data_model_and_scoring.md.",
+    "Accepted deterministic defensive defaults as MVP-safe and documented in README.",
+    "Accepted the scoreBreakdown and scoreExplanation output as persistence-ready for the later Opportunity total_score, score_breakdown, and score_explanation fields.",
+    "Accepted the focused tests as covering the systems concerns from the prior rubric and the active task acceptance criteria."
+  ],
+  "risks": [
+    "The first local npm run build attempt compiled and type-checked but exited 1 because Next could not find .next/server/middleware-manifest.json; a no-edit rerun completed successfully, so this appears to be a transient local Next build artifact issue rather than a scoring source issue.",
+    "Risk penalty remains bounded by the documented 0.06 weighted subtraction; later scan orchestration and ranking policy should still filter excluded or regulated opportunities rather than relying only on numeric score.",
+    "Deterministic default values are MVP heuristics and may need calibration after real scan and feedback data exists.",
+    "Next.js build continues to print existing nonfatal @next/swc-win32-x64-msvc invalid Win32 application warnings before falling back successfully."
+  ],
+  "tests_run": [
+    {
+      "command": "node .agents\\skills\\just-goal\\scripts\\validate-handoff.mjs project\\messages\\outbox\\M4-SCORING-ENGINE-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+      "exit_code": 0,
+      "result": "VALID incoming implementation handoff."
+    },
+    {
+      "command": "npx tsx --test tests/scoring.test.ts",
+      "exit_code": 0,
+      "result": "PASS: focused scoring suite passed 6 tests covering formula, clamping, high-risk ranking, dimension ranking, invalid hints, determinism, and explanation shape."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "PASS: all 38 tests across 8 suites passed, including the scoring suite."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 1,
+      "result": "FIRST ATTEMPT: compiled and type-checked, then failed collecting page data with missing .next/server/middleware-manifest.json."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "result": "PASS ON RERUN: Next production build completed, generated static pages, finalized optimization, and exited successfully with existing nonfatal local SWC warnings."
+    },
+    {
+      "command": "node .agents\\skills\\just-goal\\scripts\\validate-handoff.mjs project\\messages\\outbox\\M4-SCORING-ENGINE-001__MSG-20260628-SYSTEMS_ARCHITECT.json",
+      "exit_code": 0,
+      "result": "VALID systems_architect handoff JSON."
+    }
+  ],
+  "blockers": [],
+  "route_to": "domain_designer",
+  "requested_action": "Proceed with domain_designer review of scoring semantics, risk penalty behavior, and explanation wording for M4-SCORING-ENGINE-001.",
+  "created_at": "2026-06-28T16:44:57.9838347+08:00"
+}

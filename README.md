@@ -168,6 +168,47 @@ The required build check is:
 npm run build
 ```
 
+## Scoring Engine
+
+The M4 scoring slice lives in `lib/scoring.ts` and exposes `calculateOpportunityScore()` with typed input/output contracts for score hints, score breakdown, score explanations, and the final total score.
+
+The score uses the documented formula:
+
+```text
+intentScore * 0.18 +
+monetizationScore * 0.16 +
+serpWeaknessScore * 0.18 +
+toolabilityScore * 0.18 +
+userFitScore * 0.14 +
+buildSpeedScore * 0.10 -
+riskPenalty * 0.06
+```
+
+The final total is rounded and clamped to 0-100. Individual dimensions are defensively normalized and clamped to 0-100, with missing or invalid positive dimensions defaulting to 50 and missing or invalid risk penalty defaulting to 35. Numeric strings are accepted, and 0-1 values are treated as normalized fractions.
+
+`scoreBreakdown` returns persistence-ready numeric fields: `intentScore`, `monetizationScore`, `serpWeaknessScore`, `toolabilityScore`, `userFitScore`, `buildSpeedScore`, `riskPenalty`, and `totalScore`. `scoreExplanation` returns concise text for the same dimensions so later opportunity detail UI can explain why a score moved up or down.
+
+Risk remains part of the exact weighted formula. Passing `riskLevel: "high"` raises the normalized risk penalty to at least 70, and `riskLevel: "excluded"` raises it to 100, so comparable safer opportunities sort above high-risk ones.
+
+Risk tiers are decision aids as well as numeric inputs:
+
+- `0-10` low risk: normal scoring can proceed.
+- `11-35` medium risk: use caution, disclaimer, or checklist/self-assessment framing.
+- `36-70` high risk: poor fit for automation and usually not suitable for default ranking.
+- `71-100` exclusion-level risk: filter out or treat as a do-not-build signal outside the numeric total.
+
+Focused scoring coverage runs with:
+
+```bash
+npm test
+```
+
+The required build check is:
+
+```bash
+npm run build
+```
+
 ## Local Radar Task API
 
 The MVP exposes a single-admin, unauthenticated local API slice for Radar Task management. It is intended for local development and later admin UI integration; it does not add sessions, public auth, scans, SERP providers, or LLM calls.

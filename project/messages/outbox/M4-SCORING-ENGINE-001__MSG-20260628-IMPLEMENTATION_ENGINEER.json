@@ -1,0 +1,53 @@
+{
+  "message_id": "MSG-20260628-IMPLEMENTATION_ENGINEER",
+  "task_id": "M4-SCORING-ENGINE-001",
+  "from_role": "implementation_engineer",
+  "status": "REVIEW",
+  "summary": "Implemented the narrow M4 scoring engine slice with a pure calculateOpportunityScore() boundary, typed score contracts, defensive normalization, docs-aligned weighted formula, risk-level penalty handling, score breakdown, score explanations, focused tests, and README documentation.",
+  "artifacts": [
+    "lib/scoring.ts",
+    "tests/scoring.test.ts",
+    "README.md"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "tests_run": [
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "PASS: 38 tests passed across 8 suites, including the new calculateOpportunityScore coverage."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "result": "PASS: Next.js production build completed successfully. Nonfatal local SWC native-package warnings were printed before fallback build continued."
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS: no whitespace errors. Git printed a line-ending conversion warning for README.md."
+    },
+    {
+      "command": "npx tsx --test tests/scoring.test.ts",
+      "exit_code": 0,
+      "result": "PASS: focused scoring tests passed, covering formula, clamping, risk ranking, dimension ranking, invalid hints, determinism, and explanations."
+    }
+  ],
+  "decisions": [
+    "Kept lib/scoring.ts as a pure synchronous shared boundary with no DB, network, API, UI, env, filesystem, LLM, provider, Prisma, or scan orchestration imports.",
+    "Accepted both top-level score values and nested scoreHints so later orchestration can pass Opportunity Analysis scoreHints and SERP Analysis serpWeaknessScoreHint without runtime agent imports.",
+    "Implemented the documented formula exactly: intent 0.18, monetization 0.16, SERP weakness 0.18, toolability 0.18, user fit 0.14, build speed 0.10, minus risk penalty 0.06, then round and clamp 0-100.",
+    "Normalized missing or invalid positive dimensions to 50 and missing or invalid risk penalty to 35; numeric strings are accepted and 0-1 values are treated as normalized fractions.",
+    "Added riskLevel minimum penalties for low, medium, high, and excluded risk to keep comparable high-risk opportunities below safer ones while preserving the documented weighted formula.",
+    "Returned scoreBreakdown and scoreExplanation shapes that are persistence-ready for later Opportunity.total_score, score_breakdown, and score_explanation fields."
+  ],
+  "risks": [
+    "Risk penalty is still limited by the documented 0.06 subtractive weight, so excluded or regulated opportunities should still be filtered by guardrails and later ranking policy rather than relying on score alone.",
+    "Default values are deterministic MVP heuristics and may need calibration after real scan and feedback data exists.",
+    "The successful build still emitted nonfatal local Next SWC native-package warnings about next-swc.win32-x64-msvc being an invalid Win32 application."
+  ],
+  "blockers": [],
+  "route_to": "systems_architect",
+  "requested_action": "Review the scoring engine implementation against M4-SCORING-ENGINE-001, then route to domain_designer and qa_reviewer for final acceptance.",
+  "created_at": "2026-06-28T08:34:00Z"
+}

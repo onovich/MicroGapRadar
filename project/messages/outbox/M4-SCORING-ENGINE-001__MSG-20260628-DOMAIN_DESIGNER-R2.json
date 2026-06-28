@@ -1,0 +1,85 @@
+{
+  "message_id": "MSG-20260628-DOMAIN_DESIGNER-R2",
+  "task_id": "M4-SCORING-ENGINE-001",
+  "from_role": "domain_designer",
+  "status": "ACCEPT",
+  "summary": "R2 domain re-review accepts the scoring engine risk-semantics fix. The previous REQUEST_CHANGES is resolved: README now documents low, medium, high, and exclusion-level risk meanings; riskPenalty explanations now carry decision-aid guidance; high and exclusion-level explanation assertions exist; and the exact documented weighted formula remains unchanged.",
+  "artifacts": [
+    "project/messages/outbox/M4-SCORING-ENGINE-001__MSG-20260628-DOMAIN_DESIGNER-R2.json"
+  ],
+  "artifacts_reviewed": [
+    "project/messages/outbox/M4-SCORING-ENGINE-001__MSG-20260628-IMPLEMENTATION_ENGINEER-R2.json",
+    "project/messages/outbox/M4-SCORING-ENGINE-001__MSG-20260628-DOMAIN_DESIGNER.json",
+    "project/tasks/active/M4-SCORING-ENGINE-001.json",
+    "lib/scoring.ts",
+    "tests/scoring.test.ts",
+    "README.md"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "acceptance_criteria_review": [
+    {
+      "criterion": "Exact scoring formula preserved.",
+      "status": "PASS",
+      "notes": "SCORE_WEIGHTS still match the docs and calculateOpportunityScore() still computes positive weighted dimensions minus riskPenalty * 0.06, then rounds and clamps to 0-100."
+    },
+    {
+      "criterion": "README documents full risk semantics.",
+      "status": "PASS",
+      "notes": "README Scoring Engine now documents low 0-10 as normal scoring can proceed, medium 11-35 as caution/disclaimer/checklist framing, high 36-70 as poor automation/default-ranking fit, and 71-100 as filter/do-not-build outside the numeric total."
+    },
+    {
+      "criterion": "riskPenalty explanation carries decision-aid language.",
+      "status": "PASS",
+      "notes": "riskDecisionAid() adds deterministic guidance for low, medium, high, and exclusion-level penalties while preserving the subtractive riskPenalty explanation."
+    },
+    {
+      "criterion": "High and exclusion-level warning coverage.",
+      "status": "PASS",
+      "notes": "Focused tests assert high-risk explanations mention poor automation fit and review before ranking, and exclusion-level explanations mention do-not-build handling outside the numeric total."
+    },
+    {
+      "criterion": "No exaggerated market, revenue, ranking, or safety guarantees.",
+      "status": "PASS",
+      "notes": "No new guarantee language was found in the reviewed scoring files. The only scan hit is the existing README guardrail that says there are no promises about revenue, search rankings, legal compliance, medical outcomes, financial outcomes, or assured business results."
+    },
+    {
+      "criterion": "MicroGap Radar thesis alignment.",
+      "status": "PASS",
+      "notes": "The scoring engine remains aligned with task-intent microtool opportunities: weak SERP, clear toolability, user fit, monetization potential, build speed, and explicit risk burden."
+    }
+  ],
+  "findings": [],
+  "decisions": [
+    "Accepted the R2 README risk-tier clarification as resolving the documentation portion of the prior domain finding.",
+    "Accepted the riskDecisionAid() wording as enough decision-aid guidance for this M4 scoring slice without changing formula or adding hidden filtering.",
+    "Accepted the added high-risk and exclusion-level explanation assertions as covering the requested warning semantics.",
+    "Routed to qa_reviewer for final QA review."
+  ],
+  "risks": [
+    "RiskPenalty still intentionally has only the documented 0.06 weight, so later orchestration or ranking policy should filter exclusion-level opportunities explicitly rather than relying on totalScore alone.",
+    "Risk explanation wording is deterministic MVP guidance and may need evidence-aware copy after real scan data is available.",
+    "Full npm test and npm run build results are reported in the implementation R2 handoff; domain_designer reran only focused scoring tests plus handoff validation."
+  ],
+  "blockers": [],
+  "tests_run": [
+    {
+      "command": "node .agents/skills/just-goal/scripts/validate-handoff.mjs project/messages/outbox/M4-SCORING-ENGINE-001__MSG-20260628-IMPLEMENTATION_ENGINEER-R2.json",
+      "exit_code": 0,
+      "result": "VALID R2 implementation handoff JSON."
+    },
+    {
+      "command": "npx tsx --test tests/scoring.test.ts",
+      "exit_code": 0,
+      "result": "PASS: 6 calculateOpportunityScore tests passed, including high-risk and exclusion-level explanation assertions."
+    },
+    {
+      "command": "rg -n \"guarantee|guaranteed|validated demand|easy ranking|assured|market proof|revenue proof|safe to automate|guarantees|promises\" README.md lib/scoring.ts tests/scoring.test.ts",
+      "exit_code": 0,
+      "result": "Only expected README guardrail found: no promises about revenue, search rankings, legal compliance, medical outcomes, financial outcomes, or assured business results."
+    }
+  ],
+  "route_to": "qa_reviewer",
+  "requested_action": "Proceed with QA review for M4-SCORING-ENGINE-001. Domain_designer accepts the R2 risk-semantics fix and has no remaining domain/product changes.",
+  "created_at": "2026-06-28T08:47:41Z"
+}

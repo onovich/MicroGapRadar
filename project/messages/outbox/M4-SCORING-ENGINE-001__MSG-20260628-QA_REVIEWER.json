@@ -1,0 +1,132 @@
+{
+  "message_id": "MSG-20260628-QA_REVIEWER",
+  "task_id": "M4-SCORING-ENGINE-001",
+  "from_role": "qa_reviewer",
+  "status": "ACCEPT",
+  "summary": "Final QA accepts M4-SCORING-ENGINE-001 after R2 implementation and domain acceptance. The scoring engine exposes the requested typed calculateOpportunityScore() boundary, implements the documented weighted formula with round-and-clamp behavior, normalizes score hints defensively, applies risk-level minimum penalties and decision-aid risk explanations, returns persistence-ready scoreBreakdown and scoreExplanation shapes, and remains scoped to lib/scoring.ts, tests/scoring.test.ts, and README scoring documentation.",
+  "artifacts": [
+    "lib/scoring.ts",
+    "tests/scoring.test.ts",
+    "README.md",
+    "project/messages/outbox/M4-SCORING-ENGINE-001__MSG-20260628-QA_REVIEWER.json"
+  ],
+  "artifacts_reviewed": [
+    "project/tasks/active/M4-SCORING-ENGINE-001.json",
+    "project/messages/outbox/M4-SCORING-ENGINE-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+    "project/messages/outbox/M4-SCORING-ENGINE-001__MSG-20260628-SYSTEMS_ARCHITECT.json",
+    "project/messages/outbox/M4-SCORING-ENGINE-001__MSG-20260628-DOMAIN_DESIGNER.json",
+    "project/messages/outbox/M4-SCORING-ENGINE-001__MSG-20260628-DOMAIN_DESIGNER-R2.json",
+    "project/messages/outbox/M4-SCORING-ENGINE-001__MSG-20260628-IMPLEMENTATION_ENGINEER-R2.json",
+    "lib/scoring.ts",
+    "tests/scoring.test.ts",
+    "README.md"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "findings": [],
+  "acceptance_criteria_review": [
+    {
+      "criterion": "Reusable scoring module and typed contracts.",
+      "status": "PASS",
+      "notes": "lib/scoring.ts exports calculateOpportunityScore(), score hint/input types, score breakdown type, score explanation type, and score result type."
+    },
+    {
+      "criterion": "Docs-aligned formula, rounding, and clamp.",
+      "status": "PASS",
+      "notes": "Formula uses the documented weights and subtracts riskPenalty * 0.06, then rounds and clamps totalScore to 0-100."
+    },
+    {
+      "criterion": "Defensive score hint normalization.",
+      "status": "PASS",
+      "notes": "Tests and focused probe cover missing, invalid, numeric-string, fractional, negative, over-100, NaN, and Infinity score values."
+    },
+    {
+      "criterion": "Risk penalty behavior and semantics.",
+      "status": "PASS",
+      "notes": "Comparable high-risk opportunities rank below safer alternatives, excluded risk receives a 100 minimum penalty, and R2 domain review accepted the README and explanation decision-aid wording."
+    },
+    {
+      "criterion": "Explanation and persistence-ready output shape.",
+      "status": "PASS",
+      "notes": "scoreBreakdown matches the existing ScoreBreakdown fields and scoreExplanation includes concise text for every dimension, risk penalty, and total score."
+    },
+    {
+      "criterion": "Scope boundaries.",
+      "status": "PASS",
+      "notes": "Product implementation is limited to lib/scoring.ts, tests/scoring.test.ts, and README scoring documentation. No API, UI, database persistence, scan orchestrator, provider, network, cron, auth, package, or service integration change was found."
+    }
+  ],
+  "tests_run": [
+    {
+      "command": "node .agents\\skills\\just-goal\\scripts\\validate-handoff.mjs project\\messages\\outbox\\M4-SCORING-ENGINE-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+      "exit_code": 0,
+      "result": "VALID initial implementation handoff."
+    },
+    {
+      "command": "node .agents\\skills\\just-goal\\scripts\\validate-handoff.mjs project\\messages\\outbox\\M4-SCORING-ENGINE-001__MSG-20260628-SYSTEMS_ARCHITECT.json",
+      "exit_code": 0,
+      "result": "VALID systems_architect ACCEPT handoff."
+    },
+    {
+      "command": "node .agents\\skills\\just-goal\\scripts\\validate-handoff.mjs project\\messages\\outbox\\M4-SCORING-ENGINE-001__MSG-20260628-DOMAIN_DESIGNER-R2.json",
+      "exit_code": 0,
+      "result": "VALID domain_designer R2 ACCEPT handoff."
+    },
+    {
+      "command": "node .agents\\skills\\just-goal\\scripts\\validate-handoff.mjs project\\messages\\outbox\\M4-SCORING-ENGINE-001__MSG-20260628-IMPLEMENTATION_ENGINEER-R2.json",
+      "exit_code": 0,
+      "result": "VALID R2 implementation handoff."
+    },
+    {
+      "command": "node .agents\\skills\\just-goal\\scripts\\taskctl.mjs validate M4-SCORING-ENGINE-001",
+      "exit_code": 0,
+      "result": "VALID active task JSON."
+    },
+    {
+      "command": "node .agents\\skills\\just-goal\\scripts\\modelctl.mjs validate",
+      "exit_code": 0,
+      "result": "VALID model-routing-state JSON."
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS: no whitespace errors. Git printed line-ending conversion warnings for README.md and project coordination JSON files."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "PASS: 38 tests passed across 8 suites, including 6 calculateOpportunityScore tests."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "result": "PASS: Next.js production build completed. Existing nonfatal local @next/swc-win32-x64-msvc warnings were printed before fallback build continued."
+    },
+    {
+      "command": "npx tsx focused scoring probe",
+      "exit_code": 0,
+      "result": "PASS: comparable low/high/excluded risk scores were 84/80/79 with expected risk explanations; invalid score hints fell back deterministically."
+    },
+    {
+      "command": "rg scope scans over lib/scoring.ts and tests/scoring.test.ts",
+      "exit_code": 0,
+      "result": "PASS: no forbidden runtime coupling, network, env, Prisma, Next, React, API, scan, orchestrator, provider, cron, auth, or paid-service usage found; imports are limited to type-only ScoreBreakdown, node:test/assert, and ../lib/scoring."
+    }
+  ],
+  "decisions": [
+    "Accepted the R2 implementation after domain_designer accepted the risk-tier semantic clarification.",
+    "Accepted the exact documented scoring formula and deterministic defaults as sufficient for the M4 scoring-engine slice.",
+    "Accepted riskDecisionAid() as explanation-only decision guidance; no hidden filtering or ranking side effect was introduced.",
+    "Treated JustGoal task/message/model-routing files as coordination state outside product implementation scope.",
+    "Did not commit or push."
+  ],
+  "risks": [
+    "Risk penalty intentionally remains a 0.06 weighted subtraction; later orchestration or ranking policy should still filter exclusion-level opportunities explicitly.",
+    "Task JSON currently still records the prior REQUEST_CHANGES state and should be updated by the lead_orchestrator during integration/closure.",
+    "Next build continues to print existing nonfatal local SWC native-package warnings."
+  ],
+  "blockers": [],
+  "route_to": "lead_orchestrator",
+  "requested_action": "Integrate and close M4-SCORING-ENGINE-001. QA, systems_architect, and domain_designer R2 have accepted the scoring engine slice.",
+  "created_at": "2026-06-28T16:51:25.4455196+08:00"
+}

@@ -1,0 +1,95 @@
+{
+  "message_id": "MSG-20260628-DOMAIN_DESIGNER",
+  "task_id": "M4-SCORING-ENGINE-001",
+  "from_role": "domain_designer",
+  "status": "REQUEST_CHANGES",
+  "summary": "Domain review accepts the scoring formula, subtractive risk penalty mechanics, comparable-risk ranking behavior, no-guarantee language, and MicroGap Radar thesis alignment, but requests a small risk-semantics clarification before acceptance. The current implementation labels risk tiers, yet medium/high/excluded risk meanings are not explicit enough in README or scoreExplanation for a decision-aid surface, especially because an exclusion-level penalty can still produce a high numeric total under the documented 0.06 weight.",
+  "artifacts": [
+    "project/messages/outbox/M4-SCORING-ENGINE-001__MSG-20260628-DOMAIN_DESIGNER.json"
+  ],
+  "artifacts_reviewed": [
+    "project/tasks/active/M4-SCORING-ENGINE-001.json",
+    "docs/07_data_model_and_scoring.md",
+    "project/messages/outbox/M4-SCORING-ENGINE-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+    "lib/scoring.ts",
+    "tests/scoring.test.ts",
+    "README.md"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "acceptance_criteria_review": [
+    {
+      "criterion": "Scoring formula meaning and documented weights.",
+      "status": "PASS",
+      "notes": "SCORE_WEIGHTS and calculateOpportunityScore() implement intent 0.18, monetization 0.16, SERP weakness 0.18, toolability 0.18, user fit 0.14, build speed 0.10, minus riskPenalty 0.06, then round and clamp to 0-100. README repeats the same formula."
+    },
+    {
+      "criterion": "riskPenalty as a subtractive burden.",
+      "status": "PASS",
+      "notes": "The implementation subtracts riskPenalty from the weighted score and the generated risk explanation says it subtracts weight 0.06. README also frames risk as part of the weighted formula."
+    },
+    {
+      "criterion": "Low, medium, high, and excluded risk framing.",
+      "status": "REQUEST_CHANGES",
+      "notes": "The code defines low/medium/high/excluded penalty minima and riskTier labels, but the domain meaning is under-documented. README only calls out high and excluded minimums, and scoreExplanation does not say that medium risk needs disclaimer/checklist framing, high risk is not suitable for automation, and excluded risk should be filtered or treated as a do-not-build signal outside the numeric total."
+    },
+    {
+      "criterion": "Comparable risky opportunities rank below safer alternatives.",
+      "status": "PASS",
+      "notes": "Risk-level minimum penalties make otherwise equal high-risk opportunities score below low-risk opportunities, and tests cover the safer-comparable Top 5 scenario."
+    },
+    {
+      "criterion": "Explanations are decision-aid language with no market, revenue, ranking, or safety guarantees.",
+      "status": "REQUEST_CHANGES",
+      "notes": "No exaggerated guarantee language was found. The requested change is to make risk explanations more decision-oriented for medium/high/excluded tiers while preserving concise, non-guaranteed wording."
+    },
+    {
+      "criterion": "MicroGap Radar thesis alignment.",
+      "status": "PASS",
+      "notes": "The scoring dimensions still favor task-intent keywords, weak SERPs, tool-shaped outputs, user fit, monetization potential, and fast MVP build speed. Tests compare a generic article idea against a weak-SERP/toolable/user-fit microtool opportunity."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "P2",
+      "file": "README.md",
+      "line": 183,
+      "title": "Clarify risk-tier semantics beyond high/excluded minimums",
+      "details": "README documents that high risk becomes at least 70 and excluded becomes 100, but it does not document the full docs-aligned meaning: low 0-10, medium 11-35 needs disclaimer/checklist framing, high 36-70 is not suitable for automation, and 71-100 should be excluded or filtered. This matters because the numeric formula intentionally only subtracts risk at weight 0.06."
+    },
+    {
+      "severity": "P2",
+      "file": "lib/scoring.ts",
+      "line": 236,
+      "title": "Make riskPenalty explanation carry the product decision warning",
+      "details": "The current risk explanation labels the tier and says the penalty subtracts weight 0.06, but it does not tell downstream UI or reviewers what to do with medium, high, or exclusion-level risk. Please preserve the exact formula while adding concise decision-aid language, for example medium needs caution/disclaimer framing, high is poor automation fit, and exclusion-level should be filtered or treated as do-not-build."
+    }
+  ],
+  "decisions": [
+    "Did not request any change to the documented weighted formula; the formula implementation is correct.",
+    "Accepted the current high-risk ranking mechanic for comparable opportunities as sufficient for this M4 scoring slice.",
+    "Requested changes only for risk-tier semantic clarity in documentation and generated explanations, because domain reviewers and later UI/ranking surfaces need to see that excluded risk is not made safe by a high total score.",
+    "No product/source files were edited during review; only this domain_designer handoff was created."
+  ],
+  "risks": [
+    "Because riskPenalty has only a 0.06 weight, an exclusion-level opportunity can still receive a high total score when positive dimensions are strong; downstream filtering needs explicit risk semantics.",
+    "The current generic dimension explanations are acceptable for M4 but may need evidence-aware wording once real Opportunity Analysis evidence is wired into scoring.",
+    "Implementation-reported build warnings about local Next SWC native packages were not revalidated by this domain review."
+  ],
+  "blockers": [],
+  "tests_run": [
+    {
+      "command": "node .agents/skills/just-goal/scripts/validate-handoff.mjs project/messages/outbox/M4-SCORING-ENGINE-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+      "exit_code": 0,
+      "result": "VALID implementation handoff JSON."
+    },
+    {
+      "command": "Read-only domain review of lib/scoring.ts, tests/scoring.test.ts, README.md scoring section, task JSON, and scoring docs",
+      "exit_code": 0,
+      "result": "Reviewed score semantics, risk penalty behavior, no-guarantee language, and MicroGap Radar alignment. No product tests were rerun by domain_designer."
+    }
+  ],
+  "route_to": "implementation_engineer",
+  "requested_action": "Please clarify risk-tier semantics in README and riskPenalty scoreExplanation while preserving the exact documented scoring formula. Route back to domain_designer after updating; QA should wait until this domain semantics request is resolved.",
+  "created_at": "2026-06-28T08:40:35Z"
+}
