@@ -1,11 +1,11 @@
 {
   "version": 1,
   "created_at": "2026-06-27T19:24:00Z",
-  "updated_at": "2026-06-28T12:15:43Z",
-  "main_commit": "be68450",
+  "updated_at": "2026-06-28T12:55:00Z",
+  "main_commit": "1ebe85f",
   "current_milestone": "M5",
-  "current_task": "M5-DASHBOARD-OPPORTUNITY-LIST-001",
-  "last_integrated_task": "M4-RUN-SCAN-API-001",
+  "current_task": "M5-OPPORTUNITY-DETAIL-STATUS-001",
+  "last_integrated_task": "M5-DASHBOARD-OPPORTUNITY-LIST-001",
   "closed_threads": {
     "m0_implementation_engineer": "019f0a11-0493-7fe0-89e9-a21d3b680a67",
     "m0_qa_reviewer": "019f0a2a-70f9-77e0-8f7d-6091b879545a",
@@ -39,52 +39,48 @@
     "m4_run_scan_api_systems_architect": "019f0d72-d836-7983-a20f-6df9854b95d6",
     "m4_run_scan_api_domain_designer": "019f0d72-da92-7f40-8ae4-0dfb3737f227",
     "m4_run_scan_api_security_reviewer": "019f0d72-dcc3-7831-97ae-15e7293fbd21",
-    "m4_run_scan_api_qa_reviewer": "019f0d72-de9d-7091-9983-dc8e48404156"
+    "m4_run_scan_api_qa_reviewer": "019f0d72-de9d-7091-9983-dc8e48404156",
+    "m5_dashboard_opportunity_list_implementation_engineer": "019f0e26-be4e-7ad2-b00f-d536cc0f02a1",
+    "m5_dashboard_opportunity_list_systems_architect": "019f0e26-d257-78a3-8d78-b4f594c511a3",
+    "m5_dashboard_opportunity_list_domain_designer": "019f0e26-e716-78c0-b1fc-b1196006cae1",
+    "m5_dashboard_opportunity_list_qa_reviewer": "019f0e26-ee4f-7973-967a-3c934f7bd3bb"
   },
-  "active_threads": [
-    {
-      "role": "implementation_engineer",
-      "task_id": "M5-DASHBOARD-OPPORTUNITY-LIST-001",
-      "thread_id": "019f0e26-be4e-7ad2-b00f-d536cc0f02a1",
-      "status": "active"
-    },
-    {
-      "role": "systems_architect",
-      "task_id": "M5-DASHBOARD-OPPORTUNITY-LIST-001",
-      "thread_id": "019f0e26-d257-78a3-8d78-b4f594c511a3",
-      "status": "active"
-    },
-    {
-      "role": "domain_designer",
-      "task_id": "M5-DASHBOARD-OPPORTUNITY-LIST-001",
-      "thread_id": "019f0e26-e716-78c0-b1fc-b1196006cae1",
-      "status": "active"
-    },
-    {
-      "role": "qa_reviewer",
-      "task_id": "M5-DASHBOARD-OPPORTUNITY-LIST-001",
-      "thread_id": "019f0e26-ee4f-7973-967a-3c934f7bd3bb",
-      "status": "active"
-    }
+  "active_threads": [],
+  "next_ready_tasks": [
+    "M5-OPPORTUNITY-DETAIL-STATUS-001"
   ],
-  "next_ready_tasks": [],
   "recommended_next_task": null,
-  "recent_handoffs": [],
+  "recent_handoffs": [
+    "project/messages/outbox/M5-DASHBOARD-OPPORTUNITY-LIST-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+    "project/messages/outbox/M5-DASHBOARD-OPPORTUNITY-LIST-001__MSG-20260628-SYSTEMS_ARCHITECT.json",
+    "project/messages/outbox/M5-DASHBOARD-OPPORTUNITY-LIST-001__MSG-20260628-DOMAIN_DESIGNER.json",
+    "project/messages/outbox/M5-DASHBOARD-OPPORTUNITY-LIST-001__MSG-20260628-QA_REVIEWER.json"
+  ],
   "validation_evidence": [
     {
-      "command": "multi_agent_v1.spawn_agent implementation_engineer",
+      "command": "npx tsx --test tests/opportunities.test.ts",
       "exit_code": 0,
-      "note": "Spawned Kierkegaard for Dashboard/List implementation."
+      "note": "M5 Dashboard/List focused tests passed: 6 tests."
     },
     {
-      "command": "multi_agent_v1.spawn_agent systems_architect/domain_designer/qa_reviewer",
+      "command": "npm test",
       "exit_code": 0,
-      "note": "Spawned Fermat, Planck, and Volta for parallel review preparation."
+      "note": "M5 Dashboard/List integration gate passed: 52 tests."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "note": "M5 Dashboard/List production build passed with nonfatal local Windows SWC warnings."
+    },
+    {
+      "command": "git push -u origin HEAD",
+      "exit_code": 0,
+      "note": "Integrated M5-DASHBOARD-OPPORTUNITY-LIST-001 at commit 1ebe85f."
     }
   ],
   "human_gate": {
     "required": false,
     "reason": null
   },
-  "next_prompt": "Continue JustGoal on M5-DASHBOARD-OPPORTUNITY-LIST-001: wait for implementation handoff, route to systems/domain/QA, handle changes, integrate, push, close, and continue."
+  "next_prompt": "Continue JustGoal on M5-OPPORTUNITY-DETAIL-STATUS-001: spawn implementation, systems, domain, security, and QA agents as needed; implement the detail/status slice; run npm test and npm run build; route review; integrate, push, close, and continue."
 }

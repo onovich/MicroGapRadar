@@ -58,7 +58,11 @@
     "m4_run_scan_api_systems_architect": "019f0d72-d836-7983-a20f-6df9854b95d6",
     "m4_run_scan_api_domain_designer": "019f0d72-da92-7f40-8ae4-0dfb3737f227",
     "m4_run_scan_api_security_reviewer": "019f0d72-dcc3-7831-97ae-15e7293fbd21",
-    "m4_run_scan_api_qa_reviewer": "019f0d72-de9d-7091-9983-dc8e48404156"
+    "m4_run_scan_api_qa_reviewer": "019f0d72-de9d-7091-9983-dc8e48404156",
+    "m5_dashboard_opportunity_list_implementation_engineer": "019f0e26-be4e-7ad2-b00f-d536cc0f02a1",
+    "m5_dashboard_opportunity_list_systems_architect": "019f0e26-d257-78a3-8d78-b4f594c511a3",
+    "m5_dashboard_opportunity_list_domain_designer": "019f0e26-e716-78c0-b1fc-b1196006cae1",
+    "m5_dashboard_opportunity_list_qa_reviewer": "019f0e26-ee4f-7973-967a-3c934f7bd3bb"
   },
   "roles": {
     "lead_orchestrator": {
@@ -69,30 +73,22 @@
     "implementation_engineer": {
       "model": "gpt-5.5",
       "effort": "high",
-      "status": "active",
-      "thread_id": "019f0e26-be4e-7ad2-b00f-d536cc0f02a1",
-      "task_id": "M5-DASHBOARD-OPPORTUNITY-LIST-001"
+      "status": "idle"
     },
     "systems_architect": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "active",
-      "thread_id": "019f0e26-d257-78a3-8d78-b4f594c511a3",
-      "task_id": "M5-DASHBOARD-OPPORTUNITY-LIST-001"
+      "status": "idle"
     },
     "domain_designer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "active",
-      "thread_id": "019f0e26-e716-78c0-b1fc-b1196006cae1",
-      "task_id": "M5-DASHBOARD-OPPORTUNITY-LIST-001"
+      "status": "idle"
     },
     "qa_reviewer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "active",
-      "thread_id": "019f0e26-ee4f-7973-967a-3c934f7bd3bb",
-      "task_id": "M5-DASHBOARD-OPPORTUNITY-LIST-001"
+      "status": "idle"
     },
     "security_reviewer": {
       "model": "gpt-5.5",
@@ -100,5 +96,5 @@
       "status": "idle"
     }
   },
-  "last_updated_at": "2026-06-28T12:15:43Z"
+  "last_updated_at": "2026-06-28T12:55:00Z"
 }

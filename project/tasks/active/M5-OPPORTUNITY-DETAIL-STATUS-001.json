@@ -1,0 +1,84 @@
+{
+  "id": "M5-OPPORTUNITY-DETAIL-STATUS-001",
+  "summary": "Add the Opportunity Detail UI slice with persisted score/risk/monetization/SERP context and limited Save, Discard, and Build Next status updates.",
+  "milestone": "M5",
+  "status": "READY",
+  "owner_role": "implementation_engineer",
+  "reviewer_role": "qa_reviewer",
+  "risk_level": "R3",
+  "dependencies": [
+    "M5-DASHBOARD-OPPORTUNITY-LIST-001"
+  ],
+  "scope": {
+    "allowed_paths": [
+      "app/opportunities/[id]/**",
+      "app/api/opportunities/[id]/**",
+      "components/**",
+      "lib/opportunities.ts",
+      "tests/**",
+      "README.md"
+    ],
+    "forbidden_paths": [
+      ".git/**",
+      ".codex/**",
+      ".agents/**",
+      "project/**",
+      "skills/**",
+      "docs/**",
+      "mock-data/**",
+      "agents/**",
+      "services/**",
+      "prisma/**",
+      "package.json",
+      "package-lock.json",
+      "lib/scoring.ts",
+      "lib/db.ts",
+      "lib/env.ts",
+      "lib/radar-tasks.ts",
+      "lib/schemas.ts",
+      "app/api/scans/**",
+      "app/api/radar-tasks/**",
+      "app/page.tsx",
+      "app/layout.tsx",
+      "app/globals.css"
+    ]
+  },
+  "acceptance_criteria": [
+    "A server-rendered /opportunities/[id] page exists and loads one persisted Opportunity by id through the shared opportunity data helper.",
+    "The detail page renders the opportunity title/keyword, score, score breakdown/explanation where data exists, SERP weakness summary, tool concept or toolability summary, monetization cues, risk cues, build complexity, kill criteria, radar task/search run context, current status, and navigation back to the list/dashboard.",
+    "Missing opportunities render the framework not-found path or an equivalent 404 behavior without leaking internal errors.",
+    "A narrow local status update path exists for saved, discarded, and build_next only; invalid statuses and missing opportunities return safe errors, and successful updates persist the new Opportunity status.",
+    "The status update UI is clear and restrained, reflects the current status, and does not imply public auth, multi-user workflow, revenue validation, SEO certainty, or market proof.",
+    "Shared view models remain plain serializable objects; UI components do not import Prisma or duplicate authoritative query/update logic.",
+    "Focused automated tests cover detail view-model serialization, score breakdown/risk/monetization rendering, missing opportunity behavior where practical, valid and invalid status updates, and no-op scope boundaries.",
+    "README documents the Opportunity Detail and status-update slice, validation commands, local single-admin assumption, and explicit non-goals.",
+    "No MVP Spec Agent, /api/opportunities/[id]/mvp-spec endpoint, Copy MVP Spec behavior, schema migration, package dependency, provider setup, scan orchestration, scoring formula change, auth/session system, deployment, or GitHub Actions change is implemented."
+  ],
+  "required_tests": [
+    "npm test",
+    "npm run build"
+  ],
+  "branch_or_worktree": "main",
+  "threads": {},
+  "route_to": "implementation_engineer",
+  "notes": [
+    "Derived from docs/09_codex_implementation_tasks.md Task 13 and docs/11_development_plan.md M5.",
+    "Task 14/M6 owns MVP Spec generation and Copy Markdown. This task may show placeholders or absence of MVP Spec content only if it does not implement the generation/copy workflow.",
+    "systems_architect is required because this introduces a dynamic detail route and a local mutation boundary over persisted Opportunity status.",
+    "domain_designer is required because status wording and score/risk presentation must not overstate local/mock scan output.",
+    "security_reviewer is required because this task adds or exposes a write path, even though the current MVP remains a local single-admin application."
+  ],
+  "non_goals": [
+    "No MVP Spec Agent, generated Markdown, Copy MVP Spec button behavior, or /api/opportunities/[id]/mvp-spec route.",
+    "No Prisma schema changes, migrations, seed changes, package changes, real provider setup, LLM setup, env secret loading, auth/session, deployment, or GitHub Actions.",
+    "No Run Scan button wiring, RecentRunStatus component, dashboard scan trigger, cron, background jobs, Radar Task CRUD changes, scan orchestration changes, scoring formula changes, or agent changes.",
+    "No multi-user audit trail, discard reason workflow, recommendation-learning loop, public deployment policy, or irreversible/delete mutation."
+  ],
+  "created_at": "2026-06-28T12:55:00Z",
+  "updated_at": "2026-06-28T12:55:00Z",
+  "required_reviewers": [
+    "systems_architect",
+    "domain_designer",
+    "security_reviewer"
+  ]
+}
