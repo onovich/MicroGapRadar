@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-06-28T13:20:30.325Z",
+  "updated_at": "2026-06-28T13:25:28.492Z",
   "threads": {
     "019f0a11-0493-7fe0-89e9-a21d3b680a67": {
       "role": "implementation_engineer",
@@ -265,6 +265,36 @@
       "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001",
       "status": "closed",
       "updated_at": "2026-06-28T13:20:30.325Z"
+    },
+    "019f0e67-6ace-78c0-804e-50d74fff1b0b": {
+      "role": "implementation_engineer",
+      "task_id": "M6-MVP-SPEC-GENERATION-001",
+      "status": "active",
+      "updated_at": "2026-06-28T13:25:28.319Z"
+    },
+    "019f0e67-7edf-7961-9b39-fe7fae02ee40": {
+      "role": "systems_architect",
+      "task_id": "M6-MVP-SPEC-GENERATION-001",
+      "status": "active",
+      "updated_at": "2026-06-28T13:25:28.364Z"
+    },
+    "019f0e67-945c-73c1-9b58-2d7a18a68d0f": {
+      "role": "domain_designer",
+      "task_id": "M6-MVP-SPEC-GENERATION-001",
+      "status": "active",
+      "updated_at": "2026-06-28T13:25:28.406Z"
+    },
+    "019f0e67-a167-7180-a120-b75c415ff175": {
+      "role": "security_reviewer",
+      "task_id": "M6-MVP-SPEC-GENERATION-001",
+      "status": "active",
+      "updated_at": "2026-06-28T13:25:28.449Z"
+    },
+    "019f0e67-b665-7d10-81b6-378d8197107c": {
+      "role": "qa_reviewer",
+      "task_id": "M6-MVP-SPEC-GENERATION-001",
+      "status": "active",
+      "updated_at": "2026-06-28T13:25:28.492Z"
     }
   }
 }

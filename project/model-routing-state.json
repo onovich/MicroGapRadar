@@ -78,28 +78,38 @@
     "implementation_engineer": {
       "model": "gpt-5.5",
       "effort": "high",
-      "status": "idle"
+      "status": "active",
+      "thread_id": "019f0e67-6ace-78c0-804e-50d74fff1b0b",
+      "task_id": "M6-MVP-SPEC-GENERATION-001"
     },
     "systems_architect": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "idle"
+      "status": "active",
+      "thread_id": "019f0e67-7edf-7961-9b39-fe7fae02ee40",
+      "task_id": "M6-MVP-SPEC-GENERATION-001"
     },
     "domain_designer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "idle"
+      "status": "active",
+      "thread_id": "019f0e67-945c-73c1-9b58-2d7a18a68d0f",
+      "task_id": "M6-MVP-SPEC-GENERATION-001"
     },
     "qa_reviewer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "idle"
+      "status": "active",
+      "thread_id": "019f0e67-b665-7d10-81b6-378d8197107c",
+      "task_id": "M6-MVP-SPEC-GENERATION-001"
     },
     "security_reviewer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "idle"
+      "status": "active",
+      "thread_id": "019f0e67-a167-7180-a120-b75c415ff175",
+      "task_id": "M6-MVP-SPEC-GENERATION-001"
     }
   },
-  "last_updated_at": "2026-06-28T13:20:00Z"
+  "last_updated_at": "2026-06-28T13:25:00Z"
 }

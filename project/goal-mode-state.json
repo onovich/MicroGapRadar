@@ -3,16 +3,45 @@
   "enabled": true,
   "current_milestone": "M6",
   "current_task": "M6-MVP-SPEC-GENERATION-001",
-  "active_threads": [],
+  "active_threads": [
+    {
+      "role": "implementation_engineer",
+      "task_id": "M6-MVP-SPEC-GENERATION-001",
+      "thread_id": "019f0e67-6ace-78c0-804e-50d74fff1b0b",
+      "status": "active"
+    },
+    {
+      "role": "systems_architect",
+      "task_id": "M6-MVP-SPEC-GENERATION-001",
+      "thread_id": "019f0e67-7edf-7961-9b39-fe7fae02ee40",
+      "status": "active"
+    },
+    {
+      "role": "domain_designer",
+      "task_id": "M6-MVP-SPEC-GENERATION-001",
+      "thread_id": "019f0e67-945c-73c1-9b58-2d7a18a68d0f",
+      "status": "active"
+    },
+    {
+      "role": "security_reviewer",
+      "task_id": "M6-MVP-SPEC-GENERATION-001",
+      "thread_id": "019f0e67-a167-7180-a120-b75c415ff175",
+      "status": "active"
+    },
+    {
+      "role": "qa_reviewer",
+      "task_id": "M6-MVP-SPEC-GENERATION-001",
+      "thread_id": "019f0e67-b665-7d10-81b6-378d8197107c",
+      "status": "active"
+    }
+  ],
   "last_integrated_task": "M5-OPPORTUNITY-DETAIL-STATUS-001",
   "last_main_commit": "03b93ce",
-  "next_ready_tasks": [
-    "M6-MVP-SPEC-GENERATION-001"
-  ],
+  "next_ready_tasks": [],
   "unresolved_risks": [],
   "human_gate": {
     "required": false,
     "reason": null
   },
-  "last_updated_at": "2026-06-28T13:20:00Z"
+  "last_updated_at": "2026-06-28T13:25:00Z"
 }
