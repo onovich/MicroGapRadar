@@ -1,7 +1,7 @@
 {
   "version": 1,
   "created_at": "2026-06-27T19:24:00Z",
-  "updated_at": "2026-06-28T05:05:21Z",
+  "updated_at": "2026-06-28T05:11:44Z",
   "main_commit": "73f0ce9435fe75e2282a5ab8d56784ec4ba64eba",
   "current_milestone": "M3",
   "current_task": "M3-LLM-JSON-CLIENT-001",
@@ -18,10 +18,15 @@
     "m3_serp_mock_systems_architect": "019f0c8b-8da1-7f82-a866-792a96952009",
     "m3_serp_mock_qa_reviewer": "019f0c92-caf5-7bd0-b486-81da510b17a7"
   },
-  "active_threads": [],
-  "next_ready_tasks": [
-    "M3-LLM-JSON-CLIENT-001"
+  "active_threads": [
+    {
+      "role": "implementation_engineer",
+      "task_id": "M3-LLM-JSON-CLIENT-001",
+      "thread_id": "019f0ca3-cd06-7100-aedd-34e155e298c2",
+      "status": "active"
+    }
   ],
+  "next_ready_tasks": [],
   "recommended_next_task": {
     "id": "M3-LLM-JSON-CLIENT-001",
     "summary": "Add an OpenAI-compatible LLM client boundary plus safe JSON parse, Zod validation, and one-step repair flow.",
