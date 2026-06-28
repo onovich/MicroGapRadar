@@ -1,14 +1,14 @@
 # Project Status
 
-Updated at: 2026-06-27T20:45:05Z
+Updated at: 2026-06-28T05:05:21Z
 
 ## Current Milestone
 
-`M3`: provider interface and mock data source foundation.
+`M3`: provider, LLM client, and agent foundation.
 
 ## Current Outcome
 
-Completed the M0 scaffold, the M1 database base, and the Radar Task API slice:
+Completed the M0 scaffold, the M1 database base, the Radar Task API slice, and the mock SERP provider slice:
 
 - The orchestrator skill is installed globally and in the repository.
 - Project orchestration state exists under `project/`.
@@ -18,6 +18,8 @@ Completed the M0 scaffold, the M1 database base, and the Radar Task API slice:
 - Prisma SQLite schema, Prisma Client helper, shared validation schemas, and seed data import are in place.
 - `M1-RADAR-TASK-MANAGEMENT-001` is accepted, integrated, and pushed at `e7563fdf49607a6000ac484728bf7c8811c53d3e`.
 - Local Radar Task API routes now support list/create/read/update/non-destructive delete, with strict Zod validation and structured JSON errors.
+- `M3-SERP-MOCK-PROVIDER-001` is accepted, integrated, and pushed at `73f0ce9435fe75e2282a5ab8d56784ec4ba64eba`.
+- The reusable SERP provider contract, deterministic mock provider, provider factory, README documentation, and focused provider tests are in place.
 - `JustGoal` is installed at `.agents/skills/just-goal` and its source repository is published at `git@github.com:onovich/JustGoal.skill.git`.
 
 ## Product Summary
@@ -36,7 +38,7 @@ MicroGap Radar is a self-use-first AI microtool opportunity radar. The 48-hour M
 
 ## Active Task
 
-- `M3-SERP-MOCK-PROVIDER-001`: add the SERP provider interface, deterministic mock provider, provider factory, and focused tests. This task must not add real external providers, scan orchestration, persistence, API routes, LLM calls, UI, auth, or deployment.
+- `M3-LLM-JSON-CLIENT-001`: add an OpenAI-compatible LLM client boundary plus safe JSON parse, Zod validation, and one-step repair flow. This task must not add real LLM calls, environment-variable secret loading, agent implementations, scan orchestration, persistence, API routes, UI, auth, cron, deployment, or paid service setup.
 
 ## Human Gates
 

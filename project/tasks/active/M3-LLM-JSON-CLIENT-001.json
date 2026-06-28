@@ -1,0 +1,73 @@
+{
+  "id": "M3-LLM-JSON-CLIENT-001",
+  "summary": "Add an OpenAI-compatible LLM client boundary plus safe JSON parse, Zod validation, and one-step repair flow.",
+  "milestone": "M3",
+  "status": "READY",
+  "owner_role": "implementation_engineer",
+  "reviewer_role": "qa_reviewer",
+  "required_reviewers": [
+    "systems_architect",
+    "security_reviewer"
+  ],
+  "risk_level": "R3",
+  "dependencies": [
+    "M3-SERP-MOCK-PROVIDER-001"
+  ],
+  "scope": {
+    "allowed_paths": [
+      "services/llm/**",
+      "tests/**",
+      "package.json",
+      "package-lock.json",
+      "README.md"
+    ],
+    "forbidden_paths": [
+      ".git/**",
+      ".codex/**",
+      ".agents/**",
+      "project/**",
+      "skills/**",
+      "docs/**",
+      "mock-data/**",
+      "app/**",
+      "components/**",
+      "agents/**",
+      "lib/**",
+      "prisma/**",
+      "services/serp/**",
+      "services/scan-orchestrator.ts"
+    ]
+  },
+  "acceptance_criteria": [
+    "A reusable LLM client interface exists with typed chat/completion input, output, and error surfaces suitable for an OpenAI-compatible provider.",
+    "An OpenAI-compatible client adapter accepts explicit configuration such as baseUrl, apiKey, model, and optional fetch implementation, fails fast on missing configuration, and does not read process.env directly.",
+    "safeJsonCompletion() parses assistant JSON, validates it with a caller-provided Zod schema, attempts at most one repair call after parse or validation failure, and returns structured success/failure results without crashing the caller on malformed model output.",
+    "JSON extraction handles plain JSON and common fenced JSON responses without accepting unrelated prose as valid output.",
+    "Focused automated tests cover valid JSON, parse failure with successful repair, validation or repair failure without throwing, and OpenAI-compatible request shape using a fake transport only.",
+    "README documents the LLM JSON utility slice, configuration boundary, no-secret/no-network test policy, and the test command.",
+    "No real LLM call, environment-variable secret loading, agent implementation, scan orchestration, database write, API route, UI, auth, cron, deployment, or paid service setup is implemented."
+  ],
+  "required_tests": [
+    "npm test",
+    "npm run build"
+  ],
+  "branch_or_worktree": "main",
+  "threads": {},
+  "route_to": "implementation_engineer",
+  "notes": [
+    "Derived from docs/08_ai_agents_and_prompts.md JSON parsing strategy and docs/11_development_plan.md recommended step 6 after SERP provider/mock provider.",
+    "systems_architect is required because this creates the LLM service boundary used by later agents.",
+    "security_reviewer is required because the boundary will later carry API keys and external network calls; this task must avoid direct secret loading and real calls.",
+    "Keep this task limited to the reusable LLM client boundary and JSON repair utility. Keyword, SERP, opportunity, MVP spec agents and scan orchestration belong to later tasks."
+  ],
+  "non_goals": [
+    "No Keyword Expansion Agent, SERP Analysis Agent, Opportunity Analysis Agent, or MVP Spec Agent.",
+    "No /api/scans/run route or scan orchestrator.",
+    "No SearchRun, KeywordCandidate, SerpResult, Opportunity, or MvpSpec persistence.",
+    "No process.env reads, .env changes, real API keys, real network calls in tests, or paid service setup.",
+    "No dashboard, radar task UI, auth, cron, deployment, or public release work.",
+    "No changes to the existing SERP provider contract."
+  ],
+  "created_at": "2026-06-28T05:05:21Z",
+  "updated_at": "2026-06-28T05:05:21Z"
+}

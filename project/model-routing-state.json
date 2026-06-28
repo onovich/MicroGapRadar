@@ -1,5 +1,29 @@
 {
   "version": 1,
+  "status": "ready",
+  "source": "current-session-fallback",
+  "available_models": [
+    "gpt-5.5"
+  ],
+  "tiers": {
+    "deep": "gpt-5.5",
+    "balanced": "gpt-5.5",
+    "fast": "gpt-5.5"
+  },
+  "role_assignments": {
+    "lead_orchestrator": "deep",
+    "systems_architect": "deep",
+    "domain_designer": "deep",
+    "implementation_engineer": "balanced",
+    "client_engineer": "balanced",
+    "data_content_engineer": "balanced",
+    "test_engineer": "balanced",
+    "qa_reviewer": "deep",
+    "security_reviewer": "deep",
+    "research_scout": "fast",
+    "release_engineer": "fast",
+    "spark_worker": "fast"
+  },
   "active_fallbacks": [],
   "closed_threads": {
     "m0_implementation_engineer": "019f0a11-0493-7fe0-89e9-a21d3b680a67",
@@ -8,7 +32,10 @@
     "m1_db_qa_reviewer": "019f0a82-167d-7140-a25b-0e5a77ea085d",
     "m1_radar_task_implementation_engineer": "019f0aa6-2f46-75f3-9a1c-1080a5033dd5",
     "m1_radar_task_systems_architect": "019f0ab3-4ece-7d33-a749-81e57e567784",
-    "m1_radar_task_qa_reviewer": "019f0ac1-b47e-74b2-aea6-95f0a9b83b4c"
+    "m1_radar_task_qa_reviewer": "019f0ac1-b47e-74b2-aea6-95f0a9b83b4c",
+    "m3_serp_mock_implementation_engineer": "019f0c83-99e9-7253-9a60-d62004713813",
+    "m3_serp_mock_systems_architect": "019f0c8b-8da1-7f82-a866-792a96952009",
+    "m3_serp_mock_qa_reviewer": "019f0c92-caf5-7bd0-b486-81da510b17a7"
   },
   "roles": {
     "lead_orchestrator": {
@@ -19,24 +46,23 @@
     "implementation_engineer": {
       "model": "gpt-5.5",
       "effort": "high",
-      "status": "accepted",
-      "thread_id": "019f0c83-99e9-7253-9a60-d62004713813",
-      "task_id": "M3-SERP-MOCK-PROVIDER-001"
+      "status": "idle"
     },
     "systems_architect": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "accepted",
-      "thread_id": "019f0c8b-8da1-7f82-a866-792a96952009",
-      "task_id": "M3-SERP-MOCK-PROVIDER-001"
+      "status": "idle"
     },
     "qa_reviewer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "accepted",
-      "thread_id": "019f0c92-caf5-7bd0-b486-81da510b17a7",
-      "task_id": "M3-SERP-MOCK-PROVIDER-001"
+      "status": "idle"
+    },
+    "security_reviewer": {
+      "model": "gpt-5.5",
+      "effort": "xhigh",
+      "status": "idle"
     }
   },
-  "last_updated_at": "2026-06-28T04:58:00Z"
+  "last_updated_at": "2026-06-28T05:05:21Z"
 }

@@ -2,34 +2,17 @@
   "version": 1,
   "enabled": true,
   "current_milestone": "M3",
-  "current_task": "M3-SERP-MOCK-PROVIDER-001",
-  "active_threads": [
-    {
-      "role": "implementation_engineer",
-      "task_id": "M3-SERP-MOCK-PROVIDER-001",
-      "thread_id": "019f0c83-99e9-7253-9a60-d62004713813",
-      "status": "accepted"
-    },
-    {
-      "role": "systems_architect",
-      "task_id": "M3-SERP-MOCK-PROVIDER-001",
-      "thread_id": "019f0c8b-8da1-7f82-a866-792a96952009",
-      "status": "accepted"
-    },
-    {
-      "role": "qa_reviewer",
-      "task_id": "M3-SERP-MOCK-PROVIDER-001",
-      "thread_id": "019f0c92-caf5-7bd0-b486-81da510b17a7",
-      "status": "accepted"
-    }
+  "current_task": "M3-LLM-JSON-CLIENT-001",
+  "active_threads": [],
+  "last_integrated_task": "M3-SERP-MOCK-PROVIDER-001",
+  "last_main_commit": "73f0ce9435fe75e2282a5ab8d56784ec4ba64eba",
+  "next_ready_tasks": [
+    "M3-LLM-JSON-CLIENT-001"
   ],
-  "last_integrated_task": "M1-RADAR-TASK-MANAGEMENT-001",
-  "last_main_commit": "e7563fdf49607a6000ac484728bf7c8811c53d3e",
-  "next_ready_tasks": [],
   "unresolved_risks": [],
   "human_gate": {
     "required": false,
     "reason": null
   },
-  "last_updated_at": "2026-06-28T04:58:00Z"
+  "last_updated_at": "2026-06-28T05:05:21Z"
 }
