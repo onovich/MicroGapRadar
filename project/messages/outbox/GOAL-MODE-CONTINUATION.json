@@ -1,11 +1,11 @@
 {
   "version": 1,
   "created_at": "2026-06-27T19:24:00Z",
-  "updated_at": "2026-06-28T12:09:53Z",
-  "main_commit": "2baa491",
-  "current_milestone": "M4",
-  "current_task": "M4-RUN-SCAN-API-001",
-  "last_integrated_task": "M4-SCORING-ENGINE-001",
+  "updated_at": "2026-06-28T12:13:03Z",
+  "main_commit": "be68450",
+  "current_milestone": "M5",
+  "current_task": "M5-DASHBOARD-OPPORTUNITY-LIST-001",
+  "last_integrated_task": "M4-RUN-SCAN-API-001",
   "closed_threads": {
     "m0_implementation_engineer": "019f0a11-0493-7fe0-89e9-a21d3b680a67",
     "m0_qa_reviewer": "019f0a2a-70f9-77e0-8f7d-6091b879545a",
@@ -34,84 +34,46 @@
     "m4_scoring_engine_implementation_engineer": "019f0d55-0dee-7520-88fe-4ed971624b20",
     "m4_scoring_engine_systems_architect": "019f0d55-6852-7b91-b520-461ea28a9e4f",
     "m4_scoring_engine_domain_designer": "019f0d55-7678-7213-9bdd-c86f74e5baa8",
-    "m4_scoring_engine_qa_reviewer": "019f0d56-1bc9-7690-86b9-8dd2e8d9ed14"
+    "m4_scoring_engine_qa_reviewer": "019f0d56-1bc9-7690-86b9-8dd2e8d9ed14",
+    "m4_run_scan_api_implementation_engineer": "019f0d72-c65e-7a43-9a44-72146c2b2319",
+    "m4_run_scan_api_systems_architect": "019f0d72-d836-7983-a20f-6df9854b95d6",
+    "m4_run_scan_api_domain_designer": "019f0d72-da92-7f40-8ae4-0dfb3737f227",
+    "m4_run_scan_api_security_reviewer": "019f0d72-dcc3-7831-97ae-15e7293fbd21",
+    "m4_run_scan_api_qa_reviewer": "019f0d72-de9d-7091-9983-dc8e48404156"
   },
-  "active_threads": [
-    {
-      "role": "implementation_engineer",
-      "task_id": "M4-RUN-SCAN-API-001",
-      "thread_id": "019f0d72-c65e-7a43-9a44-72146c2b2319",
-      "status": "accepted"
-    },
-    {
-      "role": "systems_architect",
-      "task_id": "M4-RUN-SCAN-API-001",
-      "thread_id": "019f0d72-d836-7983-a20f-6df9854b95d6",
-      "status": "accepted"
-    },
-    {
-      "role": "domain_designer",
-      "task_id": "M4-RUN-SCAN-API-001",
-      "thread_id": "019f0d72-da92-7f40-8ae4-0dfb3737f227",
-      "status": "accepted"
-    },
-    {
-      "role": "security_reviewer",
-      "task_id": "M4-RUN-SCAN-API-001",
-      "thread_id": "019f0d72-dcc3-7831-97ae-15e7293fbd21",
-      "status": "accepted"
-    },
-    {
-      "role": "qa_reviewer",
-      "task_id": "M4-RUN-SCAN-API-001",
-      "thread_id": "019f0d72-de9d-7091-9983-dc8e48404156",
-      "status": "accepted"
-    }
+  "active_threads": [],
+  "next_ready_tasks": [
+    "M5-DASHBOARD-OPPORTUNITY-LIST-001"
   ],
-  "next_ready_tasks": [],
-  "recommended_next_task": null,
+  "recommended_next_task": "M5-DASHBOARD-OPPORTUNITY-LIST-001",
   "recent_handoffs": [
-    "project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
-    "project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-SYSTEMS_ARCHITECT.json",
-    "project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-DOMAIN_DESIGNER.json",
-    "project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-SECURITY_REVIEWER.json",
     "project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-QA_REVIEWER.json"
   ],
   "validation_evidence": [
     {
-      "command": "node .agents/skills/just-goal/scripts/validate-handoff.mjs project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-QA_REVIEWER.json",
+      "command": "git commit/push feat: add run scan API",
       "exit_code": 0,
-      "note": "Final QA handoff is valid and ACCEPT."
+      "note": "M4 Run Scan API/orchestrator accepted, integrated, committed, and pushed as be68450."
     },
     {
-      "command": "node .agents/skills/just-goal/scripts/validate-handoff.mjs project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-SYSTEMS_ARCHITECT.json",
+      "command": "node .agents/skills/just-goal/scripts/taskctl.mjs set-status M4-RUN-SCAN-API-001 CLOSED --repo-root .",
       "exit_code": 0,
-      "note": "Systems architect ACCEPT handoff is valid."
+      "note": "Run Scan task closed after successful push."
     },
     {
-      "command": "node .agents/skills/just-goal/scripts/validate-handoff.mjs project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-DOMAIN_DESIGNER.json",
+      "command": "node .agents/skills/just-goal/scripts/taskctl.mjs create --id M5-DASHBOARD-OPPORTUNITY-LIST-001 ...",
       "exit_code": 0,
-      "note": "Domain designer ACCEPT handoff is valid."
+      "note": "Created next M5 dashboard/opportunity list task."
     },
     {
-      "command": "node .agents/skills/just-goal/scripts/validate-handoff.mjs project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-SECURITY_REVIEWER.json",
+      "command": "node .agents/skills/just-goal/scripts/taskctl.mjs set-status M5-DASHBOARD-OPPORTUNITY-LIST-001 READY --repo-root .",
       "exit_code": 0,
-      "note": "Security reviewer ACCEPT handoff is valid."
-    },
-    {
-      "command": "npm test",
-      "exit_code": 0,
-      "note": "46 tests passed across 10 suites."
-    },
-    {
-      "command": "npm run build",
-      "exit_code": 0,
-      "note": "Build passed with known nonfatal Windows Next SWC native package warning."
+      "note": "Dashboard/Opportunity List task is ready for autonomous execution."
     }
   ],
   "human_gate": {
     "required": false,
     "reason": null
   },
-  "next_prompt": "Continue JustGoal on M4-RUN-SCAN-API-001: integrate accepted Run Scan API/orchestrator, commit and push, then close the task and queue the next non-human-gated task."
+  "next_prompt": "Continue JustGoal on M5-DASHBOARD-OPPORTUNITY-LIST-001: spawn implementation_engineer plus systems/domain/QA reviewers, implement dashboard/list UI slice, validate, push, close, and continue."
 }

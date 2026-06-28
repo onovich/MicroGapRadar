@@ -1,0 +1,80 @@
+{
+  "id": "M5-DASHBOARD-OPPORTUNITY-LIST-001",
+  "summary": "Add the Dashboard and Opportunity List UI slice with Top 5 opportunities, score-sorted list, filters, reusable OpportunityCard and ScoreBadge components, and focused tests.",
+  "milestone": "M5",
+  "status": "READY",
+  "owner_role": "implementation_engineer",
+  "reviewer_role": "qa_reviewer",
+  "risk_level": "R2",
+  "dependencies": [
+    "M4-RUN-SCAN-API-001"
+  ],
+  "scope": {
+    "allowed_paths": [
+      "app/dashboard/**",
+      "app/opportunities/**",
+      "components/**",
+      "lib/opportunities.ts",
+      "tests/**",
+      "README.md"
+    ],
+    "forbidden_paths": [
+      ".git/**",
+      ".codex/**",
+      ".agents/**",
+      "project/**",
+      "skills/**",
+      "docs/**",
+      "mock-data/**",
+      "agents/**",
+      "services/**",
+      "lib/scoring.ts",
+      "lib/db.ts",
+      "lib/env.ts",
+      "lib/radar-tasks.ts",
+      "lib/schemas.ts",
+      "app/api/**",
+      "app/page.tsx",
+      "app/layout.tsx",
+      "app/globals.css",
+      "prisma/**",
+      "package.json",
+      "package-lock.json"
+    ]
+  },
+  "acceptance_criteria": [
+    "A /dashboard page exists and displays today/top opportunities sorted by totalScore descending, including a Top 5 section and summary metrics derived from persisted Opportunity/SearchRun data.",
+    "A /opportunities page exists and displays a score-sorted opportunity list with query-string filters for radar task, minimum score, tool type, risk level, and status where data exists.",
+    "Reusable OpportunityCard and ScoreBadge components exist under components/ and render score, keyword/title, tool type, market/language, summary, monetization/risk cues, and a detail link target for each opportunity.",
+    "A server-side data helper exists at lib/opportunities.ts to query opportunities and dashboard data through Prisma without duplicating UI query logic; it returns plain serializable view models.",
+    "The UI uses restrained operational styling consistent with the existing app, remains responsive, avoids nested cards, and does not add marketing hero content or decorative visual noise.",
+    "Focused automated tests cover opportunity sorting, Top 5 selection, filter behavior, view-model serialization, score badge/risk rendering where practical, and empty states.",
+    "README documents the Dashboard/Opportunity List slice, local data dependency, filter query parameters, validation commands, and explicit non-goals.",
+    "No Opportunity Detail implementation, Save/Discard/Build Next mutation, RunScanButton wiring, RecentRunStatus component, API route, scan orchestration, database schema migration, auth, cron, deployment, package dependency, real provider, or agent change is implemented."
+  ],
+  "required_tests": [
+    "npm test",
+    "npm run build"
+  ],
+  "branch_or_worktree": "main",
+  "threads": {},
+  "route_to": "implementation_engineer",
+  "notes": [
+    "Derived from docs/09_codex_implementation_tasks.md Task 12 and docs/11_development_plan.md M5.",
+    "docs/09 says clicking enters detail, but Task 13 owns /opportunities/[id] details. This task may render stable links to /opportunities/[id] but must not implement the detail page or status mutations unless separately tasked.",
+    "systems_architect is required because this introduces shared UI/data-access boundaries over persisted scan/opportunity records.",
+    "domain_designer is required because this is the main ranking/list presentation surface and must not overstate mock scan output or hide risk semantics."
+  ],
+  "non_goals": [
+    "No /opportunities/[id] detail page, score breakdown detail view, SERP weakness detail, MVP Spec, Copy MVP Spec, Save/Discard/Build Next mutation, or status update endpoint.",
+    "No RunScanButton behavior, RecentRunStatus component, Radar Task detail page, dashboard scan trigger, cron, background jobs, or API route changes.",
+    "No Prisma schema changes, migrations, seed changes, package changes, provider setup, LLM setup, env secret loading, auth/session, deployment, or GitHub Actions.",
+    "No changes to agents, services, scan orchestrator, scoring formula, Radar Task CRUD API, app shell, global styles, or landing page unless required only for import paths."
+  ],
+  "created_at": "2026-06-28T12:11:54.213Z",
+  "updated_at": "2026-06-28T12:12:32.688Z",
+  "required_reviewers": [
+    "systems_architect",
+    "domain_designer"
+  ]
+}

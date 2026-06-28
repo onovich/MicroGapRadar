@@ -1,47 +1,18 @@
 {
   "version": 1,
   "enabled": true,
-  "current_milestone": "M4",
-  "current_task": "M4-RUN-SCAN-API-001",
-  "active_threads": [
-    {
-      "role": "implementation_engineer",
-      "task_id": "M4-RUN-SCAN-API-001",
-      "thread_id": "019f0d72-c65e-7a43-9a44-72146c2b2319",
-      "status": "accepted"
-    },
-    {
-      "role": "systems_architect",
-      "task_id": "M4-RUN-SCAN-API-001",
-      "thread_id": "019f0d72-d836-7983-a20f-6df9854b95d6",
-      "status": "accepted"
-    },
-    {
-      "role": "domain_designer",
-      "task_id": "M4-RUN-SCAN-API-001",
-      "thread_id": "019f0d72-da92-7f40-8ae4-0dfb3737f227",
-      "status": "accepted"
-    },
-    {
-      "role": "security_reviewer",
-      "task_id": "M4-RUN-SCAN-API-001",
-      "thread_id": "019f0d72-dcc3-7831-97ae-15e7293fbd21",
-      "status": "accepted"
-    },
-    {
-      "role": "qa_reviewer",
-      "task_id": "M4-RUN-SCAN-API-001",
-      "thread_id": "019f0d72-de9d-7091-9983-dc8e48404156",
-      "status": "accepted"
-    }
+  "current_milestone": "M5",
+  "current_task": "M5-DASHBOARD-OPPORTUNITY-LIST-001",
+  "active_threads": [],
+  "last_integrated_task": "M4-RUN-SCAN-API-001",
+  "last_main_commit": "be68450",
+  "next_ready_tasks": [
+    "M5-DASHBOARD-OPPORTUNITY-LIST-001"
   ],
-  "last_integrated_task": "M4-SCORING-ENGINE-001",
-  "last_main_commit": "2baa491",
-  "next_ready_tasks": [],
   "unresolved_risks": [],
   "human_gate": {
     "required": false,
     "reason": null
   },
-  "last_updated_at": "2026-06-28T12:09:53Z"
+  "last_updated_at": "2026-06-28T12:13:03Z"
 }

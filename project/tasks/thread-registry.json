@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-06-28T12:09:53Z",
+  "updated_at": "2026-06-28T12:13:03Z",
   "threads": {
     "019f0a11-0493-7fe0-89e9-a21d3b680a67": {
       "role": "implementation_engineer",
@@ -185,32 +185,32 @@
     "019f0d72-c65e-7a43-9a44-72146c2b2319": {
       "role": "implementation_engineer",
       "task_id": "M4-RUN-SCAN-API-001",
-      "status": "accepted",
-      "updated_at": "2026-06-28T12:09:53Z"
+      "status": "closed",
+      "updated_at": "2026-06-28T12:13:03Z"
     },
     "019f0d72-d836-7983-a20f-6df9854b95d6": {
       "role": "systems_architect",
       "task_id": "M4-RUN-SCAN-API-001",
-      "status": "accepted",
-      "updated_at": "2026-06-28T12:09:53Z"
+      "status": "closed",
+      "updated_at": "2026-06-28T12:13:03Z"
     },
     "019f0d72-da92-7f40-8ae4-0dfb3737f227": {
       "role": "domain_designer",
       "task_id": "M4-RUN-SCAN-API-001",
-      "status": "accepted",
-      "updated_at": "2026-06-28T12:09:53Z"
+      "status": "closed",
+      "updated_at": "2026-06-28T12:13:03Z"
     },
     "019f0d72-de9d-7091-9983-dc8e48404156": {
       "role": "qa_reviewer",
       "task_id": "M4-RUN-SCAN-API-001",
-      "status": "accepted",
-      "updated_at": "2026-06-28T12:09:53Z"
+      "status": "closed",
+      "updated_at": "2026-06-28T12:13:03Z"
     },
     "019f0d72-dcc3-7831-97ae-15e7293fbd21": {
       "role": "security_reviewer",
       "task_id": "M4-RUN-SCAN-API-001",
-      "status": "accepted",
-      "updated_at": "2026-06-28T12:09:53Z"
+      "status": "closed",
+      "updated_at": "2026-06-28T12:13:03Z"
     }
   }
 }

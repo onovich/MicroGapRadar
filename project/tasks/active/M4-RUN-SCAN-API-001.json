@@ -2,7 +2,7 @@
   "id": "M4-RUN-SCAN-API-001",
   "summary": "Add the Run Scan API and scan orchestrator core chain with mock SERP, deterministic agent fallbacks, scoring, persistence-ready run records, and focused tests.",
   "milestone": "M4",
-  "status": "ACCEPTED",
+  "status": "CLOSED",
   "owner_role": "implementation_engineer",
   "reviewer_role": "qa_reviewer",
   "risk_level": "R3",
@@ -80,7 +80,7 @@
     "No changes to existing agent contracts, scoring formula, SERP provider contracts, LLM client contracts, or Radar Task CRUD API unless strictly necessary for type-only consumption."
   ],
   "created_at": "2026-06-28T08:55:30.026Z",
-  "updated_at": "2026-06-28T12:09:28.549Z",
+  "updated_at": "2026-06-28T12:11:20.342Z",
   "required_reviewers": [
     "systems_architect",
     "domain_designer",
