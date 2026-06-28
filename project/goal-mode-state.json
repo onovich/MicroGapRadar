@@ -8,31 +8,31 @@
       "role": "implementation_engineer",
       "task_id": "M4-RUN-SCAN-API-001",
       "thread_id": "019f0d72-c65e-7a43-9a44-72146c2b2319",
-      "status": "active"
+      "status": "accepted"
     },
     {
       "role": "systems_architect",
       "task_id": "M4-RUN-SCAN-API-001",
       "thread_id": "019f0d72-d836-7983-a20f-6df9854b95d6",
-      "status": "active"
+      "status": "accepted"
     },
     {
       "role": "domain_designer",
       "task_id": "M4-RUN-SCAN-API-001",
       "thread_id": "019f0d72-da92-7f40-8ae4-0dfb3737f227",
-      "status": "active"
+      "status": "accepted"
     },
     {
       "role": "security_reviewer",
       "task_id": "M4-RUN-SCAN-API-001",
       "thread_id": "019f0d72-dcc3-7831-97ae-15e7293fbd21",
-      "status": "active"
+      "status": "accepted"
     },
     {
       "role": "qa_reviewer",
       "task_id": "M4-RUN-SCAN-API-001",
       "thread_id": "019f0d72-de9d-7091-9983-dc8e48404156",
-      "status": "active"
+      "status": "accepted"
     }
   ],
   "last_integrated_task": "M4-SCORING-ENGINE-001",
@@ -43,5 +43,5 @@
     "required": false,
     "reason": null
   },
-  "last_updated_at": "2026-06-28T08:58:39Z"
+  "last_updated_at": "2026-06-28T12:09:53Z"
 }

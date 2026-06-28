@@ -1,0 +1,135 @@
+{
+  "message_id": "MSG-20260628-SECURITY_REVIEWER-M4-RUN-SCAN-API-001",
+  "task_id": "M4-RUN-SCAN-API-001",
+  "from_role": "security_reviewer",
+  "status": "ACCEPT",
+  "summary": "Security review accepts the M4 Run Scan API and orchestrator slice. POST input uses a strict Zod schema with bounded ids and limits, API error responses are sanitized and consistent with the existing route style, SearchRun error messages redact common token/API-key patterns and are length-bounded, the default scan path creates no LLM client or real SERP provider and has no fetch/process.env/lib/env usage, useMockSerp false fails closed without an injected provider, and database writes use Prisma structured operations within the expected local unauthenticated MVP scope.",
+  "artifacts": [
+    "services/scan-orchestrator.ts",
+    "app/api/scans/run/_api.ts",
+    "app/api/scans/run/route.ts",
+    "lib/schemas.ts",
+    "tests/scan-orchestrator.test.ts",
+    "tests/run-scan-api.test.ts",
+    "README.md",
+    "project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+    "project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-SECURITY_REVIEWER.json"
+  ],
+  "artifacts_reviewed": [
+    "project/tasks/active/M4-RUN-SCAN-API-001.json",
+    "project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+    "services/scan-orchestrator.ts",
+    "app/api/scans/run/_api.ts",
+    "app/api/scans/run/route.ts",
+    "lib/schemas.ts",
+    "tests/scan-orchestrator.test.ts",
+    "tests/run-scan-api.test.ts",
+    "README.md",
+    "app/api/radar-tasks/_api.ts",
+    "lib/env.ts",
+    "lib/db.ts",
+    "services/serp/index.ts",
+    "services/serp/mock-provider.ts",
+    "services/llm/index.ts",
+    "services/llm/openai-compatible-client.ts",
+    "services/llm/json-output.ts"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "findings": [],
+  "security_checklist": [
+    {
+      "item": "POST input validation",
+      "status": "PASS",
+      "notes": "runScanInputSchema is strict, requires non-empty radarTaskId capped at 191 characters, defaults useMockSerp to true, and bounds keywordLimit and serpLimit to integers from 1 to 50."
+    },
+    {
+      "item": "Sanitized API responses",
+      "status": "PASS",
+      "notes": "Invalid JSON, validation, not-found, inactive-task, unsupported-provider, and internal errors return generic structured JSON without ids, stack traces, Prisma details, provider details, or raw runtime messages."
+    },
+    {
+      "item": "SearchRun.errorMessage sanitization",
+      "status": "PASS",
+      "notes": "Thrown error messages are normalized, redacted for common sk-token/Bearer/key-token-secret patterns, capped at 240 characters per error, and summarized into SearchRun.errorMessage with a 1000-character cap."
+    },
+    {
+      "item": "No secret/env leakage",
+      "status": "PASS",
+      "notes": "Product implementation files do not import lib/env or read process.env. README references are documentation only; tests include fake secret redaction assertions."
+    },
+    {
+      "item": "No network or paid service by default",
+      "status": "PASS",
+      "notes": "The default orchestrator path uses MockSerpProvider and no LLM client. Focused tests block global fetch for the default scan path."
+    },
+    {
+      "item": "useMockSerp false behavior",
+      "status": "PASS",
+      "notes": "Without an injected provider, useMockSerp false throws RunScanUnsupportedProviderError before creating a SearchRun, so the API fails closed instead of falling through to a real provider."
+    },
+    {
+      "item": "DB write safety",
+      "status": "PASS",
+      "notes": "The Prisma repository uses structured create/update calls only, no raw SQL, no schema or migration edits, and records partial failures without deleting successful keyword, SERP, or opportunity writes."
+    },
+    {
+      "item": "Unauthenticated local-MVP assumptions",
+      "status": "PASS",
+      "notes": "The slice does not add ad hoc auth/session/cron behavior and README records auth/session changes as a non-goal for this local MVP slice."
+    },
+    {
+      "item": "Scope boundaries",
+      "status": "PASS",
+      "notes": "Reviewed product changes are inside the task allowed paths. Dirty project coordination files are treated as workflow state, not product implementation scope."
+    }
+  ],
+  "tests_run": [
+    {
+      "command": "npx tsx --test tests/scan-orchestrator.test.ts tests/run-scan-api.test.ts",
+      "exit_code": 0,
+      "result": "PASS: 8 focused scan/API tests passed, including default no-network mock scan, invalid/inactive/unsupported preconditions, partial failure, failed-run sanitized errors, and API response shapes."
+    },
+    {
+      "command": "rg -n 'process\\.env|lib/env|fetch\\(|OpenAICompatibleClient|executeRaw|queryRaw|\\$transaction' services/scan-orchestrator.ts app/api/scans/run lib/schemas.ts tests/scan-orchestrator.test.ts tests/run-scan-api.test.ts README.md",
+      "exit_code": 0,
+      "result": "PASS: no product implementation hits for process.env, lib/env, fetch, OpenAICompatibleClient, raw SQL, or transactions. Hits were README documentation only."
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS: no whitespace errors. Git printed line-ending conversion warnings for README.md, lib/schemas.ts, and project coordination JSON files."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "PASS: 46 tests passed across 10 suites."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "result": "PASS: Next.js production build completed successfully. Existing nonfatal local SWC native-package warnings were printed before fallback build continued."
+    },
+    {
+      "command": "node skills/general-rd-orchestrator/scripts/validate-handoff.mjs project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-SECURITY_REVIEWER.json",
+      "exit_code": 0,
+      "result": "PASS: security reviewer handoff JSON validates."
+    }
+  ],
+  "decisions": [
+    "Accepted the default local deterministic path because it uses MockSerpProvider, does not construct OpenAICompatibleClient or real SERP providers, and has no product fetch usage.",
+    "Accepted useMockSerp false behavior because the production API cannot inject a provider and the orchestrator throws before creating a run when no provider is supplied.",
+    "Accepted the existing API style of logging unexpected server errors while returning generic INTERNAL_ERROR responses; no configured secrets are read by this slice.",
+    "Accepted Prisma structured partial writes because partial_failed is an explicit task requirement and successful opportunities should survive single-keyword failures.",
+    "Did not commit or push."
+  ],
+  "risks": [
+    "The POST route remains intentionally unauthenticated for the local single-admin MVP; production exposure still requires the later auth/session gate and deployment policy.",
+    "Run result errors and SearchRun.errorMessage intentionally retain keyword and stage context after sanitizing thrown error messages; avoid putting secrets into Radar Task content or generated keyword text.",
+    "An explicitly injected SerpProvider or LlmClient can perform external work by design for tests/future wiring; this review accepts only the default production API path for no-network/no-paid behavior."
+  ],
+  "blockers": [],
+  "route_to": "qa_reviewer",
+  "requested_action": "Proceed with QA review for M4-RUN-SCAN-API-001. Security review accepts the implementation with local-MVP residual risks noted.",
+  "created_at": "2026-06-28T12:06:12Z"
+}

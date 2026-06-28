@@ -136,6 +136,15 @@ export const radarTaskRouteParamsSchema = z
   })
   .strict();
 
+export const runScanInputSchema = z
+  .object({
+    radarTaskId: nonEmptyString.max(191),
+    useMockSerp: z.boolean().default(true),
+    keywordLimit: z.coerce.number().int().min(1).max(50).optional(),
+    serpLimit: z.coerce.number().int().min(1).max(50).optional(),
+  })
+  .strict();
+
 export const scoreBreakdownSchema = z
   .object({
     intentScore: scoreValue,
@@ -160,5 +169,7 @@ export const mvpSpecInputSchema = z
 export type RadarTaskInput = z.infer<typeof radarTaskInputSchema>;
 export type RadarTaskUpdateInput = z.infer<typeof radarTaskUpdateInputSchema>;
 export type RadarTaskListQuery = z.infer<typeof radarTaskListQuerySchema>;
+export type RunScanInput = z.input<typeof runScanInputSchema>;
+export type ParsedRunScanInput = z.infer<typeof runScanInputSchema>;
 export type ScoreBreakdown = z.infer<typeof scoreBreakdownSchema>;
 export type MvpSpecInput = z.infer<typeof mvpSpecInputSchema>;

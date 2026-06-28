@@ -1,0 +1,54 @@
+{
+  "message_id": "MSG-20260628-DOMAIN_DESIGNER",
+  "task_id": "M4-RUN-SCAN-API-001",
+  "from_role": "domain_designer",
+  "status": "ACCEPT",
+  "summary": "Domain/product review accepts the Run Scan API slice. The implementation matches the M4 opportunity-generation contract: the default local mock path produces 10 scored opportunities in focused coverage, saves candidates/SERP/opportunities with score breakdowns and explanations, preserves new opportunity status semantics, carries risk into persisted summaries/raw analysis/kill criteria and scoring, avoids market-proof or outcome overclaims, distinguishes completed/partial_failed/failed, and stays within the MVP boundary.",
+  "artifacts": [
+    "services/scan-orchestrator.ts",
+    "app/api/scans/run/_api.ts",
+    "app/api/scans/run/route.ts",
+    "lib/schemas.ts",
+    "tests/scan-orchestrator.test.ts",
+    "tests/run-scan-api.test.ts",
+    "README.md"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "tests_run": [
+    {
+      "command": "npx tsx --test tests/scan-orchestrator.test.ts tests/run-scan-api.test.ts",
+      "exit_code": 0,
+      "result": "PASS: 8 focused scan/API tests passed, including deterministic default mock scan with 10 opportunities, partial_failed retention of successful opportunities, failed run semantics, sanitized errors, API validation, and response envelopes."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "PASS: 46 tests passed across 10 suites."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 1,
+      "result": "FAIL in this review environment: Next compiled successfully, then failed during page-data/static-export after repeated local @next/swc-win32-x64-msvc native package errors reporting the binary is not a valid Win32 application. This was not traced to a domain/product issue in the changed slice; QA/release should rerun build on a clean dependency install."
+    }
+  ],
+  "decisions": [
+    "ACCEPT: Opportunity generation semantics follow the documented chain from active RadarTask through keyword expansion, mock SERP, SERP analysis, opportunity analysis, calculateOpportunityScore(), and persistence.",
+    "ACCEPT: The default scan path is local and deterministic with useMockSerp defaulting true, MockSerpProvider used by default, no default LLM client, and no network dependency in focused tests.",
+    "ACCEPT: The default mock scan coverage verifies 10 keyword candidates, 10 SERP successes, and 10 persisted opportunities when using the active task dailyLimit of 10.",
+    "ACCEPT: Saved opportunity semantics remain product-safe for M4: the orchestrator does not mark generated opportunities as saved/build_next/built, relying on the Prisma default status of new.",
+    "ACCEPT: Risk-aware saving is sufficient for this slice: risk level and notes are persisted in riskSummary/rawAnalysis, killCriteria is saved, and riskLevel is passed into code-owned scoring so high/excluded risk receives the documented penalty path.",
+    "ACCEPT: README and API language frame mock SERP as deterministic local/SERP-like output, not as real market proof; no revenue, ranking, compliance, medical, financial, or business-result promises were introduced.",
+    "ACCEPT: partial_failed means useful opportunities were saved plus at least one recoverable keyword/provider/agent failure; failed means no useful opportunities were saved or a fatal pre-run condition was hit.",
+    "ACCEPT: MVP boundary is preserved: no dashboard/list/detail UI, cron, auth/session, real SERP or LLM setup, env secret loading, schema migration, package dependency change, or MVP Spec agent was added."
+  ],
+  "risks": [
+    "Build did not pass in this reviewer environment because of a local Next SWC native binary issue despite successful TypeScript/test coverage; this should be rechecked by QA/release before final merge.",
+    "High/excluded-risk opportunities can still be persisted as new records with risk penalties and do-not-build signals. Later ranking/list/detail UI must surface riskSummary/killCriteria and avoid presenting excluded items as normal top picks.",
+    "The API response returns compact generated opportunity summaries with scoreBreakdown/scoreExplanation; future opportunity views should expose the persisted risk summary and kill criteria before any build-next workflow."
+  ],
+  "blockers": [],
+  "route_to": "security_reviewer",
+  "requested_action": "Review the accepted Run Scan API/orchestrator slice for security concerns around the mutating local POST route, sanitized error handling, dependency injection boundaries, no-secret/no-network defaults, and persistence behavior.",
+  "created_at": "2026-06-28T12:06:02Z"
+}

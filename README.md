@@ -209,6 +209,84 @@ The required build check is:
 npm run build
 ```
 
+## Run Scan API
+
+The M4 Run Scan slice adds the local scan orchestrator at `services/scan-orchestrator.ts` and the API route `POST /api/scans/run`.
+
+The default execution path is deterministic and local:
+
+- `useMockSerp` defaults to `true`.
+- The orchestrator uses `MockSerpProvider` unless a test injects a fake provider.
+- No LLM client is created by default, so the keyword, SERP, and opportunity agents use their deterministic fallback logic.
+- The default path does not read API keys, call paid services, or use the network.
+
+Request shape:
+
+```json
+{
+  "radarTaskId": "clx_example_task_id",
+  "useMockSerp": true,
+  "keywordLimit": 10,
+  "serpLimit": 10
+}
+```
+
+`radarTaskId` is required. `keywordLimit` and `serpLimit` are optional integers from 1 to 50.
+
+Success responses use `{ "data": ... }` and include the persisted SearchRun id, terminal status, counts, sanitized per-keyword errors, and generated opportunities:
+
+```json
+{
+  "data": {
+    "searchRunId": "clx_example_run_id",
+    "radarTaskId": "clx_example_task_id",
+    "status": "completed",
+    "useMockSerp": true,
+    "counts": {
+      "keywordCandidates": 10,
+      "serpSuccesses": 10,
+      "opportunities": 10
+    },
+    "errors": [],
+    "opportunities": [
+      {
+        "id": "clx_example_opportunity_id",
+        "keyword": "steam description generator",
+        "country": "US",
+        "language": "en",
+        "title": "Steam Description Generator",
+        "totalScore": 82,
+        "scoreBreakdown": {},
+        "scoreExplanation": {}
+      }
+    ]
+  }
+}
+```
+
+Error responses follow the existing API shape:
+
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Request validation failed.",
+    "issues": []
+  }
+}
+```
+
+The orchestrator creates a `SearchRun`, saves `KeywordCandidate` rows, saves `SerpResult` rows, runs SERP and opportunity analysis, calculates scores with `calculateOpportunityScore()`, saves `Opportunity` rows with `scoreBreakdown` and `scoreExplanation`, and finalizes the run as `completed`, `partial_failed`, or `failed`. A single keyword failure is recorded with a sanitized message and does not discard successful opportunities.
+
+Validate this slice with:
+
+```bash
+npm test
+npm run build
+```
+
+Non-goals for this slice: no dashboard UI, no opportunity list/detail UI, no cron or queue, no auth/session changes, no real SERP provider, no real LLM provider setup, no secret loading, no schema migration, and no package dependency changes.
+
 ## Local Radar Task API
 
 The MVP exposes a single-admin, unauthenticated local API slice for Radar Task management. It is intended for local development and later admin UI integration; it does not add sessions, public auth, scans, SERP providers, or LLM calls.

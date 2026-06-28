@@ -1,0 +1,93 @@
+{
+  "message_id": "MSG-20260628-SYSTEMS_ARCHITECT",
+  "task_id": "M4-RUN-SCAN-API-001",
+  "from_role": "systems_architect",
+  "status": "ACCEPT",
+  "summary": "Systems architecture review accepts the M4 Run Scan API/orchestrator slice. The implementation keeps services/scan-orchestrator.ts as the orchestration boundary, composes existing agents, MockSerpProvider, and calculateOpportunityScore(), persists the existing Prisma SearchRun/KeywordCandidate/SerpResult/Opportunity shape without schema changes, finalizes completed/partial_failed/failed runs with sanitized errors, and exposes a scoped POST /api/scans/run route with route-safe exports.",
+  "artifacts": [
+    "services/scan-orchestrator.ts",
+    "app/api/scans/run/_api.ts",
+    "app/api/scans/run/route.ts",
+    "lib/schemas.ts",
+    "tests/scan-orchestrator.test.ts",
+    "tests/run-scan-api.test.ts",
+    "README.md",
+    "project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json"
+  ],
+  "artifacts_reviewed": [
+    "project/tasks/active/M4-RUN-SCAN-API-001.json",
+    "docs/09_codex_implementation_tasks.md",
+    "docs/11_development_plan.md",
+    "docs/07_data_model_and_scoring.md",
+    "docs/08_ai_agents_and_prompts.md",
+    "prisma/schema.prisma",
+    "services/scan-orchestrator.ts",
+    "app/api/scans/run/_api.ts",
+    "app/api/scans/run/route.ts",
+    "lib/schemas.ts",
+    "lib/scoring.ts",
+    "lib/db.ts",
+    "services/serp/types.ts",
+    "services/serp/mock-provider.ts",
+    "agents/keyword-expansion-agent.ts",
+    "agents/serp-analysis-agent.ts",
+    "agents/opportunity-analysis-agent.ts",
+    "tests/scan-orchestrator.test.ts",
+    "tests/run-scan-api.test.ts",
+    "README.md",
+    "project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "review_focus": {
+    "orchestrator_boundary": "PASS: services/scan-orchestrator.ts is the only new orchestration layer and reuses existing agents, SERP provider types, MockSerpProvider, and calculateOpportunityScore() rather than duplicating prompt, provider, or scoring logic.",
+    "dependency_injection": "PASS: runScan() accepts an injected repository, SERP provider, and optional LLM client for focused tests while the default path dynamically wires Prisma plus MockSerpProvider without constructing real LLM or SERP clients.",
+    "pipeline_order": "PASS: the scan loads an active RadarTask, creates a SearchRun, expands keywords, persists each KeywordCandidate, searches SERP, persists SerpResult rows, runs SERP analysis, runs opportunity analysis, calculates score, persists Opportunity rows, and finalizes counts/status.",
+    "prisma_persistence_shape": "PASS: default repository writes only fields that exist in the current Prisma schema, including scoreBreakdown, scoreExplanation, rawAnalysis, killCriteria, SearchRun counts, completedAt, and errorMessage; no schema or migration change was introduced.",
+    "status_finalization": "PASS: valid scans finalize to completed, partial_failed, or failed with completedAt, counts, and sanitized error summaries; invalid missing/inactive task and unsupported non-mock preconditions are rejected before creating orphaned runs.",
+    "partial_safe_writes": "PASS: keyword processing is isolated per candidate, so a SERP or persistence failure marks that keyword failed, records a sanitized per-keyword error, and preserves successful opportunities before returning partial_failed.",
+    "deterministic_defaults": "PASS: useMockSerp defaults true, the default SERP provider is MockSerpProvider, no LLM client is created by default, and tests block global fetch on the happy path to guard against accidental network calls.",
+    "api_route_validation": "PASS: POST /api/scans/run validates JSON through runScanInputSchema, returns the existing {data} and {error} envelope style, sanitizes not-found/inactive/unsupported/runtime responses, and exposes only POST from route.ts.",
+    "scope_control": "PASS: reviewed changes are confined to the allowed implementation paths plus task/message state; no UI, provider setup, LLM setup, env secret loading, Prisma schema, package, cron, auth/session, radar-task API, or scoring formula creep was found."
+  },
+  "findings": [],
+  "decisions": [
+    "Accepted the repository interface as the correct boundary for Prisma persistence and partial-failure tests.",
+    "Accepted rejecting missing, inactive, and unsupported non-mock scans before SearchRun creation because it avoids orphaned run records for invalid preconditions.",
+    "Accepted route helper exports from app/api/scans/run/_api.ts while keeping app/api/scans/run/route.ts constrained to POST for Next route compatibility.",
+    "Accepted focused fake-based tests for systems behavior, with the default production path still wired to Prisma and MockSerpProvider.",
+    "Accepted README coverage for request shape, response shape, local mock behavior, validation commands, and non-goals."
+  ],
+  "risks": [
+    "The default Prisma-backed path is reviewed statically and through repository fakes, not with a real SQLite integration scan in this review.",
+    "If final SearchRun update itself fails, the returned result records run_finalization but the database cannot be repaired by the same failed write; this is acceptable for the MVP slice and should be revisited before background jobs or retries.",
+    "The provider value persisted on SerpResult is currently mock-oriented, matching this MVP scope; future real provider work should extend that contract deliberately.",
+    "Next.js build still prints nonfatal local @next/swc-win32-x64-msvc warnings before completing successfully."
+  ],
+  "tests_run": [
+    {
+      "command": "node skills/general-rd-orchestrator/scripts/validate-handoff.mjs project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+      "exit_code": 0,
+      "result": "PASS: incoming implementation handoff JSON is valid."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "PASS: all 46 tests across 10 suites passed, including scan orchestrator and run-scan API coverage."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "result": "PASS: Next.js production build completed successfully and included /api/scans/run as a dynamic server route; nonfatal local SWC native-package warnings were printed before fallback build continued."
+    },
+    {
+      "command": "node skills/general-rd-orchestrator/scripts/validate-handoff.mjs project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-SYSTEMS_ARCHITECT.json",
+      "exit_code": 0,
+      "result": "PASS: systems_architect handoff JSON validated successfully."
+    }
+  ],
+  "blockers": [],
+  "route_to": "domain_designer",
+  "requested_action": "Proceed with domain_designer review of opportunity persistence semantics, scoring/risk summaries, and saved analysis shape for M4-RUN-SCAN-API-001.",
+  "created_at": "2026-06-28T20:06:24+08:00"
+}

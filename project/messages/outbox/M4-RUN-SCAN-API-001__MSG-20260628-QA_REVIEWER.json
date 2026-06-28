@@ -1,0 +1,154 @@
+{
+  "message_id": "MSG-20260628-QA_REVIEWER",
+  "task_id": "M4-RUN-SCAN-API-001",
+  "from_role": "qa_reviewer",
+  "status": "ACCEPT",
+  "summary": "Final QA accepts M4-RUN-SCAN-API-001. The Run Scan orchestrator exposes the requested runScan() boundary, defaults to the local deterministic mock SERP/no-LLM path, loads only active Radar Tasks, creates and finalizes SearchRun records, persists keyword candidates, SERP results, scored opportunities, scoreBreakdown, scoreExplanation, raw analysis, and kill criteria, preserves successful opportunities across partial keyword failures, and exposes POST /api/scans/run with strict validation and sanitized API responses.",
+  "artifacts": [
+    "services/scan-orchestrator.ts",
+    "app/api/scans/run/_api.ts",
+    "app/api/scans/run/route.ts",
+    "lib/schemas.ts",
+    "tests/scan-orchestrator.test.ts",
+    "tests/run-scan-api.test.ts",
+    "README.md",
+    "project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-QA_REVIEWER.json"
+  ],
+  "artifacts_reviewed": [
+    "project/tasks/active/M4-RUN-SCAN-API-001.json",
+    "project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+    "project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-DOMAIN_DESIGNER.json",
+    "project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-SECURITY_REVIEWER.json",
+    "docs/09_codex_implementation_tasks.md",
+    "docs/11_development_plan.md",
+    "docs/10_acceptance_criteria_and_test_plan.md",
+    "services/scan-orchestrator.ts",
+    "app/api/scans/run/_api.ts",
+    "app/api/scans/run/route.ts",
+    "lib/schemas.ts",
+    "lib/scoring.ts",
+    "agents/keyword-expansion-agent.ts",
+    "agents/serp-analysis-agent.ts",
+    "agents/opportunity-analysis-agent.ts",
+    "services/serp/mock-provider.ts",
+    "services/serp/types.ts",
+    "tests/scan-orchestrator.test.ts",
+    "tests/run-scan-api.test.ts",
+    "README.md"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "findings": [],
+  "acceptance_criteria_review": [
+    {
+      "criterion": "Stable runScan() orchestrator contract.",
+      "status": "PASS",
+      "notes": "services/scan-orchestrator.ts exports runScan(), typed input/result/error/count/opportunity contracts, and dependency injection for repository, SERP provider, and optional LLM client."
+    },
+    {
+      "criterion": "Core chain and persistence.",
+      "status": "PASS",
+      "notes": "The implementation loads an active RadarTask, creates a SearchRun, expands keywords, searches mock SERP, runs SERP and opportunity analysis, calculates scores through calculateOpportunityScore(), and persists candidates, results, opportunities, scoreBreakdown, scoreExplanation, rawAnalysis, killCriteria, and final run counts/status."
+    },
+    {
+      "criterion": "Default local deterministic path.",
+      "status": "PASS",
+      "notes": "useMockSerp defaults to true, MockSerpProvider is used by default, no default LLM client is constructed, and focused tests block fetch during the default scan path."
+    },
+    {
+      "criterion": "Completed, failed, and partial_failed behavior.",
+      "status": "PASS",
+      "notes": "Focused tests cover completed mock scans, partial_failed scans that retain successful opportunities when one keyword fails, and failed scans with no useful output."
+    },
+    {
+      "criterion": "POST /api/scans/run validation and response shape.",
+      "status": "PASS",
+      "notes": "The route validates JSON with runScanInputSchema, returns success as { data: ... }, and returns existing-style sanitized error envelopes for invalid JSON, validation, not-found, inactive task, unsupported provider, and unexpected runtime failures."
+    },
+    {
+      "criterion": "Focused automated coverage.",
+      "status": "PASS",
+      "notes": "New tests cover successful mock orchestration, persistence payloads, score breakdown/explanation, missing/inactive/unsupported provider preconditions, partial and failed runs, API validation, API success/not-found shape, and no-network/no-secret defaults."
+    },
+    {
+      "criterion": "README documentation.",
+      "status": "PASS",
+      "notes": "README documents the Run Scan API/orchestrator slice, mock local behavior, request shape, response shape, validation commands, and explicit non-goals."
+    },
+    {
+      "criterion": "Scope boundaries.",
+      "status": "PASS",
+      "notes": "Product implementation stayed within allowed task paths. Dirty project/task/message/model-routing files are coordination state from the multi-role workflow and were not treated as product implementation expansion."
+    }
+  ],
+  "tests_run": [
+    {
+      "command": "node skills/general-rd-orchestrator/scripts/validate-handoff.mjs project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+      "exit_code": 0,
+      "result": "VALID implementation handoff JSON."
+    },
+    {
+      "command": "node skills/general-rd-orchestrator/scripts/taskctl.mjs validate M4-RUN-SCAN-API-001",
+      "exit_code": 1,
+      "result": "Non-blocking lookup issue: taskctl did not resolve the task by ID in this invocation; path-based validation was run next and passed."
+    },
+    {
+      "command": "node skills/general-rd-orchestrator/scripts/taskctl.mjs validate project/tasks/active/M4-RUN-SCAN-API-001.json",
+      "exit_code": 0,
+      "result": "VALID active task JSON."
+    },
+    {
+      "command": "node .agents/skills/just-goal/scripts/modelctl.mjs validate",
+      "exit_code": 0,
+      "result": "VALID project/model-routing-state.json."
+    },
+    {
+      "command": "git -c safe.directory=D:/WebProjects/MicroGapRadar diff --check",
+      "exit_code": 0,
+      "result": "PASS: no whitespace errors. Git printed line-ending conversion warnings for README.md, lib/schemas.ts, and project coordination JSON files."
+    },
+    {
+      "command": "npx tsx --test tests/scan-orchestrator.test.ts tests/run-scan-api.test.ts",
+      "exit_code": 0,
+      "result": "PASS: 8 focused scan/API tests passed."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "PASS: 46 tests passed across 10 suites."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "result": "PASS: Next.js production build completed. Nonfatal local @next/swc-win32-x64-msvc warnings were printed before fallback build continued."
+    },
+    {
+      "command": "rg security/scope scan over Run Scan files",
+      "exit_code": 0,
+      "result": "PASS: no product implementation hits for env/secret loading, real provider setup, raw SQL, package changes, UI, cron, auth, or session changes. Hits were README context, sanitizer tests, sanitizeScanErrorMessage(), and an existing-style console.error for unexpected API failures."
+    },
+    {
+      "command": "git -c safe.directory=D:/WebProjects/MicroGapRadar status --short --untracked-files=all with scope classification",
+      "exit_code": 0,
+      "result": "PASS: product artifacts are within allowed paths; project/* changes are coordination state, including implementation/domain/security handoffs and task/model-routing state."
+    }
+  ],
+  "decisions": [
+    "ACCEPT: The implementation satisfies the QA checklist prepared for successful mock scan, persistence payloads, score breakdown/explanation, invalid/inactive task handling, partial failures, API validation response shape, no-network/no-secret defaults, npm test, npm run build, and scope review.",
+    "Accepted the dependency-injection seams as adequate testability for persistence/provider failures while keeping the default production route wired to Prisma and MockSerpProvider.",
+    "Accepted useMockSerp false fail-closed behavior because real SERP provider setup is explicitly out of scope for this task.",
+    "Accepted existing-style console.error for unexpected API failures as a residual local-MVP risk because the public API response remains sanitized, the slice reads no secrets by default, and security review accepted this pattern.",
+    "Accepted project coordination file churn as workflow state, not product scope expansion.",
+    "Did not commit or push."
+  ],
+  "risks": [
+    "The POST route remains intentionally unauthenticated for the local single-admin MVP; production exposure still needs the later auth/session/deployment policy.",
+    "SearchRun.errorMessage and returned per-keyword errors retain keyword and stage context after redaction; users should avoid putting secrets in Radar Task content or generated keyword text.",
+    "High or excluded-risk opportunities can be persisted with penalties and kill criteria; later ranking/detail UI must surface those risk signals and avoid treating excluded ideas as normal top picks.",
+    "Next build still prints nonfatal local SWC native-package warnings before succeeding."
+  ],
+  "blockers": [],
+  "route_to": "lead_orchestrator",
+  "requested_action": "Integrate and close M4-RUN-SCAN-API-001. QA accepts the Run Scan API/orchestrator implementation; domain and security handoffs also record ACCEPT.",
+  "created_at": "2026-06-28T20:06:33.6356909+08:00"
+}

@@ -1,0 +1,65 @@
+{
+  "message_id": "MSG-20260628-IMPLEMENTATION_ENGINEER",
+  "task_id": "M4-RUN-SCAN-API-001",
+  "from_role": "implementation_engineer",
+  "status": "REVIEW",
+  "summary": "Implemented the M4 Run Scan API and scan orchestrator slice. The local default path creates a SearchRun, expands keywords, uses mock SERP, runs SERP and opportunity analysis fallbacks, calculates final scores, persists candidates/results/opportunities, finalizes completed/partial_failed/failed status, and exposes POST /api/scans/run with strict validation and sanitized responses.",
+  "artifacts": [
+    "services/scan-orchestrator.ts",
+    "app/api/scans/run/_api.ts",
+    "app/api/scans/run/route.ts",
+    "lib/schemas.ts",
+    "tests/scan-orchestrator.test.ts",
+    "tests/run-scan-api.test.ts",
+    "README.md"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "tests_run": [
+    {
+      "command": "npx tsx --test tests/scan-orchestrator.test.ts tests/run-scan-api.test.ts",
+      "exit_code": 0,
+      "result": "PASS: 8 focused scan/API tests passed, covering successful default mock scan with 10 opportunities, missing/inactive/unsupported provider preconditions, partial failures, failed runs with sanitized errors, API validation, API success envelope, and not-found response shape."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "PASS: 46 tests passed across 10 suites."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "result": "PASS: Next.js production build completed successfully after moving test helper exports out of route.ts. Nonfatal local SWC native-package warnings were printed before fallback build continued."
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS: no whitespace errors. Git printed line-ending conversion warnings for README.md and lib/schemas.ts."
+    },
+    {
+      "command": "rg boundary/security scan over Run Scan files",
+      "exit_code": 0,
+      "result": "PASS: no process.env, fetch, OpenAICompatibleClient, real provider setup, raw SQL, schema migration, package change, UI, cron, auth, or forbidden service edits found in the implementation scope. Expected hits are sanitized error tests, existing README context, console.error matching existing API helper style, and sanitizeScanErrorMessage()."
+    }
+  ],
+  "decisions": [
+    "Kept services/scan-orchestrator.ts as the only orchestration layer and reused existing agents, MockSerpProvider, and calculateOpportunityScore() instead of duplicating prompt, provider, or scoring logic.",
+    "Defaulted useMockSerp to true and did not construct real SERP or LLM providers; without injected clients/providers, the scan remains local and deterministic.",
+    "Used dependency injection for repository, SERP provider, and optional LLM client so tests can exercise persistence and partial-failure behavior without network or secret dependencies.",
+    "Rejected missing or inactive Radar Tasks and unsupported non-mock scans before creating a SearchRun, preventing orphaned runs for invalid preconditions.",
+    "Persisted successful keyword candidates, SERP results, and opportunities independently so one keyword failure can produce partial_failed without discarding successful opportunities.",
+    "Stored scoreBreakdown and scoreExplanation from calculateOpportunityScore() and saved opportunity rawAnalysis/killCriteria for later UI/detail views.",
+    "Moved the API test factory into app/api/scans/run/_api.ts because Next route modules may only export route-supported symbols; app/api/scans/run/route.ts exports POST only.",
+    "The implementation thread hit an external usage-limit error before final handoff; the lead orchestrator completed integration, added missing route success/not-found and failed-run tests, and reran validation."
+  ],
+  "risks": [
+    "The route is intentionally unauthenticated for the local single-admin MVP; production auth/session policy remains out of scope for this slice.",
+    "The default Prisma-backed path writes to the configured local database; tests use injected repositories and do not exercise a real SQLite integration run.",
+    "SearchRun.errorMessage and returned per-keyword errors are sanitized and length-bounded but still include keyword and stage context for debugging.",
+    "Risk filtering beyond scoring and risk summaries remains a later ranking/UI policy concern; this slice saves opportunities produced by the existing risk-aware Opportunity Analysis Agent."
+  ],
+  "blockers": [],
+  "route_to": "systems_architect",
+  "requested_action": "Review the Run Scan orchestrator/API implementation against M4-RUN-SCAN-API-001, then route to domain_designer, security_reviewer, and qa_reviewer for final acceptance.",
+  "created_at": "2026-06-28T09:11:00Z"
+}

@@ -1,7 +1,7 @@
 {
   "version": 1,
   "created_at": "2026-06-27T19:24:00Z",
-  "updated_at": "2026-06-28T08:58:39Z",
+  "updated_at": "2026-06-28T12:09:53Z",
   "main_commit": "2baa491",
   "current_milestone": "M4",
   "current_task": "M4-RUN-SCAN-API-001",
@@ -41,56 +41,77 @@
       "role": "implementation_engineer",
       "task_id": "M4-RUN-SCAN-API-001",
       "thread_id": "019f0d72-c65e-7a43-9a44-72146c2b2319",
-      "status": "active"
+      "status": "accepted"
     },
     {
       "role": "systems_architect",
       "task_id": "M4-RUN-SCAN-API-001",
       "thread_id": "019f0d72-d836-7983-a20f-6df9854b95d6",
-      "status": "active"
+      "status": "accepted"
     },
     {
       "role": "domain_designer",
       "task_id": "M4-RUN-SCAN-API-001",
       "thread_id": "019f0d72-da92-7f40-8ae4-0dfb3737f227",
-      "status": "active"
+      "status": "accepted"
     },
     {
       "role": "security_reviewer",
       "task_id": "M4-RUN-SCAN-API-001",
       "thread_id": "019f0d72-dcc3-7831-97ae-15e7293fbd21",
-      "status": "active"
+      "status": "accepted"
     },
     {
       "role": "qa_reviewer",
       "task_id": "M4-RUN-SCAN-API-001",
       "thread_id": "019f0d72-de9d-7091-9983-dc8e48404156",
-      "status": "active"
+      "status": "accepted"
     }
   ],
   "next_ready_tasks": [],
   "recommended_next_task": null,
-  "recent_handoffs": [],
+  "recent_handoffs": [
+    "project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+    "project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-SYSTEMS_ARCHITECT.json",
+    "project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-DOMAIN_DESIGNER.json",
+    "project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-SECURITY_REVIEWER.json",
+    "project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-QA_REVIEWER.json"
+  ],
   "validation_evidence": [
     {
-      "command": "multi_agent_v1.spawn_agent implementation_engineer",
+      "command": "node .agents/skills/just-goal/scripts/validate-handoff.mjs project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-QA_REVIEWER.json",
       "exit_code": 0,
-      "note": "Spawned McClintock for Run Scan implementation."
+      "note": "Final QA handoff is valid and ACCEPT."
     },
     {
-      "command": "multi_agent_v1.spawn_agent systems_architect/domain_designer/security_reviewer/qa_reviewer",
+      "command": "node .agents/skills/just-goal/scripts/validate-handoff.mjs project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-SYSTEMS_ARCHITECT.json",
       "exit_code": 0,
-      "note": "Spawned Pauli, Sartre, Peirce, and Carson for parallel review preparation."
+      "note": "Systems architect ACCEPT handoff is valid."
     },
     {
-      "command": "node .agents/skills/just-goal/scripts/taskctl.mjs check-registry --repo-root .",
+      "command": "node .agents/skills/just-goal/scripts/validate-handoff.mjs project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-DOMAIN_DESIGNER.json",
       "exit_code": 0,
-      "note": "Registry reports 5 active M4 Run Scan role threads and no duplicates."
+      "note": "Domain designer ACCEPT handoff is valid."
+    },
+    {
+      "command": "node .agents/skills/just-goal/scripts/validate-handoff.mjs project/messages/outbox/M4-RUN-SCAN-API-001__MSG-20260628-SECURITY_REVIEWER.json",
+      "exit_code": 0,
+      "note": "Security reviewer ACCEPT handoff is valid."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "note": "46 tests passed across 10 suites."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "note": "Build passed with known nonfatal Windows Next SWC native package warning."
     }
   ],
   "human_gate": {
     "required": false,
     "reason": null
   },
-  "next_prompt": "Continue JustGoal on M4-RUN-SCAN-API-001: wait for implementation handoff, route to systems/domain/security/QA, handle changes, integrate, push, close, and continue."
+  "next_prompt": "Continue JustGoal on M4-RUN-SCAN-API-001: integrate accepted Run Scan API/orchestrator, commit and push, then close the task and queue the next non-human-gated task."
 }
