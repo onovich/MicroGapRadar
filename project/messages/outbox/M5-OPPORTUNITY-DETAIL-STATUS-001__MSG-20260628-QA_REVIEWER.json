@@ -1,0 +1,148 @@
+{
+  "message_id": "MSG-20260628-QA_REVIEWER",
+  "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001",
+  "from_role": "qa_reviewer",
+  "status": "ACCEPT",
+  "summary": "QA accepts M5-OPPORTUNITY-DETAIL-STATUS-001. The working tree adds the requested server-rendered opportunity detail route, serializable persisted detail view model, restrained status controls, narrow PATCH status API for saved/discarded/build_next, safe not-found and validation errors, README documentation, and focused tests. Review found no blocking acceptance, coverage, or product-scope issue.",
+  "artifacts": [
+    "app/opportunities/[id]/page.tsx",
+    "app/api/opportunities/[id]/_api.ts",
+    "app/api/opportunities/[id]/route.ts",
+    "components/OpportunityDetail.tsx",
+    "components/OpportunityStatusControls.tsx",
+    "lib/opportunities.ts",
+    "tests/opportunities.test.ts",
+    "README.md",
+    "project/messages/outbox/M5-OPPORTUNITY-DETAIL-STATUS-001__MSG-20260628-QA_REVIEWER.json"
+  ],
+  "artifacts_reviewed": [
+    "project/tasks/active/M5-OPPORTUNITY-DETAIL-STATUS-001.json",
+    "project/messages/outbox/M5-OPPORTUNITY-DETAIL-STATUS-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+    "app/opportunities/[id]/page.tsx",
+    "app/api/opportunities/[id]/_api.ts",
+    "app/api/opportunities/[id]/route.ts",
+    "components/OpportunityDetail.tsx",
+    "components/OpportunityStatusControls.tsx",
+    "lib/opportunities.ts",
+    "tests/opportunities.test.ts",
+    "README.md"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "findings": [],
+  "acceptance_criteria_review": [
+    {
+      "criterion": "Server-rendered /opportunities/[id] detail page loads one persisted Opportunity through the shared helper.",
+      "status": "PASS",
+      "notes": "app/opportunities/[id]/page.tsx:18-25 resolves the dynamic id and calls getOpportunityDetailData(); lib/opportunities.ts:319-329 parses the id, queries one persisted Opportunity with the shared include, and returns serializeOpportunityDetail(). The page is force-dynamic at app/opportunities/[id]/page.tsx:10."
+    },
+    {
+      "criterion": "Plain serializable detail view model with persisted score, analysis context, and empty/missing-field tolerance.",
+      "status": "PASS",
+      "notes": "lib/opportunities.ts:155-164 defines the detail view model; lib/opportunities.ts:496-525 extends the existing card serializer with target user, search intent, SERP weakness, scoreExplanation, scoreBreakdownItems, toolConcept/toolabilitySummary, and normalized killCriteria. Dates are still ISO strings via serializeOpportunity() at lib/opportunities.ts:571-579. Missing or partial JSON is normalized defensively at lib/opportunities.ts:830-860, 891-910, 956-988, and 1206-1213. tests/opportunities.test.ts:145-179 asserts detail JSON serialization and persisted analysis fields."
+    },
+    {
+      "criterion": "Detail rendering covers score breakdown, risk, monetization, SERP, tool concept, kill criteria, run context, current status, and navigation.",
+      "status": "PASS",
+      "notes": "components/OpportunityDetail.tsx:21-42 renders back navigation, title/keyword/context, and score; components/OpportunityDetail.tsx:70-101 renders score breakdown/explanations; components/OpportunityDetail.tsx:104-134 renders SERP and tool concept/toolability; components/OpportunityDetail.tsx:139-189 renders monetization, risk/build, and kill criteria; components/OpportunityDetail.tsx:192-212 renders radar task/search run context. tests/opportunities.test.ts:231-258 asserts the main rendered detail cues."
+    },
+    {
+      "criterion": "Missing opportunity behavior is safe.",
+      "status": "PASS",
+      "notes": "app/opportunities/[id]/page.tsx:24-35 maps OpportunityNotFoundError or null helper results to Next notFound(). API missing ids and missing rows return sanitized 404 responses through app/api/opportunities/[id]/_api.ts:96-98 and are covered by tests/opportunities.test.ts:394-426."
+    },
+    {
+      "criterion": "Status update path is narrow, validates malformed/invalid requests, and persists valid updates.",
+      "status": "PASS",
+      "notes": "lib/opportunities.ts:42-46 restricts mutable statuses to saved, discarded, and build_next; lib/opportunities.ts:371-390 persists the status through db.opportunity.update(); lib/opportunities.ts:583-610 rejects empty ids and invalid statuses. app/api/opportunities/[id]/_api.ts:50-80 handles malformed JSON and passes only body.status to the update boundary; app/api/opportunities/[id]/_api.ts:82-107 returns safe validation/not-found/internal errors; app/api/opportunities/[id]/_api.ts:119-125 performs parse/update/response. tests/opportunities.test.ts:263-426 covers allowed statuses, built/new rejection, extra body fields not reaching update, malformed JSON, and missing opportunity errors."
+    },
+    {
+      "criterion": "Status UI is restrained and reflects current status without overstating workflow guarantees.",
+      "status": "PASS",
+      "notes": "components/OpportunityStatusControls.tsx:21-37 exposes only Save, Discard, and Build next actions; components/OpportunityStatusControls.tsx:55-87 calls the local PATCH route and updates the displayed status; components/OpportunityStatusControls.tsx:101-127 shows current status, disables active/pending actions, and does not mention auth, team workflow, revenue validation, SEO certainty, market proof, or irreversible deletion."
+    },
+    {
+      "criterion": "Shared query/update logic remains outside UI components.",
+      "status": "PASS",
+      "notes": "Prisma-backed detail read and status update logic are centralized in lib/opportunities.ts:319-329 and lib/opportunities.ts:371-390. The route delegates through createOpportunityStatusPatchHandler() at app/api/opportunities/[id]/route.ts:1-3. UI components receive typed serializable props and do not import Prisma; component imports from lib/opportunities are type-only or existing display helpers."
+    },
+    {
+      "criterion": "README documents the detail/status slice, validation commands, local single-admin assumption, and non-goals.",
+      "status": "PASS",
+      "notes": "README.md:318-342 documents the /opportunities/{id} detail page, PATCH /api/opportunities/{id}, the allowed status set, sanitized errors, local single-admin assumption, validation commands, and explicit non-goals including no MVP Spec/copy route, schema/package/scoring/orchestration/auth/deployment/GitHub Actions changes."
+    },
+    {
+      "criterion": "Forbidden path scope and non-goals are preserved.",
+      "status": "PASS",
+      "notes": "C:\\Users\\Administrator\\.codex\\skills\\project-git-workflow\\scripts\\git\\Status.cmd showed product changes limited to README.md, lib/opportunities.ts, tests/opportunities.test.ts, app/api/opportunities/[id]/**, app/opportunities/[id]/**, and components/OpportunityDetail.tsx/components/OpportunityStatusControls.tsx. git diff over package.json, package-lock.json, prisma, lib/scoring.ts, lib/db.ts, lib/env.ts, lib/radar-tasks.ts, lib/schemas.ts, app/api/scans, app/api/radar-tasks, app/page.tsx, app/layout.tsx, app/globals.css, services, agents, docs, mock-data, skills, .codex, and .agents produced no output. project/messages/outbox handoff files are treated as JustGoal coordination artifacts, not product implementation."
+    }
+  ],
+  "tests_run": [
+    {
+      "command": "node .agents\\skills\\just-goal\\scripts\\validate-handoff.mjs project\\messages\\outbox\\M5-OPPORTUNITY-DETAIL-STATUS-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+      "exit_code": 0,
+      "result": "VALID implementation handoff JSON."
+    },
+    {
+      "command": "node .agents\\skills\\just-goal\\scripts\\taskctl.mjs validate project\\tasks\\active\\M5-OPPORTUNITY-DETAIL-STATUS-001.json",
+      "exit_code": 0,
+      "result": "VALID active task JSON; validated 1 task."
+    },
+    {
+      "command": "C:\\Users\\Administrator\\.codex\\skills\\project-git-workflow\\scripts\\git\\Status.cmd",
+      "exit_code": 0,
+      "result": "Reviewed dirty tree on main: tracked product changes are README.md, lib/opportunities.ts, tests/opportunities.test.ts; untracked expected product artifacts are app/api/opportunities/[id]/_api.ts, app/api/opportunities/[id]/route.ts, app/opportunities/[id]/page.tsx, components/OpportunityDetail.tsx, and components/OpportunityStatusControls.tsx; implementation handoff is present under project/messages/outbox."
+    },
+    {
+      "command": "git -c safe.directory=D:/WebProjects/MicroGapRadar ls-files --others --exclude-standard",
+      "exit_code": 0,
+      "result": "Untracked files are the expected new detail/API/component artifacts plus the implementation handoff; no unexpected product path was present."
+    },
+    {
+      "command": "git -c safe.directory=D:/WebProjects/MicroGapRadar diff -- package.json package-lock.json prisma lib/scoring.ts lib/db.ts lib/env.ts lib/radar-tasks.ts lib/schemas.ts app/api/scans app/api/radar-tasks app/page.tsx app/layout.tsx app/globals.css services agents docs mock-data skills .codex .agents",
+      "exit_code": 0,
+      "result": "No forbidden-scope product diff output."
+    },
+    {
+      "command": "git -c safe.directory=D:/WebProjects/MicroGapRadar diff --check",
+      "exit_code": 0,
+      "result": "PASS: no whitespace errors. Git printed LF-to-CRLF working-copy warnings for README.md, lib/opportunities.ts, and tests/opportunities.test.ts only."
+    },
+    {
+      "command": "npx tsx --test tests/opportunities.test.ts",
+      "exit_code": 0,
+      "result": "PASS: 14 focused tests passed across 3 suites."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "PASS: 60 tests passed across 13 suites."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "result": "PASS: Next.js production build completed and emitted dynamic /api/opportunities/[id] and /opportunities/[id] routes. Existing local Windows @next/swc-win32-x64-msvc optional-binary warnings were printed but the build exited 0."
+    }
+  ],
+  "decisions": [
+    "ACCEPT: All task acceptance criteria are met with no requested product-code changes.",
+    "Accepted the local unauthenticated PATCH route because the task explicitly scopes the MVP to a local single-admin status update boundary and README documents that assumption.",
+    "Accepted injected API-handler tests for update-boundary behavior, supplemented by code review of the actual Prisma update path in lib/opportunities.ts.",
+    "Accepted framework notFound() code review for the dynamic page; API not-found behavior is covered by focused automated tests.",
+    "Accepted project/messages/outbox changes as JustGoal coordination state despite project/** being listed in product forbidden paths.",
+    "Did not modify product code, commit, or push."
+  ],
+  "risks": [
+    "No browser-level smoke test was run for the interactive status controls; React static rendering and API handler tests cover the core behavior.",
+    "No real database integration test exercises db.opportunity.update(); focused tests validate parsing, safe errors, and boundary calls, while the Prisma update implementation was reviewed directly.",
+    "The dynamic detail page's notFound() path is verified by code review rather than a Next route-level test.",
+    "Older Opportunity rows without rawAnalysis.toolConcept or scoreExplanation.toolabilityScore will omit the optional tool concept block; the persisted tool type, SERP weakness, score data, and empty kill-criteria fallback still render safely.",
+    "The status endpoint remains unauthenticated by design for the local MVP and must not be treated as public-deploy ready.",
+    "Next build continues to print existing nonfatal local SWC native-package warnings before exiting 0."
+  ],
+  "requested_changes": [],
+  "blockers": [],
+  "route_to": "lead_orchestrator",
+  "requested_action": "Integrate M5-OPPORTUNITY-DETAIL-STATUS-001 after remaining required role reviews, if any. QA accepts the implementation with no requested changes.",
+  "created_at": "2026-06-28T21:16:41.2121361+08:00"
+}

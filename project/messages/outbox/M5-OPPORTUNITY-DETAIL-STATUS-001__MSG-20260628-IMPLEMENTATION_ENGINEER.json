@@ -1,0 +1,62 @@
+{
+  "message_id": "MSG-20260628-IMPLEMENTATION_ENGINEER",
+  "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001",
+  "from_role": "implementation_engineer",
+  "status": "REVIEW",
+  "summary": "Implemented the M5 Opportunity Detail and limited status-update slice. Added a server-rendered /opportunities/{id} page backed by lib/opportunities.ts, a plain serializable detail view model, restrained detail UI components, a local PATCH /api/opportunities/{id} status path for saved/discarded/build_next only, focused tests, and README documentation. No MVP Spec generation/copy, schema migration, package change, scan orchestration, scoring change, auth/session, deployment, or task non-goal was implemented.",
+  "artifacts": [
+    "app/opportunities/[id]/page.tsx",
+    "app/api/opportunities/[id]/_api.ts",
+    "app/api/opportunities/[id]/route.ts",
+    "components/OpportunityDetail.tsx",
+    "components/OpportunityStatusControls.tsx",
+    "lib/opportunities.ts",
+    "tests/opportunities.test.ts",
+    "README.md"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "tests_run": [
+    {
+      "command": "npx tsx --test tests/opportunities.test.ts",
+      "exit_code": 0,
+      "result": "PASS: 14 focused opportunity tests passed across 3 suites, covering detail serialization, score/risk/monetization/detail rendering, status allow-list parsing, valid status update handling, extra request fields not reaching the update boundary, invalid/new/built status rejection, malformed JSON handling, and safe not-found status errors."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "PASS: 60 tests passed across 13 suites."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "result": "PASS: Next.js production build completed successfully. The local Windows SWC optional native package printed nonfatal 'not a valid Win32 application' warnings before Next continued and exited 0."
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS: no whitespace errors. Git printed LF-to-CRLF working-copy warnings for README.md, lib/opportunities.ts, and tests/opportunities.test.ts."
+    }
+  ],
+  "decisions": [
+    "Kept Opportunity detail reads and status writes centralized in lib/opportunities.ts so Prisma query/update logic remains outside UI components.",
+    "Extended the existing Opportunity card serializer into serializeOpportunityDetail() rather than creating a parallel model, preserving plain JSON-safe view models for server/client rendering and tests.",
+    "Used Next notFound() from the /opportunities/{id} server page when the helper returns no persisted Opportunity or receives an invalid/missing id.",
+    "Implemented PATCH /api/opportunities/{id} as the narrow local mutation boundary, accepting only saved, discarded, and build_next while rejecting new, built, and arbitrary statuses.",
+    "Returned sanitized API errors for invalid JSON, invalid statuses, missing ids, missing opportunities, and unexpected failures without echoing internal ids or exception details.",
+    "Built the status UI as a small client component that receives serializable props and calls the local PATCH route; it reflects the current status and disables the active action.",
+    "Displayed score breakdown/explanation only from persisted score JSON, tool concept from rawAnalysis.opportunityAnalysis.toolConcept when available, and kill criteria from persisted killCriteria JSON.",
+    "Documented the local single-admin assumption and explicit non-goals in README instead of implying public auth, multi-user workflow, market proof, SEO certainty, or MVP Spec generation.",
+    "Lead orchestrator added extra focused API tests after the initial implementation handoff so malformed JSON, status=new rejection, and extra request fields are covered before reviewer routing."
+  ],
+  "risks": [
+    "The status update endpoint is intentionally unauthenticated for the local single-admin MVP; public deployment still requires a later auth/session/security slice.",
+    "No discard reason, audit trail, optimistic cross-tab sync, or multi-user workflow is implemented; status changes are a simple persisted field update.",
+    "Tool concept details depend on rawAnalysis shape from the existing opportunity-analysis agent output; older rows without that JSON render the persisted score/toolability text that is available.",
+    "The local build environment prints nonfatal Windows SWC optional-binary warnings during Next build, although the build exits 0."
+  ],
+  "blockers": [],
+  "route_to": "systems_architect",
+  "requested_action": "Review M5-OPPORTUNITY-DETAIL-STATUS-001 against architecture and mutation-boundary requirements, then route to domain_designer, security_reviewer, and qa_reviewer for independent acceptance.",
+  "created_at": "2026-06-28T13:05:28Z"
+}

@@ -1,4 +1,4 @@
-import type { Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 const opportunityInclude = {
   radarTask: {
@@ -39,6 +39,11 @@ export const OPPORTUNITY_STATUSES = [
   "build_next",
   "built",
 ] as const;
+export const OPPORTUNITY_STATUS_UPDATE_STATUSES = [
+  "saved",
+  "discarded",
+  "build_next",
+] as const;
 export const TOOL_TYPES = [
   "generator",
   "checker",
@@ -66,6 +71,8 @@ export type RadarTaskOption = {
 export type RiskLevel = (typeof RISK_LEVELS)[number];
 export type RiskDisplayLevel = RiskLevel | "unknown";
 export type OpportunityStatus = (typeof OPPORTUNITY_STATUSES)[number];
+export type OpportunityStatusUpdate =
+  (typeof OPPORTUNITY_STATUS_UPDATE_STATUSES)[number];
 export type ToolType = (typeof TOOL_TYPES)[number];
 
 export type OpportunityFilters = {
@@ -94,6 +101,23 @@ export type ScoreBreakdownViewModel = {
   totalScore?: number;
 };
 
+export type ScoreExplanationViewModel = Partial<
+  Record<keyof ScoreBreakdownViewModel, string>
+>;
+
+export type ScoreBreakdownItemViewModel = {
+  key: keyof ScoreBreakdownViewModel;
+  label: string;
+  value: number;
+  explanation: string | null;
+};
+
+export type ToolConceptViewModel = {
+  oneLiner: string;
+  inputFields: string[];
+  outputModules: string[];
+};
+
 export type OpportunityCardViewModel = {
   id: string;
   detailHref: string;
@@ -112,7 +136,7 @@ export type OpportunityCardViewModel = {
   riskLabel: string;
   buildComplexity: string;
   buildComplexityLabel: string;
-  status: string;
+  status: OpportunityStatus;
   statusLabel: string;
   totalScore: number;
   scoreBreakdown: ScoreBreakdownViewModel;
@@ -125,6 +149,24 @@ export type OpportunityCardViewModel = {
     completedAt: string | null;
   };
   createdAt: string;
+  updatedAt: string;
+};
+
+export type OpportunityDetailViewModel = OpportunityCardViewModel & {
+  targetUser: string;
+  searchIntent: string;
+  serpWeaknessSummary: string;
+  scoreExplanation: ScoreExplanationViewModel;
+  scoreBreakdownItems: ScoreBreakdownItemViewModel[];
+  toolConcept: ToolConceptViewModel | null;
+  toolabilitySummary: string | null;
+  killCriteria: string[];
+};
+
+export type OpportunityStatusUpdateViewModel = {
+  id: string;
+  status: OpportunityStatusUpdate;
+  statusLabel: string;
   updatedAt: string;
 };
 
@@ -183,6 +225,24 @@ type BuildDashboardInput = {
   runCountToday?: number;
   completedRunCountToday?: number;
 };
+
+export class OpportunityNotFoundError extends Error {
+  readonly code = "OPPORTUNITY_NOT_FOUND";
+
+  constructor(id: string) {
+    super(`Opportunity not found: ${id}`);
+    this.name = "OpportunityNotFoundError";
+  }
+}
+
+export class OpportunityStatusValidationError extends Error {
+  readonly code = "OPPORTUNITY_STATUS_VALIDATION_ERROR";
+
+  constructor() {
+    super("Opportunity status must be saved, discarded, or build_next.");
+    this.name = "OpportunityStatusValidationError";
+  }
+}
 
 export async function getDashboardData(
   now: Date = new Date(),
@@ -256,6 +316,19 @@ export async function getDashboardData(
   });
 }
 
+export async function getOpportunityDetailData(
+  idInput: unknown,
+): Promise<OpportunityDetailViewModel | null> {
+  const id = parseOpportunityId(idInput);
+  const { db } = await import("@/lib/db");
+  const opportunity = await db.opportunity.findUnique({
+    where: { id },
+    include: opportunityInclude,
+  });
+
+  return opportunity ? serializeOpportunityDetail(opportunity) : null;
+}
+
 export async function getOpportunityListData(
   rawFilters: Record<string, unknown> = {},
 ): Promise<OpportunityListViewModel> {
@@ -293,6 +366,35 @@ export async function getOpportunityListData(
     radarTasks,
     optionOpportunities,
   });
+}
+
+export async function updateOpportunityStatus(
+  idInput: unknown,
+  statusInput: unknown,
+): Promise<OpportunityStatusUpdateViewModel> {
+  const id = parseOpportunityId(idInput);
+  const status = parseOpportunityStatusUpdate(statusInput);
+  const { db } = await import("@/lib/db");
+
+  try {
+    const opportunity = await db.opportunity.update({
+      where: { id },
+      data: { status },
+      select: {
+        id: true,
+        status: true,
+        updatedAt: true,
+      },
+    });
+
+    return serializeOpportunityStatusUpdate(opportunity);
+  } catch (error) {
+    if (isMissingRecordError(error)) {
+      throw new OpportunityNotFoundError(id);
+    }
+
+    throw error;
+  }
 }
 
 export function buildDashboardViewModel({
@@ -391,6 +493,39 @@ export function buildOpportunityListViewModel({
   };
 }
 
+export function serializeOpportunityDetail(
+  opportunity: OpportunityRow,
+): OpportunityDetailViewModel {
+  const card = serializeOpportunity(opportunity);
+  const scoreExplanation = normalizeScoreExplanation(
+    opportunity.scoreExplanation,
+  );
+  const scoreBreakdown = {
+    ...card.scoreBreakdown,
+    totalScore: card.scoreBreakdown.totalScore ?? card.totalScore,
+  };
+  const toolConcept = deriveToolConcept(opportunity.rawAnalysis);
+
+  return {
+    ...card,
+    scoreBreakdown,
+    targetUser: opportunity.targetUser,
+    searchIntent: opportunity.searchIntent,
+    serpWeaknessSummary: opportunity.serpWeaknessSummary,
+    scoreExplanation,
+    scoreBreakdownItems: buildScoreBreakdownItems(
+      scoreBreakdown,
+      scoreExplanation,
+    ),
+    toolConcept,
+    toolabilitySummary: deriveToolabilitySummary(
+      toolConcept,
+      scoreExplanation,
+    ),
+    killCriteria: normalizeStringList(opportunity.killCriteria),
+  };
+}
+
 export function serializeOpportunity(
   opportunity: OpportunityRow,
 ): OpportunityCardViewModel {
@@ -443,6 +578,36 @@ export function serializeOpportunity(
     createdAt: opportunity.createdAt.toISOString(),
     updatedAt: opportunity.updatedAt.toISOString(),
   };
+}
+
+export function parseOpportunityId(idInput: unknown): string {
+  const id = firstParam(idInput);
+
+  if (!id) {
+    throw new OpportunityNotFoundError("missing");
+  }
+
+  return id;
+}
+
+export function parseOpportunityStatusUpdate(
+  value: unknown,
+): OpportunityStatusUpdate {
+  if (typeof value !== "string") {
+    throw new OpportunityStatusValidationError();
+  }
+
+  const normalized = normalizeText(value).toLowerCase();
+
+  if (
+    OPPORTUNITY_STATUS_UPDATE_STATUSES.includes(
+      normalized as OpportunityStatusUpdate,
+    )
+  ) {
+    return normalized as OpportunityStatusUpdate;
+  }
+
+  throw new OpportunityStatusValidationError();
 }
 
 export function filterOpportunityViewModels(
@@ -627,6 +792,21 @@ function serializeSearchRun(run: SearchRunRow): RecentRunViewModel {
   };
 }
 
+function serializeOpportunityStatusUpdate(opportunity: {
+  id: string;
+  status: string;
+  updatedAt: Date;
+}): OpportunityStatusUpdateViewModel {
+  const status = parseOpportunityStatusUpdate(opportunity.status);
+
+  return {
+    id: opportunity.id,
+    status,
+    statusLabel: formatStatusLabel(status),
+    updatedAt: opportunity.updatedAt.toISOString(),
+  };
+}
+
 function compareOpportunitiesByScore(
   left: OpportunityCardViewModel,
   right: OpportunityCardViewModel,
@@ -645,6 +825,39 @@ function compareOpportunitiesByScore(
   }
 
   return left.id.localeCompare(right.id);
+}
+
+const SCORE_BREAKDOWN_ITEMS: Array<{
+  key: keyof ScoreBreakdownViewModel;
+  label: string;
+}> = [
+  { key: "intentScore", label: "Intent" },
+  { key: "monetizationScore", label: "Monetization" },
+  { key: "serpWeaknessScore", label: "SERP weakness" },
+  { key: "toolabilityScore", label: "Toolability" },
+  { key: "userFitScore", label: "User fit" },
+  { key: "buildSpeedScore", label: "Build speed" },
+  { key: "riskPenalty", label: "Risk penalty" },
+  { key: "totalScore", label: "Total" },
+];
+
+function buildScoreBreakdownItems(
+  scoreBreakdown: ScoreBreakdownViewModel,
+  scoreExplanation: ScoreExplanationViewModel,
+): ScoreBreakdownItemViewModel[] {
+  return SCORE_BREAKDOWN_ITEMS.flatMap((item) => {
+    const value = scoreBreakdown[item.key];
+
+    if (typeof value !== "number") {
+      return [];
+    }
+
+    return [{
+      ...item,
+      value,
+      explanation: scoreExplanation[item.key] ?? null,
+    }];
+  });
 }
 
 function normalizeScoreBreakdown(value: unknown): ScoreBreakdownViewModel {
@@ -669,6 +882,30 @@ function normalizeScoreBreakdown(value: unknown): ScoreBreakdownViewModel {
 
     if (numericValue !== undefined) {
       normalized[key] = numericValue;
+    }
+  }
+
+  return normalized;
+}
+
+function normalizeScoreExplanation(value: unknown): ScoreExplanationViewModel {
+  if (!isRecord(value)) {
+    return {};
+  }
+
+  const normalized: ScoreExplanationViewModel = {};
+
+  for (const { key } of SCORE_BREAKDOWN_ITEMS) {
+    const rawExplanation = value[key];
+
+    if (typeof rawExplanation !== "string") {
+      continue;
+    }
+
+    const explanation = normalizeText(rawExplanation);
+
+    if (explanation) {
+      normalized[key] = explanation;
     }
   }
 
@@ -714,6 +951,41 @@ function deriveMonetizationTypes({
     .filter((type) => lowerSummary.includes(type.replace("_", " ")) ||
       lowerSummary.includes(type))
     .map(formatTokenLabel);
+}
+
+function deriveToolConcept(rawAnalysis: unknown): ToolConceptViewModel | null {
+  const toolConcept = getNestedValue(rawAnalysis, [
+    "opportunityAnalysis",
+    "toolConcept",
+  ]);
+
+  if (!isRecord(toolConcept)) {
+    return null;
+  }
+
+  const oneLiner =
+    typeof toolConcept.oneLiner === "string"
+      ? normalizeText(toolConcept.oneLiner)
+      : "";
+  const inputFields = normalizeStringList(toolConcept.inputFields);
+  const outputModules = normalizeStringList(toolConcept.outputModules);
+
+  if (!oneLiner && inputFields.length === 0 && outputModules.length === 0) {
+    return null;
+  }
+
+  return {
+    oneLiner,
+    inputFields,
+    outputModules,
+  };
+}
+
+function deriveToolabilitySummary(
+  toolConcept: ToolConceptViewModel | null,
+  scoreExplanation: ScoreExplanationViewModel,
+): string | null {
+  return toolConcept?.oneLiner || scoreExplanation.toolabilityScore || null;
 }
 
 function normalizeMinScore(value: string | undefined): number | undefined {
@@ -931,6 +1203,16 @@ function uniqueStatuses(values: OpportunityStatus[]): OpportunityStatus[] {
   return OPPORTUNITY_STATUSES.filter((status) => set.has(status));
 }
 
+function normalizeStringList(value: unknown): string[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return uniqueStringsInOrder(
+    value.filter((item): item is string => typeof item === "string"),
+  );
+}
+
 function normalizeNumber(value: unknown): number | undefined {
   if (typeof value !== "number" || !Number.isFinite(value)) {
     return undefined;
@@ -975,4 +1257,11 @@ function normalizeText(value: string): string {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+function isMissingRecordError(error: unknown): boolean {
+  return (
+    error instanceof Prisma.PrismaClientKnownRequestError &&
+    error.code === "P2025"
+  );
 }

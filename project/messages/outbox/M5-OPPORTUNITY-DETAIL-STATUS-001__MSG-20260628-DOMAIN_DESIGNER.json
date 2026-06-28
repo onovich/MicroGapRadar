@@ -1,0 +1,219 @@
+{
+  "message_id": "MSG-20260628-DOMAIN_DESIGNER",
+  "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001",
+  "from_role": "domain_designer",
+  "status": "ACCEPT",
+  "summary": "Domain/product review accepts the M5 Opportunity Detail and Status Update slice. The detail page provides a useful operator decision brief from persisted opportunity data, keeps score/risk/monetization language as cues rather than proof, makes risk and kill criteria visible, limits status actions to Save, Discard, and Build next, documents the local single-admin assumption, and keeps MVP Spec generation/copy behavior out of scope.",
+  "artifacts": [
+    "app/opportunities/[id]/page.tsx",
+    "app/api/opportunities/[id]/_api.ts",
+    "app/api/opportunities/[id]/route.ts",
+    "components/OpportunityDetail.tsx",
+    "components/OpportunityStatusControls.tsx",
+    "components/OpportunityCard.tsx",
+    "lib/opportunities.ts",
+    "tests/opportunities.test.ts",
+    "README.md",
+    "project/messages/outbox/M5-OPPORTUNITY-DETAIL-STATUS-001__MSG-20260628-DOMAIN_DESIGNER.json"
+  ],
+  "artifacts_reviewed": [
+    "project/tasks/active/M5-OPPORTUNITY-DETAIL-STATUS-001.json",
+    "project/messages/outbox/M5-OPPORTUNITY-DETAIL-STATUS-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+    "docs/06_feature_specification.md",
+    "docs/07_data_model_and_scoring.md",
+    "docs/09_codex_implementation_tasks.md",
+    "docs/11_development_plan.md",
+    "README.md",
+    "app/opportunities/[id]/page.tsx",
+    "app/api/opportunities/[id]/_api.ts",
+    "app/api/opportunities/[id]/route.ts",
+    "components/OpportunityDetail.tsx",
+    "components/OpportunityStatusControls.tsx",
+    "components/OpportunityCard.tsx",
+    "lib/opportunities.ts",
+    "tests/opportunities.test.ts"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "acceptance_criteria_review": [
+    {
+      "criterion": "Detail decision usefulness.",
+      "status": "PASS",
+      "notes": "The server-rendered detail page loads one persisted Opportunity by id and renders a compact decision brief: summary, target user, search intent, score breakdown/explanations, SERP weakness, tool concept/toolability, monetization, risk/build, kill criteria, run context, current status, and back navigation.",
+      "evidence": [
+        "app/opportunities/[id]/page.tsx:18",
+        "app/opportunities/[id]/page.tsx:25",
+        "app/opportunities/[id]/page.tsx:34",
+        "components/OpportunityDetail.tsx:45",
+        "components/OpportunityDetail.tsx:70",
+        "components/OpportunityDetail.tsx:104",
+        "components/OpportunityDetail.tsx:138",
+        "components/OpportunityDetail.tsx:160",
+        "components/OpportunityDetail.tsx:182",
+        "components/OpportunityDetail.tsx:192",
+        "lib/opportunities.ts:496"
+      ]
+    },
+    {
+      "criterion": "Score, risk, and monetization wording.",
+      "status": "PASS",
+      "notes": "Score remains a 0-100 ranking/explanation surface, monetization is presented as persisted cues and badges, and risk is presented as a visible risk/build section. The reviewed UI copy does not turn local/mock scan output into validated demand, revenue proof, market proof, SEO certainty, compliance proof, or no-competitor claims.",
+      "evidence": [
+        "components/ScoreBadge.tsx:39",
+        "components/OpportunityDetail.tsx:78",
+        "components/OpportunityDetail.tsx:87",
+        "components/OpportunityDetail.tsx:141",
+        "components/OpportunityDetail.tsx:143",
+        "components/OpportunityDetail.tsx:162",
+        "components/OpportunityDetail.tsx:177",
+        "lib/opportunities.ts:830",
+        "tests/opportunities.test.ts:231",
+        "tests/opportunities.test.ts:245"
+      ]
+    },
+    {
+      "criterion": "Saved, discarded, and build_next status labels.",
+      "status": "PASS",
+      "notes": "The UI offers only Save, Discard, and Build next actions, reflects the current status, disables the active action, and does not imply team approval, audit workflow, public publishing, irreversible delete, or result tracking.",
+      "evidence": [
+        "components/OpportunityStatusControls.tsx:21",
+        "components/OpportunityStatusControls.tsx:23",
+        "components/OpportunityStatusControls.tsx:28",
+        "components/OpportunityStatusControls.tsx:33",
+        "components/OpportunityStatusControls.tsx:99",
+        "components/OpportunityStatusControls.tsx:122",
+        "components/OpportunityStatusControls.tsx:127",
+        "tests/opportunities.test.ts:263",
+        "tests/opportunities.test.ts:277"
+      ]
+    },
+    {
+      "criterion": "Narrow local status update boundary.",
+      "status": "PASS",
+      "notes": "The mutation boundary accepts only saved, discarded, and build_next. Invalid statuses, malformed JSON, missing ids, and missing opportunities return safe errors. Extra body fields are ignored before the update boundary, keeping this as a status-only local write.",
+      "evidence": [
+        "lib/opportunities.ts:42",
+        "lib/opportunities.ts:371",
+        "lib/opportunities.ts:593",
+        "app/api/opportunities/[id]/_api.ts:68",
+        "app/api/opportunities/[id]/_api.ts:74",
+        "app/api/opportunities/[id]/_api.ts:87",
+        "app/api/opportunities/[id]/_api.ts:97",
+        "app/api/opportunities/[id]/_api.ts:121",
+        "app/api/opportunities/[id]/_api.ts:123",
+        "tests/opportunities.test.ts:313",
+        "tests/opportunities.test.ts:343",
+        "tests/opportunities.test.ts:369",
+        "tests/opportunities.test.ts:394"
+      ]
+    },
+    {
+      "criterion": "High/excluded risk visibility.",
+      "status": "PASS",
+      "notes": "Risk level is derived from raw analysis, summary, or riskPenalty, and high/excluded levels keep explicit badge styling through the shared badge path. The detail view surfaces both the risk label and risk summary next to build complexity instead of hiding high-risk opportunities behind score.",
+      "evidence": [
+        "lib/opportunities.ts:533",
+        "lib/opportunities.ts:667",
+        "lib/opportunities.ts:695",
+        "lib/opportunities.ts:706",
+        "lib/opportunities.ts:710",
+        "lib/opportunities.ts:716",
+        "components/OpportunityCard.tsx:14",
+        "components/OpportunityCard.tsx:17",
+        "components/OpportunityCard.tsx:18",
+        "components/OpportunityDetail.tsx:160",
+        "components/OpportunityDetail.tsx:165",
+        "components/OpportunityDetail.tsx:171",
+        "components/OpportunityDetail.tsx:177"
+      ]
+    },
+    {
+      "criterion": "Local-admin framing and explicit non-goals.",
+      "status": "PASS",
+      "notes": "README documents the detail/status slice as narrow and local-admin only, states that only saved/discarded/build_next are accepted, and explicitly excludes auth/session, public multi-user workflow, audit history, discard reasons, irreversible deletes, MVP Spec generation, Copy MVP Spec behavior, and the mvp-spec API route.",
+      "evidence": [
+        "README.md:321",
+        "README.md:325",
+        "README.md:331",
+        "README.md:350"
+      ]
+    },
+    {
+      "criterion": "MVP Spec and copy behavior remain out of scope.",
+      "status": "PASS",
+      "notes": "No app/component/API route in the reviewed implementation exposes Generate MVP Spec, Copy MVP Spec, or /api/opportunities/[id]/mvp-spec behavior. The only hits for MVP Spec/Copy in reviewed changed scope are README non-goals.",
+      "evidence": [
+        "README.md:350",
+        "rg result: no product UI/API MVP Spec or Copy behavior hits outside README non-goals"
+      ]
+    }
+  ],
+  "findings": [],
+  "decisions": [
+    "ACCEPT: The detail page is decision-useful without becoming a marketing or proof surface.",
+    "ACCEPT: Score, risk, monetization, SERP weakness, tool concept, and kill criteria are surfaced from persisted data with restrained wording.",
+    "ACCEPT: High and excluded risk remain visible through risk derivation, badge styling, and the detail Risk and build section.",
+    "ACCEPT: Status labels and mutation semantics are limited to saved, discarded, and build_next and do not imply multi-user workflow or irreversible actions.",
+    "ACCEPT: Local single-admin assumptions and non-goals are documented.",
+    "ACCEPT: MVP Spec generation, Copy MVP Spec behavior, and /api/opportunities/[id]/mvp-spec remain out of scope.",
+    "No product/source files were edited by domain_designer; only this review handoff was created."
+  ],
+  "requested_changes": [],
+  "risks": [
+    "The first local npm run build attempt in this review exited 1 after successful compile/type-check because Next could not find a generated .next/server/next-font-manifest.json after local Windows SWC optional-binary warnings. An immediate rerun exited 0 with the same warnings, matching the implementation handoff and main-thread evidence. Treat as a transient local toolchain/generated-artifact risk, not a product/domain blocker.",
+    "The status update endpoint remains intentionally unauthenticated for the local single-admin MVP. Public deployment still requires a later auth/session/security slice.",
+    "Tool concept details depend on rawAnalysis.opportunityAnalysis.toolConcept. Older persisted rows without that shape fall back to available score/toolability text, which is acceptable for this MVP but may leave some detail pages less rich.",
+    "There is still no discard reason, feedback audit trail, built/result_update flow, or recommendation-learning loop; those are correctly out of scope for this task."
+  ],
+  "blockers": [],
+  "tests_run": [
+    {
+      "command": "C:\\Users\\Administrator\\.codex\\skills\\project-git-workflow\\scripts\\git\\Status.cmd",
+      "exit_code": 0,
+      "result": "Read-only git status showed main...origin/main with modified README.md, lib/opportunities.ts, tests/opportunities.test.ts, and untracked M5 detail/status route/component implementation files plus the implementation handoff."
+    },
+    {
+      "command": "node .agents/skills/just-goal/scripts/validate-handoff.mjs project/messages/outbox/M5-OPPORTUNITY-DETAIL-STATUS-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+      "exit_code": 0,
+      "result": "VALID incoming implementation handoff JSON."
+    },
+    {
+      "command": "rg -n \"guarantee|guaranteed|will increase|rank #1|validated demand|market proof|revenue proof|SEO certainty|legally compliant|legal compliance certification|no competitors|low competition|Copy MVP|Generate MVP|mvp-spec|MVP Spec\" app\\opportunities app\\api\\opportunities components lib\\opportunities.ts README.md tests\\opportunities.test.ts",
+      "exit_code": 0,
+      "result": "No product UI/API overclaim hits. The only MVP Spec/Copy/mvp-spec hits in reviewed scope are README non-goals for this slice."
+    },
+    {
+      "command": "npx tsx --test tests/opportunities.test.ts",
+      "exit_code": 0,
+      "result": "PASS: 14 focused opportunity tests passed across 3 suites, including detail rendering, detail serialization, valid status update, invalid/new status rejection, malformed JSON, not-found handling, and extra body field boundary behavior."
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS: no whitespace errors. Git printed LF-to-CRLF working-copy warnings for README.md, lib/opportunities.ts, and tests/opportunities.test.ts."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "PASS: 60 tests passed across 13 suites."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 1,
+      "result": "First reviewer run compiled successfully and completed type checks, then failed during page-data collection with MODULE_NOT_FOUND for .next/server/next-font-manifest.json after local Windows SWC optional-binary warnings."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "result": "PASS on immediate rerun: production build completed, including /opportunities/[id] and /api/opportunities/[id]. The same local Windows SWC optional-binary warnings were printed but were nonfatal."
+    },
+    {
+      "command": "node .agents/skills/just-goal/scripts/validate-handoff.mjs project/messages/outbox/M5-OPPORTUNITY-DETAIL-STATUS-001__MSG-20260628-DOMAIN_DESIGNER.json",
+      "exit_code": 0,
+      "result": "VALID domain_designer handoff JSON."
+    }
+  ],
+  "route_to": "qa_reviewer",
+  "requested_action": "Proceed with the remaining review/QA flow for M5-OPPORTUNITY-DETAIL-STATUS-001. Domain_designer accepts the product/domain semantics with no requested product-code changes.",
+  "created_at": "2026-06-28T22:18:00+08:00"
+}

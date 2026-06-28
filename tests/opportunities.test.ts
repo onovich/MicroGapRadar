@@ -4,12 +4,18 @@ import { describe, it } from "node:test";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
+import { createOpportunityStatusPatchHandler } from "../app/api/opportunities/[id]/_api";
 import { OpportunityCard } from "../components/OpportunityCard";
+import { OpportunityDetail } from "../components/OpportunityDetail";
 import { getScoreTone, ScoreBadge } from "../components/ScoreBadge";
 import {
   buildDashboardViewModel,
   buildOpportunityListViewModel,
   normalizeOpportunityFilters,
+  OpportunityNotFoundError,
+  OpportunityStatusValidationError,
+  parseOpportunityStatusUpdate,
+  serializeOpportunityDetail,
   serializeOpportunity,
   type OpportunityRow,
   type SearchRunRow,
@@ -136,6 +142,43 @@ describe("opportunity dashboard and list view models", () => {
     assert.doesNotThrow(() => JSON.stringify(serialized));
   });
 
+  it("returns plain detail view models with persisted score and analysis context", () => {
+    const detail = serializeOpportunityDetail(opportunityRow({
+      id: "detail",
+      title: "Shopify Accessibility Checklist",
+      keyword: "shopify accessibility checklist",
+      toolType: "checklist",
+      riskLevel: "medium",
+      monetizationPrimary: "lead_gen",
+      monetizationSecondary: ["paid_export"],
+    }));
+
+    assert.equal(detail.detailHref, "/opportunities/detail");
+    assert.equal(detail.serpWeaknessSummary, "Top results are generic articles.");
+    assert.equal(detail.scoreExplanation.intentScore, "Search intent is explicit and task oriented.");
+    assert.deepEqual(
+      detail.scoreBreakdownItems.map((item) => item.key),
+      [
+        "intentScore",
+        "monetizationScore",
+        "serpWeaknessScore",
+        "toolabilityScore",
+        "userFitScore",
+        "buildSpeedScore",
+        "riskPenalty",
+        "totalScore",
+      ],
+    );
+    assert.equal(detail.toolConcept?.oneLiner, "Generate a focused implementation checklist from a store URL.");
+    assert.deepEqual(detail.toolConcept?.inputFields, ["Store URL", "Theme name"]);
+    assert.deepEqual(detail.toolConcept?.outputModules, ["Checklist", "CSV export"]);
+    assert.equal(detail.toolabilitySummary, "Generate a focused implementation checklist from a store URL.");
+    assert.deepEqual(detail.killCriteria, [
+      "Discard if SERP is already dominated by focused tools.",
+    ]);
+    assert.doesNotThrow(() => JSON.stringify(detail));
+  });
+
   it("handles empty list inputs and ignores invalid query values", () => {
     const filters = normalizeOpportunityFilters({
       minScore: "not-a-number",
@@ -184,7 +227,222 @@ describe("opportunity components", () => {
     assert.match(html, /View brief/);
     assert.match(html, /\/opportunities\/card/);
   });
+
+  it("renders opportunity detail score, risk, monetization, status, and run context", () => {
+    const opportunity = serializeOpportunityDetail(opportunityRow({
+      id: "detail_component",
+      title: "Shopify Accessibility Checklist",
+      keyword: "shopify accessibility checklist",
+      toolType: "checklist",
+      riskLevel: "medium",
+      monetizationPrimary: "lead_gen",
+      monetizationSecondary: ["paid_export"],
+    }));
+    const html = renderToStaticMarkup(
+      createElement(OpportunityDetail, { opportunity }),
+    );
+
+    assert.match(html, /Back to opportunities/);
+    assert.match(html, /Shopify Accessibility Checklist/);
+    assert.match(html, /Score breakdown/);
+    assert.match(html, /Search intent is explicit and task oriented/);
+    assert.match(html, /Top results are generic articles/);
+    assert.match(html, /Generate a focused implementation checklist/);
+    assert.match(html, /Store URL/);
+    assert.match(html, /Lead Gen/);
+    assert.match(html, /Medium risk/);
+    assert.match(html, /Build: Low/);
+    assert.match(html, /Discard if SERP is already dominated/);
+    assert.match(html, /Status/);
+    assert.match(html, /Build next/);
+    assert.match(html, /GameDev Radar/);
+  });
 });
+
+describe("opportunity status updates", () => {
+  it("accepts only saved, discarded, and build_next as mutable statuses", () => {
+    assert.equal(parseOpportunityStatusUpdate("saved"), "saved");
+    assert.equal(parseOpportunityStatusUpdate("discarded"), "discarded");
+    assert.equal(parseOpportunityStatusUpdate("build_next"), "build_next");
+    assert.throws(
+      () => parseOpportunityStatusUpdate("built"),
+      OpportunityStatusValidationError,
+    );
+    assert.throws(
+      () => parseOpportunityStatusUpdate("new"),
+      OpportunityStatusValidationError,
+    );
+  });
+
+  it("persists valid status requests through the injected update boundary", async () => {
+    const calls: Array<{ id: unknown; status: unknown }> = [];
+    const handler = createOpportunityStatusPatchHandler(async (id, status) => {
+      calls.push({ id, status });
+      const parsedStatus = parseOpportunityStatusUpdate(status);
+
+      return {
+        id: String(id),
+        status: parsedStatus,
+        statusLabel: "Build Next",
+        updatedAt: "2026-06-28T08:00:00.000Z",
+      };
+    });
+    const response = await handler(
+      statusRequest({ status: "build_next" }) as Parameters<typeof handler>[0],
+      routeContext("opportunity_1"),
+    );
+    const payload = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.deepEqual(calls, [
+      {
+        id: "opportunity_1",
+        status: "build_next",
+      },
+    ]);
+    assert.deepEqual(payload, {
+      data: {
+        id: "opportunity_1",
+        status: "build_next",
+        statusLabel: "Build Next",
+        updatedAt: "2026-06-28T08:00:00.000Z",
+      },
+    });
+  });
+
+  it("ignores extra request fields and passes only status to the update boundary", async () => {
+    const calls: Array<{ id: unknown; status: unknown }> = [];
+    const handler = createOpportunityStatusPatchHandler(async (id, status) => {
+      calls.push({ id, status });
+
+      return {
+        id: String(id),
+        status: parseOpportunityStatusUpdate(status),
+        statusLabel: "Saved",
+        updatedAt: "2026-06-28T08:00:00.000Z",
+      };
+    });
+    const response = await handler(
+      statusRequest({
+        status: "saved",
+        title: "Do not update me",
+        totalScore: 0,
+      }) as Parameters<typeof handler>[0],
+      routeContext("opportunity_1"),
+    );
+
+    assert.equal(response.status, 200);
+    assert.deepEqual(calls, [
+      {
+        id: "opportunity_1",
+        status: "saved",
+      },
+    ]);
+  });
+
+  it("rejects invalid status requests before the update boundary", async () => {
+    const calls: unknown[] = [];
+    const handler = createOpportunityStatusPatchHandler(async (id, status) => {
+      calls.push({ id, status });
+      throw new Error("should not update");
+    });
+    const response = await handler(
+      statusRequest({ status: "built" }) as Parameters<typeof handler>[0],
+      routeContext("opportunity_1"),
+    );
+    const payload = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.equal(payload.error.code, "VALIDATION_ERROR");
+    assert.equal(payload.error.message, "Status must be one of saved, discarded, or build_next.");
+    assert.deepEqual(calls, []);
+
+    const newStatusResponse = await handler(
+      statusRequest({ status: "new" }) as Parameters<typeof handler>[0],
+      routeContext("opportunity_1"),
+    );
+
+    assert.equal(newStatusResponse.status, 400);
+    assert.deepEqual(calls, []);
+  });
+
+  it("returns safe errors for malformed JSON status requests", async () => {
+    const calls: unknown[] = [];
+    const handler = createOpportunityStatusPatchHandler(async (id, status) => {
+      calls.push({ id, status });
+      throw new Error("should not update");
+    });
+    const response = await handler(
+      new Request("http://localhost/api/opportunities/opportunity_1", {
+        method: "PATCH",
+        body: "{not-json",
+      }) as Parameters<typeof handler>[0],
+      routeContext("opportunity_1"),
+    );
+    const payload = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.deepEqual(payload, {
+      error: {
+        code: "INVALID_JSON",
+        message: "Request body must be valid JSON.",
+      },
+    });
+    assert.deepEqual(calls, []);
+  });
+
+  it("returns safe not-found errors for missing IDs and missing opportunities", async () => {
+    const calls: unknown[] = [];
+    const handler = createOpportunityStatusPatchHandler(async (id) => {
+      calls.push(id);
+      throw new OpportunityNotFoundError("secret-opportunity-id");
+    });
+    const missingIdResponse = await handler(
+      statusRequest({ status: "saved" }) as Parameters<typeof handler>[0],
+      routeContext(""),
+    );
+    const missingIdPayload = await missingIdResponse.json();
+    const missingOpportunityResponse = await handler(
+      statusRequest({ status: "saved" }) as Parameters<typeof handler>[0],
+      routeContext("missing-opportunity"),
+    );
+    const missingOpportunityPayload = await missingOpportunityResponse.json();
+
+    assert.equal(missingIdResponse.status, 404);
+    assert.deepEqual(missingIdPayload, {
+      error: {
+        code: "NOT_FOUND",
+        message: "Opportunity was not found.",
+      },
+    });
+    assert.equal(missingOpportunityResponse.status, 404);
+    assert.deepEqual(missingOpportunityPayload, {
+      error: {
+        code: "NOT_FOUND",
+        message: "Opportunity was not found.",
+      },
+    });
+    assert.deepEqual(calls, ["missing-opportunity"]);
+    assert.equal(JSON.stringify(missingOpportunityPayload).includes("secret"), false);
+  });
+});
+
+function statusRequest(body: unknown): Request {
+  return new Request("http://localhost/api/opportunities/opportunity_1", {
+    method: "PATCH",
+    body: JSON.stringify(body),
+  });
+}
+
+function routeContext(id: string): {
+  params: Promise<{
+    id: string;
+  }>;
+} {
+  return {
+    params: Promise.resolve({ id }),
+  };
+}
 
 function opportunityRow(overrides: {
   id?: string;
@@ -239,9 +497,23 @@ function opportunityRow(overrides: {
       riskPenalty: riskPenaltyFor(riskLevel),
       totalScore,
     },
-    scoreExplanation: {},
+    scoreExplanation: {
+      intentScore: "Search intent is explicit and task oriented.",
+      monetizationScore: "Monetization cues are present but need validation.",
+      serpWeaknessScore: "SERP weakness comes from generic competing pages.",
+      toolabilityScore: "The workflow can become an interactive checklist.",
+      userFitScore: "The target user has a repeatable operational task.",
+      buildSpeedScore: "The first version can stay narrow.",
+      riskPenalty: "Risk penalty reflects local review cues.",
+      totalScore: `${totalScore}/100 overall opportunity score.`,
+    },
     rawAnalysis: {
       opportunityAnalysis: {
+        toolConcept: {
+          oneLiner: "Generate a focused implementation checklist from a store URL.",
+          inputFields: ["Store URL", "Theme name"],
+          outputModules: ["Checklist", "CSV export"],
+        },
         risk: {
           level: riskLevel,
         },

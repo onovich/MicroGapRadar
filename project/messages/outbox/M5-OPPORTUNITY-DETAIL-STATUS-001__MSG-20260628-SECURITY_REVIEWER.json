@@ -1,0 +1,151 @@
+{
+  "message_id": "MSG-20260628-SECURITY_REVIEWER-M5-OPPORTUNITY-DETAIL-STATUS-001",
+  "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001",
+  "from_role": "security_reviewer",
+  "status": "ACCEPT",
+  "summary": "Security review accepts the M5 Opportunity Detail status-write slice. The PATCH /api/opportunities/{id} path accepts only saved, discarded, and build_next; rejects new, built, malformed JSON, missing ids, and missing opportunities with sanitized responses; writes only Opportunity.status through a structured Prisma update; and does not add raw SQL, broad mutation, delete/data-loss behavior, env/secret/provider/package/schema changes, auth/session expansion, or an MVP Spec route.",
+  "artifacts": [
+    "app/opportunities/[id]/page.tsx",
+    "app/api/opportunities/[id]/_api.ts",
+    "app/api/opportunities/[id]/route.ts",
+    "components/OpportunityDetail.tsx",
+    "components/OpportunityStatusControls.tsx",
+    "lib/opportunities.ts",
+    "tests/opportunities.test.ts",
+    "README.md",
+    "project/messages/outbox/M5-OPPORTUNITY-DETAIL-STATUS-001__MSG-20260628-SECURITY_REVIEWER.json"
+  ],
+  "artifacts_reviewed": [
+    "project/tasks/active/M5-OPPORTUNITY-DETAIL-STATUS-001.json",
+    "project/messages/outbox/M5-OPPORTUNITY-DETAIL-STATUS-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+    "app/opportunities/[id]/page.tsx",
+    "app/api/opportunities/[id]/_api.ts",
+    "app/api/opportunities/[id]/route.ts",
+    "components/OpportunityDetail.tsx",
+    "components/OpportunityStatusControls.tsx",
+    "lib/opportunities.ts",
+    "tests/opportunities.test.ts",
+    "README.md"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "findings": [],
+  "security_checklist": [
+    {
+      "item": "Allowed statuses only",
+      "status": "PASS",
+      "notes": "lib/opportunities.ts:42 defines the mutation allow-list as saved, discarded, and build_next only. lib/opportunities.ts:593 validates updates against that list, while tests/opportunities.test.ts:263 asserts saved/discarded/build_next pass and built/new fail."
+    },
+    {
+      "item": "Safe invalid and missing responses",
+      "status": "PASS",
+      "notes": "app/api/opportunities/[id]/_api.ts:50 returns generic INVALID_JSON; app/api/opportunities/[id]/_api.ts:83 returns generic VALIDATION_ERROR; app/api/opportunities/[id]/_api.ts:96 returns generic NOT_FOUND without echoing ids or exception text. tests/opportunities.test.ts:343, tests/opportunities.test.ts:369, and tests/opportunities.test.ts:394 cover invalid status, malformed JSON, and not-found behavior."
+    },
+    {
+      "item": "Narrow update boundary",
+      "status": "PASS",
+      "notes": "app/api/opportunities/[id]/_api.ts:122 extracts only body.status before calling the update boundary. lib/opportunities.ts:380 uses db.opportunity.update with data: { status } at lib/opportunities.ts:382 and a narrow select at lib/opportunities.ts:383. tests/opportunities.test.ts:313 proves extra request fields do not reach the update boundary."
+    },
+    {
+      "item": "No raw SQL or broad mutation",
+      "status": "PASS",
+      "notes": "Focused scan found no queryRaw, executeRaw, updateMany, createMany, or deleteMany hits in the reviewed implementation files. The only Opportunity write is the structured Prisma status update at lib/opportunities.ts:380."
+    },
+    {
+      "item": "No data-loss or deletion behavior",
+      "status": "PASS",
+      "notes": "The implementation adds no Opportunity delete path. Discard is represented as a status value only, and README.md:339 documents that the slice has no irreversible deletes."
+    },
+    {
+      "item": "No secret, env, provider, package, or schema changes",
+      "status": "PASS",
+      "notes": "Focused scan found no process.env, lib/env import, provider setup, OpenAICompatibleClient, SERP_PROVIDER, SESSION_SECRET, or related secret/provider wiring in the reviewed implementation files. Protected-path status check showed no changes under package.json, package-lock.json, prisma, lib/env.ts, lib/db.ts, lib/schemas.ts, app/api/scans, app/api/radar-tasks, services, or agents."
+    },
+    {
+      "item": "No auth/session expansion beyond local policy",
+      "status": "PASS",
+      "notes": "Focused scan found no cookies, headers, NextAuth, auth, or session implementation hits in the reviewed implementation files. README.md:339 records the local single-admin assumption and explicitly says this slice does not add sessions, auth, public multi-user workflow, audit history, or discard reasons."
+    },
+    {
+      "item": "No MVP Spec route or generation",
+      "status": "PASS",
+      "notes": "No app/api/opportunities/[id]/mvp-spec route directory exists. Focused scan found no mvp-spec or MvpSpec hits in the reviewed implementation files, and README.md:350 documents MVP Spec generation, copy behavior, and the mvp-spec route as non-goals."
+    },
+    {
+      "item": "Local single-admin framing",
+      "status": "PASS",
+      "notes": "The endpoint remains intentionally unauthenticated for the local MVP, matching the accepted project policy documented in README.md:339 and README.md:354. No public deployment, CORS, multi-user ownership, or user-isolation model was introduced."
+    }
+  ],
+  "tests_run": [
+    {
+      "command": "C:\\Users\\Administrator\\.codex\\skills\\project-git-workflow\\scripts\\git\\Status.cmd",
+      "exit_code": 0,
+      "result": "Reviewed working tree: modified README.md, lib/opportunities.ts, tests/opportunities.test.ts; untracked app/api/opportunities, app/opportunities/[id], components/OpportunityDetail.tsx, components/OpportunityStatusControls.tsx, and implementation handoff. Product changes are within the task's allowed paths."
+    },
+    {
+      "command": "node .agents/skills/just-goal/scripts/validate-handoff.mjs project/messages/outbox/M5-OPPORTUNITY-DETAIL-STATUS-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+      "exit_code": 0,
+      "result": "VALID implementation handoff JSON."
+    },
+    {
+      "command": "npx tsx --test tests/opportunities.test.ts",
+      "exit_code": 0,
+      "result": "PASS: 14 focused opportunity tests passed across 3 suites, including mutable status allow-list, extra-field no-op boundary, invalid/new/built rejection, malformed JSON, and safe not-found errors."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "PASS: 60 tests passed across 13 suites."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "result": "PASS: Next.js production build completed successfully. Existing nonfatal local Windows @next/swc optional-binary warnings were printed before fallback build continued."
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS: no whitespace errors. Git printed LF-to-CRLF working-copy warnings for README.md, lib/opportunities.ts, and tests/opportunities.test.ts."
+    },
+    {
+      "command": "rg prohibited security patterns over reviewed implementation files",
+      "exit_code": 0,
+      "result": "PASS: no prohibited raw SQL, broad update/delete, env/secret/provider, auth/session, or MVP-spec hits in reviewed implementation files."
+    },
+    {
+      "command": "Test-Path -LiteralPath 'app/api/opportunities/[id]/mvp-spec'",
+      "exit_code": 0,
+      "result": "PASS: no app/api/opportunities/[id]/mvp-spec route directory exists."
+    },
+    {
+      "command": "git status --short -- package.json package-lock.json prisma lib/env.ts lib/db.ts lib/schemas.ts app/api/scans app/api/radar-tasks services agents",
+      "exit_code": 0,
+      "result": "PASS: no protected package, schema, env/db/schema helper, scan API, radar-task API, service, or agent path changes were present."
+    },
+    {
+      "command": "node .agents/skills/just-goal/scripts/validate-handoff.mjs project/messages/outbox/M5-OPPORTUNITY-DETAIL-STATUS-001__MSG-20260628-SECURITY_REVIEWER.json",
+      "exit_code": 0,
+      "result": "PASS: security reviewer handoff JSON validates."
+    }
+  ],
+  "decisions": [
+    "ACCEPT: The status write path is a narrow local mutation boundary over Opportunity.status only.",
+    "Accepted the distinction between read-side status support and write-side status support: new and built may remain readable/filterable, but cannot be written through this PATCH path.",
+    "Accepted generic 404 handling for missing or invalid ids because the response does not leak internal ids or Prisma details and matches the existing local API response style.",
+    "Accepted the client-side fetch in OpportunityStatusControls because it only calls the same local PATCH route with one allowed status value selected from fixed UI actions.",
+    "Accepted the unauthenticated route only within the documented local single-admin MVP policy; production exposure still requires a later auth/session and deployment policy slice.",
+    "No product code was modified during this review. Only the requested security review handoff was added."
+  ],
+  "risks": [
+    "The PATCH endpoint is intentionally unauthenticated for the local single-admin MVP. Public deployment remains out of scope and requires a later auth/session gate.",
+    "The status update has no audit trail, discard reason, ownership model, or multi-user isolation by design for this slice.",
+    "Opportunity ids are returned in successful status responses, which is acceptable for local admin operation but should be revisited if this endpoint becomes public.",
+    "Next build continues to print existing nonfatal local Windows SWC optional-binary warnings."
+  ],
+  "blockers": [],
+  "requested_changes": [],
+  "route_to": "qa_reviewer",
+  "requested_action": "Proceed with QA review for M5-OPPORTUNITY-DETAIL-STATUS-001. Security review accepts the implementation with local-MVP residual risks noted and no requested changes.",
+  "created_at": "2026-06-28T21:15:41.7774477+08:00"
+}

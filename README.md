@@ -318,6 +318,37 @@ npm run build
 
 Non-goals for this slice: no `/opportunities/[id]` implementation, no status mutations, no Run Scan button wiring, no recent-run polling component, no API routes, no scan orchestration changes, no schema or migration changes, and no package dependency changes.
 
+## Opportunity Detail and Status Updates
+
+The M5 opportunity detail slice adds a server-rendered `/opportunities/{id}` page backed by the shared `lib/opportunities.ts` helper. The detail page loads one persisted Opportunity by id and renders the keyword brief, total score, persisted score breakdown and explanations, SERP weakness, tool concept/toolability cues, monetization cues, risk cues, build complexity, kill criteria, radar task context, search run context, and current status. Missing opportunities use the framework not-found path.
+
+Status updates are intentionally narrow and local-admin only:
+
+```text
+PATCH /api/opportunities/{id}
+```
+
+Request body:
+
+```json
+{
+  "status": "saved"
+}
+```
+
+Only `saved`, `discarded`, and `build_next` are accepted. Invalid statuses return a validation error, missing opportunities return a sanitized not-found error, and successful updates persist the new status on the Opportunity row. This MVP still assumes a single local admin and does not add sessions, auth, public multi-user workflow, audit history, discard reasons, or irreversible deletes.
+
+Validate this slice with:
+
+```bash
+npx tsx --test tests/opportunities.test.ts
+npm test
+npm run build
+git diff --check
+```
+
+Non-goals for this slice: no MVP Spec generation, no Copy MVP Spec behavior, no `/api/opportunities/{id}/mvp-spec` route, no schema migration, no package dependency change, no scan orchestration change, no scoring formula change, no auth/session system, no provider setup, no deployment, and no GitHub Actions change.
+
 ## Local Radar Task API
 
 The MVP exposes a single-admin, unauthenticated local API slice for Radar Task management. It is intended for local development and later admin UI integration; it does not add sessions, public auth, scans, SERP providers, or LLM calls.

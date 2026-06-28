@@ -2,7 +2,7 @@
   "id": "M5-OPPORTUNITY-DETAIL-STATUS-001",
   "summary": "Add the Opportunity Detail UI slice with persisted score/risk/monetization/SERP context and limited Save, Discard, and Build Next status updates.",
   "milestone": "M5",
-  "status": "IN_PROGRESS",
+  "status": "ACCEPTED",
   "owner_role": "implementation_engineer",
   "reviewer_role": "qa_reviewer",
   "risk_level": "R3",
@@ -81,7 +81,7 @@
     "No multi-user audit trail, discard reason workflow, recommendation-learning loop, public deployment policy, or irreversible/delete mutation."
   ],
   "created_at": "2026-06-28T12:55:00Z",
-  "updated_at": "2026-06-28T12:50:45.445Z",
+  "updated_at": "2026-06-28T13:19:44.422Z",
   "required_reviewers": [
     "systems_architect",
     "domain_designer",

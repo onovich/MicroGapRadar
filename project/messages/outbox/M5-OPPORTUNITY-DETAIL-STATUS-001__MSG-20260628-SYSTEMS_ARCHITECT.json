@@ -1,0 +1,154 @@
+{
+  "message_id": "MSG-20260628-SYSTEMS_ARCHITECT",
+  "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001",
+  "from_role": "systems_architect",
+  "status": "ACCEPT",
+  "summary": "Systems architecture review accepts the M5 Opportunity Detail and limited status-update implementation. The dynamic detail page is server-rendered and reads one persisted Opportunity through lib/opportunities.ts, the status write path is a thin local PATCH boundary that permits only saved/discarded/build_next, view models remain plain serializable objects, missing resources use safe not-found behavior, and the working tree does not introduce MVP Spec, schema, package, scoring, scan orchestration, auth/session, deployment, or broad API creep.",
+  "artifacts": [
+    "project/tasks/active/M5-OPPORTUNITY-DETAIL-STATUS-001.json",
+    "project/messages/outbox/M5-OPPORTUNITY-DETAIL-STATUS-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+    "app/opportunities/[id]/page.tsx",
+    "app/api/opportunities/[id]/_api.ts",
+    "app/api/opportunities/[id]/route.ts",
+    "components/OpportunityDetail.tsx",
+    "components/OpportunityStatusControls.tsx",
+    "lib/opportunities.ts",
+    "tests/opportunities.test.ts",
+    "README.md"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "findings": [],
+  "scope_review": {
+    "product_paths_allowed": true,
+    "forbidden_product_creep_found": false,
+    "notes": [
+      "Product changes are confined to allowed paths: app/opportunities/[id]/**, app/api/opportunities/[id]/**, components/**, lib/opportunities.ts, tests/**, and README.md.",
+      "The implementation handoff under project/messages/outbox is JustGoal coordination state requested by the task workflow, not product implementation creep.",
+      "No working tree changes were found in prisma/**, package.json, package-lock.json, lib/scoring.ts, lib/db.ts, lib/env.ts, lib/schemas.ts, services/**, agents/**, app/api/scans/**, app/api/radar-tasks/**, app/page.tsx, app/layout.tsx, app/globals.css, docs/**, or mock-data/**."
+    ]
+  },
+  "architecture_review": [
+    {
+      "area": "route_data_boundaries",
+      "status": "PASS",
+      "evidence": [
+        "app/opportunities/[id]/page.tsx:24 calls getOpportunityDetailData(id) from the shared helper instead of importing Prisma or db in the route.",
+        "app/opportunities/[id]/page.tsx:27 and app/opportunities/[id]/page.tsx:34 call notFound() for helper-level not-found errors and null detail results.",
+        "app/api/opportunities/[id]/route.ts:3 exports only PATCH through createOpportunityStatusPatchHandler(), keeping the route file thin."
+      ]
+    },
+    {
+      "area": "prisma_helper_ownership",
+      "status": "PASS",
+      "evidence": [
+        "lib/opportunities.ts:319 centralizes the persisted detail read with db.opportunity.findUnique and the existing opportunity include.",
+        "lib/opportunities.ts:371 centralizes the status update and selects only id, status, and updatedAt from Prisma after writing.",
+        "Search for Prisma/db imports found them confined to lib/opportunities.ts; app/opportunities, app/api/opportunities, and components do not import @prisma/client or @/lib/db."
+      ]
+    },
+    {
+      "area": "mutation_boundary_and_status_whitelist",
+      "status": "PASS",
+      "evidence": [
+        "lib/opportunities.ts:42 defines OPPORTUNITY_STATUS_UPDATE_STATUSES as saved, discarded, and build_next only, separate from the broader persisted status enum at lib/opportunities.ts:35.",
+        "lib/opportunities.ts:593 parses update input through that narrow allow-list and rejects new, built, non-strings, and arbitrary values with OpportunityStatusValidationError.",
+        "app/api/opportunities/[id]/_api.ts:74 parses only body.status, and app/api/opportunities/[id]/_api.ts:123 calls the injected updateStatus(opportunityId, status) boundary with no extra body fields.",
+        "lib/opportunities.ts:380 updates only data: { status } on the Opportunity row."
+      ]
+    },
+    {
+      "area": "serialization_and_detail_model",
+      "status": "PASS",
+      "evidence": [
+        "lib/opportunities.ts:496 builds OpportunityDetailViewModel by extending the existing serialized card model, preserving ISO date strings from serializeOpportunity and adding detail-only plain fields.",
+        "lib/opportunities.ts:500 normalizes persisted scoreExplanation into a string map, lib/opportunities.ts:516 builds scoreBreakdownItems, and lib/opportunities.ts:525 normalizes persisted killCriteria into a string array.",
+        "lib/opportunities.ts:956 derives toolConcept from rawAnalysis.opportunityAnalysis.toolConcept without exposing rawAnalysis to components.",
+        "tests/opportunities.test.ts:145 asserts the detail view model includes persisted score/analysis context and tests/opportunities.test.ts:179 asserts JSON.stringify(detail) succeeds."
+      ]
+    },
+    {
+      "area": "not_found_and_api_errors",
+      "status": "PASS",
+      "evidence": [
+        "app/opportunities/[id]/page.tsx:27 and app/opportunities/[id]/page.tsx:34 route missing detail data through framework notFound().",
+        "app/api/opportunities/[id]/_api.ts:50 returns a shared INVALID_JSON error for malformed JSON.",
+        "app/api/opportunities/[id]/_api.ts:82 maps invalid status requests to sanitized 400 VALIDATION_ERROR responses and app/api/opportunities/[id]/_api.ts:96 maps missing opportunities to sanitized 404 NOT_FOUND responses.",
+        "tests/opportunities.test.ts:369 covers malformed JSON and tests/opportunities.test.ts:394 covers missing id/missing opportunity without leaking a secret id."
+      ]
+    },
+    {
+      "area": "ui_boundary",
+      "status": "PASS",
+      "evidence": [
+        "components/OpportunityDetail.tsx:14 receives an OpportunityDetailViewModel prop and renders title/keyword, score, breakdown/explanations, SERP/toolability, monetization, risk/build, kill criteria, status controls, and run context without importing Prisma or duplicating queries.",
+        "components/OpportunityStatusControls.tsx:21 exposes only Save, Discard, and Build next actions, and components/OpportunityStatusControls.tsx:60 sends only { status: nextStatus } to the local PATCH endpoint.",
+        "components/OpportunityStatusControls.tsx:113 marks the active action with aria-pressed and disables the active/pending buttons."
+      ]
+    },
+    {
+      "area": "no_creep",
+      "status": "PASS",
+      "evidence": [
+        "README.md:313 documents the Opportunity Detail and Status Updates slice, README.md:331 documents the local single-admin status boundary, and README.md:342 lists non-goals including no MVP Spec, schema migration, package change, scan orchestration change, scoring formula change, auth/session, deployment, or GitHub Actions.",
+        "Repository status/diff inspection showed no package, Prisma schema, lib/scoring.ts, services, agents, scans API, radar-tasks API, app shell, global CSS, docs, or mock-data edits."
+      ]
+    }
+  ],
+  "tests_run": [
+    {
+      "command": "C:\\Users\\Administrator\\.codex\\skills\\project-git-workflow\\scripts\\git\\Status.cmd",
+      "exit_code": 0,
+      "result": "PASS: working tree shows README.md, lib/opportunities.ts, tests/opportunities.test.ts modified; new app/api/opportunities/[id], app/opportunities/[id], OpportunityDetail/OpportunityStatusControls components, and implementation handoff present."
+    },
+    {
+      "command": "git status --short --untracked-files=all",
+      "exit_code": 0,
+      "result": "PASS: confirmed the product file set is within the task's allowed paths, with only the implementation handoff under project/messages/outbox as workflow coordination state."
+    },
+    {
+      "command": "node .agents/skills/just-goal/scripts/validate-handoff.mjs project/messages/outbox/M5-OPPORTUNITY-DETAIL-STATUS-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+      "exit_code": 0,
+      "result": "PASS: implementation handoff validates."
+    },
+    {
+      "command": "npx tsx --test tests/opportunities.test.ts",
+      "exit_code": 0,
+      "result": "PASS: 14 focused opportunity tests passed across 3 suites."
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS: no whitespace errors; Git printed LF-to-CRLF working-copy warnings for README.md, lib/opportunities.ts, and tests/opportunities.test.ts only."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "PASS per main-thread evidence supplied with this review request: 60 tests passed."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "result": "PASS per main-thread evidence supplied with this review request: Next.js production build exited 0 with nonfatal local Windows SWC optional-binary warnings."
+    }
+  ],
+  "decisions": [
+    "ACCEPT: The dynamic detail route is server-rendered and uses the shared opportunity helper for data access.",
+    "ACCEPT: Prisma read/write ownership remains in lib/opportunities.ts; UI components and route files remain thin and serializable.",
+    "ACCEPT: The mutation boundary is intentionally narrow: only saved, discarded, and build_next can be requested, and only Opportunity.status is persisted.",
+    "ACCEPT: The API error surface is safe for invalid JSON, invalid statuses, missing ids, missing opportunities, and unexpected failures.",
+    "ACCEPT: The implementation shows stored score/risk/monetization/SERP/tool context without recalculating scoring, invoking agents, or adding MVP Spec behavior.",
+    "ACCEPT: The working tree stays inside product allowed paths and avoids the forbidden schema/package/scoring/API/provider/auth/deployment creep listed in the task packet."
+  ],
+  "risks": [
+    "The PATCH endpoint remains unauthenticated by design for the local single-admin MVP; public deployment still requires a later auth/session/security slice.",
+    "Status changes are simple field updates with no discard reason, audit log, multi-user conflict handling, or cross-tab refresh; this matches scope but should not be mistaken for a workflow system.",
+    "Tool concept rendering depends on the persisted rawAnalysis.opportunityAnalysis.toolConcept shape from newer scan outputs; older rows without that JSON degrade to available toolability/score text.",
+    "README still contains the prior Dashboard/List slice's historical non-goal line that says that earlier slice did not implement detail/status routes; the new Opportunity Detail section immediately below documents the current slice clearly, so this is not a systems blocker."
+  ],
+  "blockers": [],
+  "requested_changes": [],
+  "route_to": "domain_designer",
+  "requested_action": "Proceed to domain_designer, security_reviewer, and qa_reviewer review gates. Systems architecture accepts with no requested product-code changes.",
+  "created_at": "2026-06-28T21:15:14.5462516+08:00"
+}
