@@ -21,7 +21,7 @@ The autonomous JustGoal task graph through the approved Phase 0B local backfill 
 - `M7-PHASE0B-SCOPE-STATE-001` is closed and pushed at `a7eff13`.
 - `M7-LOCAL-ADMIN-GATE-001` is closed and pushed at `02be512`.
 - `M7-RADAR-TASK-UI-001` is closed and pushed at `1da58ae`.
-- `M7-PHASE0B-RELEASE-SMOKE-001` is closed locally and ready for final commit/push.
+- `M7-PHASE0B-RELEASE-SMOKE-001` is closed and pushed at `af36f65`.
 - Final local smoke coverage exists in `tests/release-readiness-smoke.test.ts` and now covers Phase 0B admin/Radar Task flow plus the existing scan/opportunity/MVP Spec flow.
 - README and `.env.example` now document local-only validation, mock provider defaults, local admin placeholders, Phase 0A/0B split, fresh-checkout commands, manual demo flow, and human-gated deployment boundaries.
 
