@@ -1,11 +1,11 @@
 {
   "version": 1,
   "created_at": "2026-06-27T19:24:00Z",
-  "updated_at": "2026-06-28T19:20:39Z",
-  "main_commit": "e166da1",
+  "updated_at": "2026-06-28T20:47:30Z",
+  "main_commit": "1da58ae",
   "current_milestone": "M7",
-  "current_task": "M7-PHASE0B-RELEASE-SMOKE-001",
-  "last_integrated_task": "M7-RADAR-TASK-UI-001",
+  "current_task": null,
+  "last_integrated_task": "M7-PHASE0B-RELEASE-SMOKE-001",
   "closed_threads": {
     "m0_implementation_engineer": "019f0a11-0493-7fe0-89e9-a21d3b680a67",
     "m0_qa_reviewer": "019f0a2a-70f9-77e0-8f7d-6091b879545a",
@@ -59,11 +59,12 @@
     "m6_release_readiness_smoke_qa_reviewer": "019f0e8c-c067-7d33-96ed-675b3c497125"
   },
   "active_threads": [],
-  "next_ready_tasks": [
-    "M7-PHASE0B-RELEASE-SMOKE-001"
-  ],
-  "recommended_next_task": "M7-PHASE0B-RELEASE-SMOKE-001",
+  "next_ready_tasks": [],
+  "recommended_next_task": null,
   "recent_handoffs": [
+    "project/messages/outbox/M7-PHASE0B-RELEASE-SMOKE-001__MSG-20260628-QA_REVIEWER.json",
+    "project/messages/outbox/M7-PHASE0B-RELEASE-SMOKE-001__MSG-20260628-SECURITY_REVIEWER.json",
+    "project/messages/outbox/M7-PHASE0B-RELEASE-SMOKE-001__MSG-20260628-RELEASE_ENGINEER.json",
     "project/messages/outbox/M7-RADAR-TASK-UI-001__MSG-20260628-QA_REVIEWER.json",
     "project/messages/outbox/M7-RADAR-TASK-UI-001__MSG-20260628-CLIENT_ENGINEER-R3.json",
     "project/messages/outbox/M7-RADAR-TASK-UI-001__MSG-20260628-SECURITY_REVIEWER.json",
@@ -129,6 +130,46 @@
       "command": "multi_agent_v1.close_agent release_engineer/security_reviewer/qa_reviewer",
       "exit_code": 0,
       "note": "Closed Mencius, Hubble, and Ohm after release, security, and QA ACCEPT handoffs."
+    },
+    {
+      "command": "npx tsx --test tests/release-readiness-smoke.test.ts",
+      "exit_code": 0,
+      "note": "M7 Phase 0B release smoke passed: 2 tests covering local admin/Radar Task helpers and existing scan/opportunity/MVP Spec readiness."
+    },
+    {
+      "command": "npx tsx --test tests/*.test.ts",
+      "exit_code": 0,
+      "note": "M7 Phase 0B full local test gate passed: 89 tests across 18 suites."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "note": "M7 Phase 0B package test gate passed: 89 tests across 18 suites."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "note": "M7 Phase 0B production build passed with nonfatal local Windows SWC optional-native warnings."
+    },
+    {
+      "command": "node .agents/skills/just-goal/scripts/taskctl.mjs validate --repo-root .",
+      "exit_code": 0,
+      "note": "18 task files validated."
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "note": "Passed with LF-to-CRLF warnings only."
+    },
+    {
+      "command": "node .agents/skills/just-goal/scripts/verify-autonomous-stop.mjs",
+      "exit_code": 0,
+      "note": "ALLOW_STOP: project_goal_complete is explicitly recorded, with no dependency-ready tasks and no active tasks."
+    },
+    {
+      "command": "multi_agent_v1.close_agent security_reviewer/qa_reviewer",
+      "exit_code": 0,
+      "note": "Closed Sagan and Kepler after Security ACCEPT and QA ACCEPT handoffs."
     }
   ],
   "human_gate": {
@@ -152,5 +193,7 @@
       "Multi-user ownership, billing, telemetry, cron, or email."
     ]
   },
-  "next_prompt": "Continue autonomous Phase 0B local backfill. Execute M7-PHASE0B-RELEASE-SMOKE-001 unless a real blocker or human gate appears."
+  "project_goal_complete": true,
+  "completion_reason": "The approved Phase 0B local-only autonomous scope is complete. Phase 0A baseline is recorded, the local single-admin gate is integrated, protected Radar Task UI is integrated, and final deterministic release smoke/docs are complete. No active machine-creatable tasks remain inside this approved scope.",
+  "next_prompt": "Stop autonomous Phase 0B execution after final validation and push. Any next phase requires a new human decision because provider setup, public deployment, production auth, paid accounts, real secrets, CI/CD, DNS, billing, telemetry, cron, email, and commercial release remain human-gated."
 }

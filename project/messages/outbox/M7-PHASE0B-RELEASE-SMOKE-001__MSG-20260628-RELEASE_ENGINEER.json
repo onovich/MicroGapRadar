@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "task_id": "M7-PHASE0B-RELEASE-SMOKE-001",
+  "role": "release_engineer",
+  "status": "READY_FOR_REVIEW",
+  "created_at": "2026-06-28T20:38:08Z",
+  "summary": "Expanded the deterministic local release smoke and README so Phase 0B closure now covers the local admin gate, protected Radar Task UI helper behavior, mock Run Scan request shape, existing opportunity flow, and MVP Spec readiness.",
+  "changed_files": [
+    "tests/release-readiness-smoke.test.ts",
+    "README.md"
+  ],
+  "acceptance_notes": [
+    "The release smoke now blocks global fetch and asserts zero network attempts for both the Phase 0B admin/Radar Task helper path and the existing scan/opportunity/MVP Spec path.",
+    "Local admin helper coverage verifies configured auth, placeholder fail-closed behavior, password verification, signed session token verification, tamper rejection, and route protection for dashboard, Radar Tasks, and scan API surfaces.",
+    "Radar Task UI helper coverage verifies active/inactive list behavior, detail model links and child context, form parsing for create/update, admin-checked create/update/deactivate action boundaries, and mock Run Scan payload/result serialization.",
+    "README now records the Phase 0A/Phase 0B split and keeps production auth, public deployment, paid providers, real accounts, budgets, real secrets, billing, telemetry, cron, email, and commercial release decisions human-gated."
+  ],
+  "validation": [
+    {
+      "command": "npx tsx --test tests/release-readiness-smoke.test.ts",
+      "exit_code": 0,
+      "note": "2 release smoke tests passed."
+    },
+    {
+      "command": "npx tsx --test tests/*.test.ts",
+      "exit_code": 0,
+      "note": "89 tests passed across 18 suites."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "note": "89 tests passed across 18 suites through the package script."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "note": "Production build passed; existing local Windows Next SWC optional-native warnings remained nonfatal."
+    },
+    {
+      "command": "node .agents/skills/just-goal/scripts/taskctl.mjs validate --repo-root .",
+      "exit_code": 0,
+      "note": "18 task files validated."
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "note": "Passed with LF-to-CRLF warnings only."
+    }
+  ],
+  "non_goals_kept": [
+    "No runtime product code changes were made in this closing task.",
+    "No public deployment, CI/CD, DNS, store listing, paid provider setup, external account creation, real secret, production auth/session policy, multi-user ownership, billing, telemetry, cron, email, or commercial release behavior was added."
+  ],
+  "review_request": {
+    "security_reviewer": "Confirm no secret/provider/deployment boundary was weakened and local admin release-smoke coverage is sufficient.",
+    "qa_reviewer": "Confirm the release-smoke and README satisfy the Phase 0B acceptance criteria and fresh-checkout validation story."
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "task_id": "M7-PHASE0B-RELEASE-SMOKE-001",
+  "role": "qa_reviewer",
+  "thread_id": "019f0ff6-0b15-75f0-9b63-bb10ef833f66",
+  "status": "ACCEPT",
+  "created_at": "2026-06-28T20:47:30Z",
+  "summary": "Phase 0B release-smoke closure accepted after task, goal, continuation, registry, and autonomous stop state were closed deterministically.",
+  "findings": [],
+  "acceptance_notes": [
+    "The release smoke covers local admin auth helpers, Radar Task helper/read-model behavior, mock scan request shape, opportunity detail readiness, and MVP Spec readiness without network.",
+    "README covers the Phase 0A/0B split, local admin gate, Radar Task UI workflow, fresh-checkout validation, and human-gated provider/deployment boundaries.",
+    "The task is CLOSED, goal-mode state and continuation have no active/current/ready tasks, reviewer registry entries are closed, and project_goal_complete is explicitly recorded.",
+    "verify-autonomous-stop returns ALLOW_STOP with no dependency-ready or active tasks."
+  ],
+  "verified_commands": [
+    "node .agents/skills/just-goal/scripts/taskctl.mjs validate --repo-root .",
+    "node .agents/skills/just-goal/scripts/verify-autonomous-stop.mjs",
+    "npx tsx --test tests/release-readiness-smoke.test.ts",
+    "npm test",
+    "git diff --check"
+  ],
+  "residual_risks": [
+    "The QA re-review was read-only and did not rerun npm run build, but the release engineer recorded a passing build for the same closure changes."
+  ]
+}

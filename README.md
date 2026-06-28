@@ -26,6 +26,21 @@ path uses the mock SERP provider and deterministic local agents. It does not
 require real provider accounts, secrets, network access, a running browser, or a
 public deployment.
 
+### Phase 0A / Phase 0B Scope
+
+Phase 0A is the completed local MVP baseline: seeded Radar Tasks, mock scan
+orchestration, scored opportunities, dashboard/list/detail pages, local status
+updates, and deterministic MVP Spec generation.
+
+Phase 0B is the approved local-only backfill: a simple single-admin password
+gate, protected local admin routes, protected Radar Task list/create/detail/edit
+and deactivate UI, and a mock Run Scan control from the Radar Task detail page.
+
+Anything beyond that remains human-gated: production auth/session policy,
+public deployment, CI/CD, DNS, store listings, paid provider setup, real
+external accounts, budgets, real secrets, billing, telemetry, cron, email, or
+commercial release decisions.
+
 ### Environment Setup
 
 Copy the template and keep local-only values in `.env.local`:

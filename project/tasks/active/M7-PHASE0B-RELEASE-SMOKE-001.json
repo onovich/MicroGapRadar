@@ -2,7 +2,7 @@
   "id": "M7-PHASE0B-RELEASE-SMOKE-001",
   "summary": "Add Phase 0B local release smoke and documentation proving login, Radar Task UI, mock scan, opportunity, and MVP Spec flow.",
   "milestone": "M7",
-  "status": "READY",
+  "status": "CLOSED",
   "owner_role": "release_engineer",
   "reviewer_role": "qa_reviewer",
   "required_reviewers": [
@@ -56,7 +56,10 @@
     "node .agents/skills/just-goal/scripts/verify-autonomous-stop.mjs"
   ],
   "branch_or_worktree": "main",
-  "threads": {},
+  "threads": {
+    "security_reviewer": "019f0ff5-f717-74c3-8920-253b800da911",
+    "qa_reviewer": "019f0ff6-0b15-75f0-9b63-bb10ef833f66"
+  },
   "route_to": "release_engineer",
   "notes": [
     "This is the closing task for the approved Phase 0B autonomous scope.",
@@ -67,5 +70,5 @@
     "No runtime product code changes unless a release smoke defect is found and separately tasked."
   ],
   "created_at": "2026-06-29T00:00:00Z",
-  "updated_at": "2026-06-28T20:32:08.531Z"
+  "updated_at": "2026-06-28T20:47:24.955Z"
 }
