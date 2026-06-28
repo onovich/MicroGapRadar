@@ -2,7 +2,7 @@
   "id": "M7-LOCAL-ADMIN-GATE-001",
   "summary": "Add a local-only single-admin password gate with session cookie and protected admin routes.",
   "milestone": "M7",
-  "status": "READY",
+  "status": "CLOSED",
   "owner_role": "implementation_engineer",
   "reviewer_role": "security_reviewer",
   "required_reviewers": [
@@ -58,7 +58,10 @@
     "node .agents/skills/just-goal/scripts/taskctl.mjs validate --repo-root ."
   ],
   "branch_or_worktree": "main",
-  "threads": {},
+  "threads": {
+    "security_reviewer": "019f0fc0-59ab-74f2-851f-6578c27d37a4",
+    "qa_reviewer": "019f0fc9-c253-73e1-8d1f-2bf29a433520"
+  },
   "route_to": "implementation_engineer",
   "notes": [
     "Derived from docs/11_development_plan.md M2 and the 2026-06-29 human-approved Phase 0B backfill scope.",
@@ -72,5 +75,5 @@
     "No Radar Task CRUD UI beyond links needed for protected navigation."
   ],
   "created_at": "2026-06-29T00:00:00Z",
-  "updated_at": "2026-06-28T19:30:07.377Z"
+  "updated_at": "2026-06-28T19:58:00.132Z"
 }

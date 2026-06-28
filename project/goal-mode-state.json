@@ -2,12 +2,12 @@
   "version": 1,
   "enabled": true,
   "current_milestone": "M7",
-  "current_task": "M7-LOCAL-ADMIN-GATE-001",
+  "current_task": "M7-RADAR-TASK-UI-001",
   "active_threads": [],
-  "last_integrated_task": "M7-PHASE0B-SCOPE-STATE-001",
+  "last_integrated_task": "M7-LOCAL-ADMIN-GATE-001",
   "last_main_commit": "e166da1",
   "next_ready_tasks": [
-    "M7-LOCAL-ADMIN-GATE-001"
+    "M7-RADAR-TASK-UI-001"
   ],
   "unresolved_risks": [],
   "human_gate": {
@@ -31,5 +31,5 @@
       "Multi-user ownership, billing, telemetry, cron, or email."
     ]
   },
-  "last_updated_at": "2026-06-28T19:40:00Z"
+  "last_updated_at": "2026-06-28T20:20:00Z"
 }

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const signals = [
   "Low-competition search gaps",
   "AI-friendly microtool ideas",
@@ -23,6 +25,20 @@ export default function Home() {
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
+              <Link
+                className="rounded-lg bg-signal px-4 py-2 text-sm font-semibold text-white hover:bg-signal/90"
+                href="/dashboard"
+              >
+                Open dashboard
+              </Link>
+              <Link
+                className="rounded-lg border border-ink/15 bg-white px-4 py-2 text-sm font-semibold text-ink/75 hover:border-signal/40 hover:text-signal"
+                href="/radar-tasks"
+              >
+                Radar tasks
+              </Link>
+            </div>
+            <div className="flex flex-wrap gap-3">
               {signals.map((signal) => (
                 <span
                   className="rounded-full border border-ink/10 bg-white/80 px-4 py-2 text-sm font-medium text-ink/70"
@@ -41,14 +57,14 @@ export default function Home() {
                   M0 scaffold
                 </p>
                 <h2 className="mt-2 text-2xl font-semibold text-ink">
-                  Ready for the first buildable foundation.
+                  Local MVP baseline is ready.
                 </h2>
               </div>
               <p className="leading-7 text-ink/70">
-                This base app keeps the first milestone intentionally narrow:
-                App Router, TypeScript, Tailwind CSS, and server-only
-                environment access. Radar tasks, scan orchestration, providers,
-                auth, and data storage come in later milestones.
+                The local workflow now runs through mock scans, ranked
+                opportunities, detail review, and MVP Spec generation. The
+                admin gate protects the self-use workspace while provider and
+                deployment decisions stay explicitly human-gated.
               </p>
             </div>
           </div>

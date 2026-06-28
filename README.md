@@ -17,7 +17,7 @@
 - Tailwind CSS
 - `lib/env.ts` 服务端环境变量读取
 
-Local MVP slices now include the SQLite data model, mock SERP provider, LLM JSON/agent utilities, scan orchestration, dashboard/list/detail views, status updates, MVP Spec generation, and local release smoke. Production auth/session policy and public deployment remain human-gated future work.
+Local MVP slices now include the SQLite data model, mock SERP provider, LLM JSON/agent utilities, scan orchestration, dashboard/list/detail views, status updates, MVP Spec generation, local release smoke, and a simple local-only single-admin gate. Production auth/session policy and public deployment remain human-gated future work.
 
 ## Local Development
 
@@ -46,11 +46,16 @@ Required local values:
 - `NODE_ENV=development`
 - `DATABASE_URL="file:./dev.db"`
 - `SERP_PROVIDER=mock`
+- `ADMIN_PASSWORD=change-me-local-only`
+- `SESSION_SECRET=replace-with-a-random-32-plus-character-local-secret`
 
-Optional future values should stay blank unless a human intentionally configures
-that surface: admin placeholders, production session/auth settings, LLM keys,
-paid SERP provider keys, email, Stripe, cron, and deployment values. Do not add
-real secrets to `.env.example`, README examples, tests, or committed files.
+The admin password and session secret are for the local single-admin gate only.
+Use private values in `.env.local`; the checked-in placeholders intentionally
+fail closed. Optional future values should stay blank unless a human
+intentionally configures that surface: production session/auth settings, LLM
+keys, paid SERP provider keys, email, Stripe, cron, and deployment values. Do
+not add real secrets to `.env.example`, README examples, tests, or committed
+files.
 
 ### Fresh Checkout Local Validation
 
@@ -94,31 +99,34 @@ npm run start
 
 ### Manual Demo Flow
 
-With `npm run dev` running and the seed data loaded:
+With `npm run dev` running, `.env.local` configured, and the seed data loaded:
 
-1. Open `http://localhost:3000/dashboard` and confirm the local dashboard
-   renders.
-2. Run a mock scan for the seeded GameDev radar task:
+1. Open `http://localhost:3000/dashboard`, confirm unauthenticated access
+   redirects to `/login`, and sign in with the local admin password.
+2. Confirm the local dashboard renders after login.
+3. Run a mock scan for the seeded GameDev radar task from an authenticated
+   session or use the direct API with the session cookie:
 
    ```powershell
    Invoke-RestMethod -Method Post -Uri http://localhost:3000/api/scans/run -ContentType application/json -Body '{"radarTaskId":"seed-gamedev-microtools","useMockSerp":true,"keywordLimit":2,"serpLimit":1}'
    ```
 
-3. Open `http://localhost:3000/opportunities`, verify at least one scored
+4. Open `http://localhost:3000/opportunities`, verify at least one scored
    opportunity appears, then open an opportunity detail page.
-4. On the opportunity detail page, confirm score breakdown, SERP weakness,
+5. On the opportunity detail page, confirm score breakdown, SERP weakness,
    monetization, risk, radar task/run context, and status controls render.
-5. Generate the MVP Spec from the detail page and confirm the Markdown includes
+6. Generate the MVP Spec from the detail page and confirm the Markdown includes
    Page Structure, Form Fields, Data Model, API Routes, Monetization Entry
    Points, Risk Notes, 48-Hour Build Checklist, Acceptance Criteria, and Kill
    Criteria.
 
 ### Deployment Readiness Notes
 
-This task prepares local release confidence only. Public deployment,
-production auth/session/ownership policy, paid provider setup, CI/CD, DNS,
-store listings, commercial release decisions, and real account creation remain
-human-gated and are not executed by this repository setup.
+This task prepares local release confidence only. The local admin gate is not a
+production auth or ownership model. Public deployment, production auth/session
+policy, paid provider setup, CI/CD, DNS, store listings, commercial release
+decisions, and real account creation remain human-gated and are not executed by
+this repository setup.
 
 ## Mock SERP Provider
 

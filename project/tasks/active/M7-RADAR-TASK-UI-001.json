@@ -2,7 +2,7 @@
   "id": "M7-RADAR-TASK-UI-001",
   "summary": "Add protected Radar Task list, create, detail, edit, delete, and mock Run Scan UI on top of the existing API.",
   "milestone": "M7",
-  "status": "DRAFT",
+  "status": "READY",
   "owner_role": "client_engineer",
   "reviewer_role": "qa_reviewer",
   "required_reviewers": [
@@ -76,5 +76,5 @@
     "No changes to scoring, opportunity analysis, LLM, SERP provider behavior, or MVP Spec generation."
   ],
   "created_at": "2026-06-29T00:00:00Z",
-  "updated_at": "2026-06-28T19:28:40.349Z"
+  "updated_at": "2026-06-28T19:58:00.179Z"
 }
