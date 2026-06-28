@@ -49,7 +49,11 @@
     "m3_opportunity_analysis_implementation_engineer": "019f0d03-720b-7d93-a8d9-e3537087239b",
     "m3_opportunity_analysis_systems_architect": "019f0d15-83a8-7b50-a149-8273ddfbe116",
     "m3_opportunity_analysis_domain_designer": "019f0d15-a618-7da0-84d7-0334b0ffcbcc",
-    "m3_opportunity_analysis_qa_reviewer": "019f0d45-b9c3-7002-86e0-826b5fb655b5"
+    "m3_opportunity_analysis_qa_reviewer": "019f0d45-b9c3-7002-86e0-826b5fb655b5",
+    "m4_scoring_engine_implementation_engineer": "019f0d55-0dee-7520-88fe-4ed971624b20",
+    "m4_scoring_engine_systems_architect": "019f0d55-6852-7b91-b520-461ea28a9e4f",
+    "m4_scoring_engine_domain_designer": "019f0d55-7678-7213-9bdd-c86f74e5baa8",
+    "m4_scoring_engine_qa_reviewer": "019f0d56-1bc9-7690-86b9-8dd2e8d9ed14"
   },
   "roles": {
     "lead_orchestrator": {
@@ -60,30 +64,22 @@
     "implementation_engineer": {
       "model": "gpt-5.5",
       "effort": "high",
-      "status": "accepted",
-      "thread_id": "019f0d55-0dee-7520-88fe-4ed971624b20",
-      "task_id": "M4-SCORING-ENGINE-001"
+      "status": "idle"
     },
     "systems_architect": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "accepted",
-      "thread_id": "019f0d55-6852-7b91-b520-461ea28a9e4f",
-      "task_id": "M4-SCORING-ENGINE-001"
+      "status": "idle"
     },
     "domain_designer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "accepted",
-      "thread_id": "019f0d55-7678-7213-9bdd-c86f74e5baa8",
-      "task_id": "M4-SCORING-ENGINE-001"
+      "status": "idle"
     },
     "qa_reviewer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "accepted",
-      "thread_id": "019f0d56-1bc9-7690-86b9-8dd2e8d9ed14",
-      "task_id": "M4-SCORING-ENGINE-001"
+      "status": "idle"
     },
     "security_reviewer": {
       "model": "gpt-5.5",
@@ -91,5 +87,5 @@
       "status": "idle"
     }
   },
-  "last_updated_at": "2026-06-28T08:53:18Z"
+  "last_updated_at": "2026-06-28T08:56:36Z"
 }

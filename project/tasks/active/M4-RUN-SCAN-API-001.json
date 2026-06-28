@@ -1,0 +1,83 @@
+{
+  "id": "M4-RUN-SCAN-API-001",
+  "summary": "Add the Run Scan API and scan orchestrator core chain with mock SERP, deterministic agent fallbacks, scoring, persistence-ready run records, and focused tests.",
+  "milestone": "M4",
+  "status": "READY",
+  "owner_role": "implementation_engineer",
+  "reviewer_role": "qa_reviewer",
+  "risk_level": "R3",
+  "dependencies": [
+    "M4-SCORING-ENGINE-001"
+  ],
+  "scope": {
+    "allowed_paths": [
+      "services/scan-orchestrator.ts",
+      "app/api/scans/run/**",
+      "lib/schemas.ts",
+      "tests/**",
+      "README.md"
+    ],
+    "forbidden_paths": [
+      ".git/**",
+      ".codex/**",
+      ".agents/**",
+      "project/**",
+      "skills/**",
+      "docs/**",
+      "mock-data/**",
+      "agents/**",
+      "services/llm/**",
+      "services/serp/**",
+      "lib/scoring.ts",
+      "lib/db.ts",
+      "lib/env.ts",
+      "lib/radar-tasks.ts",
+      "app/page.tsx",
+      "app/api/radar-tasks/**",
+      "components/**",
+      "prisma/**",
+      "package.json",
+      "package-lock.json"
+    ]
+  },
+  "acceptance_criteria": [
+    "A scan orchestrator module exists at services/scan-orchestrator.ts with a stable runScan() entry point and typed input/output contracts for radarTaskId, useMockSerp, optional limits, run status, persisted counts, errors, and generated opportunities.",
+    "The orchestrator loads an active RadarTask, creates a SearchRun, then runs the core chain in order: keyword expansion, SERP provider search, SERP analysis, opportunity analysis, calculateOpportunityScore(), and persistence of keyword candidates, SERP results, opportunities, scoreBreakdown, scoreExplanation, and final run counts/status.",
+    "The default path is fully local and deterministic when no LLM client or real SERP provider is supplied: useMockSerp defaults to true, MockSerpProvider is used, agent heuristic fallbacks run without API keys, and no network or paid service is required.",
+    "The orchestrator records completed, failed, or partial_failed run status and sanitized error messages; a single keyword failure does not discard successful opportunities when partial success is possible.",
+    "A POST /api/scans/run route exists, validates JSON input, calls runScan(), and returns structured JSON responses with sanitized validation/not-found/runtime errors consistent with existing API style.",
+    "Focused automated tests cover successful mock scan orchestration, persistence payloads including score breakdown/explanation, invalid or inactive radar task handling, partial failure behavior, API validation/response shape where practical, and no-secret/no-network defaults.",
+    "README documents the Run Scan API/orchestrator slice, local mock behavior, request shape, response shape, validation commands, and explicit non-goals.",
+    "No dashboard, Radar detail UI, opportunity list/detail UI, cron, auth/session, real SERP provider, real LLM provider setup, environment secret loading, deployment, schema migration, or package dependency change is implemented."
+  ],
+  "required_tests": [
+    "npm test",
+    "npm run build"
+  ],
+  "branch_or_worktree": "main",
+  "threads": {},
+  "route_to": "implementation_engineer",
+  "notes": [
+    "Derived from docs/09_codex_implementation_tasks.md Task 11 and docs/11_development_plan.md M4 Run Scan core chain.",
+    "Prisma schema already contains SearchRun, KeywordCandidate, SerpResult, and Opportunity tables; this task should not alter schema unless an implementation blocker proves otherwise.",
+    "systems_architect is required because this connects agents, providers, scoring, API route, and persistence boundaries.",
+    "domain_designer is required because this decides how opportunities are saved, scored, and surfaced from risk-aware analysis.",
+    "security_reviewer is required because this adds a mutating POST API route and database writes, even though MVP remains local unauthenticated admin.",
+    "Tests should prefer dependency injection/fakes for the orchestrator where possible while keeping the default production path wired to Prisma and mock SERP."
+  ],
+  "non_goals": [
+    "No UI pages or components: no dashboard, Radar detail button, opportunity list, opportunity detail, score badge, or recent run status component.",
+    "No real SERP provider or real LLM provider configuration, no process.env secret loading, no paid service setup, and no network calls in tests.",
+    "No Prisma schema edits, migrations, seed changes, package or lockfile changes unless a blocker is documented first.",
+    "No cron/daily scan, background jobs, queues, email digest, auth/session, multi-user enforcement, deployment config, or GitHub Actions changes.",
+    "No MVP Spec Agent or opportunity MVP spec generation.",
+    "No changes to existing agent contracts, scoring formula, SERP provider contracts, LLM client contracts, or Radar Task CRUD API unless strictly necessary for type-only consumption."
+  ],
+  "created_at": "2026-06-28T08:55:30.026Z",
+  "updated_at": "2026-06-28T08:56:12.168Z",
+  "required_reviewers": [
+    "systems_architect",
+    "domain_designer",
+    "security_reviewer"
+  ]
+}
