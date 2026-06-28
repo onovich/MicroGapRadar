@@ -42,7 +42,10 @@
     "m3_llm_json_qa_reviewer": "019f0cb9-40ee-7f20-9aa9-8c384b8812a9",
     "m3_keyword_expansion_implementation_engineer": "019f0cc5-8705-7c83-b19a-c85867608c06",
     "m3_keyword_expansion_systems_architect": "019f0cd0-fdea-7590-b691-4e3643e16331",
-    "m3_keyword_expansion_qa_reviewer": "019f0cd7-56e4-7252-bf05-b82828e5c429"
+    "m3_keyword_expansion_qa_reviewer": "019f0cd7-56e4-7252-bf05-b82828e5c429",
+    "m3_serp_analysis_implementation_engineer": "019f0ce2-fc6f-7ec2-b36e-711df7eca24d",
+    "m3_serp_analysis_systems_architect": "019f0cf0-8876-7d12-84c2-f02e2d0d3106",
+    "m3_serp_analysis_qa_reviewer": "019f0cf6-5173-7332-9078-ed116e704f0b"
   },
   "roles": {
     "lead_orchestrator": {
@@ -53,23 +56,22 @@
     "implementation_engineer": {
       "model": "gpt-5.5",
       "effort": "high",
-      "status": "accepted",
-      "thread_id": "019f0ce2-fc6f-7ec2-b36e-711df7eca24d",
-      "task_id": "M3-SERP-ANALYSIS-AGENT-001"
+      "status": "idle"
     },
     "systems_architect": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "accepted",
-      "thread_id": "019f0cf0-8876-7d12-84c2-f02e2d0d3106",
-      "task_id": "M3-SERP-ANALYSIS-AGENT-001"
+      "status": "idle"
+    },
+    "domain_designer": {
+      "model": "gpt-5.5",
+      "effort": "xhigh",
+      "status": "idle"
     },
     "qa_reviewer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "accepted",
-      "thread_id": "019f0cf6-5173-7332-9078-ed116e704f0b",
-      "task_id": "M3-SERP-ANALYSIS-AGENT-001"
+      "status": "idle"
     },
     "security_reviewer": {
       "model": "gpt-5.5",
@@ -77,5 +79,5 @@
       "status": "idle"
     }
   },
-  "last_updated_at": "2026-06-28T06:49:30Z"
+  "last_updated_at": "2026-06-28T06:55:30Z"
 }

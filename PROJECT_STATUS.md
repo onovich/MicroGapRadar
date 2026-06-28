@@ -1,6 +1,6 @@
 # Project Status
 
-Updated at: 2026-06-28T06:16:15Z
+Updated at: 2026-06-28T06:55:30Z
 
 ## Current Milestone
 
@@ -8,7 +8,7 @@ Updated at: 2026-06-28T06:16:15Z
 
 ## Current Outcome
 
-Completed the M0 scaffold, the M1 database base, the Radar Task API slice, the mock SERP provider slice, the LLM JSON client boundary, and the Keyword Expansion Agent:
+Completed the M0 scaffold, the M1 database base, the Radar Task API slice, the mock SERP provider slice, the LLM JSON client boundary, the Keyword Expansion Agent, and the SERP Analysis Agent:
 
 - The orchestrator skill is installed globally and in the repository.
 - Project orchestration state exists under `project/`.
@@ -24,6 +24,8 @@ Completed the M0 scaffold, the M1 database base, the Radar Task API slice, the m
 - The reusable LLM client contract, OpenAI-compatible explicit-config adapter, safe JSON parse/Zod validation/one-repair flow, README documentation, and focused no-secret/no-network tests are in place.
 - `M3-KEYWORD-EXPANSION-AGENT-001` is accepted, integrated, and pushed at `de431deb3bcd98d4abc4b5158c35ee14c2ec25e1`.
 - The reusable Keyword Expansion Agent, docs-aligned prompt builder, injected LLM client path, deterministic mock fallback, README documentation, and focused tests are in place.
+- `M3-SERP-ANALYSIS-AGENT-001` is accepted, integrated, and pushed at `a99302810aabfc72478f2bd0b1502cb41b419406`.
+- The reusable SERP Analysis Agent, docs-aligned Agent 2 prompt builder, injected LLM client path, deterministic heuristic fallback, README documentation, and focused tests are in place.
 - `JustGoal` is installed at `.agents/skills/just-goal` and its source repository is published at `git@github.com:onovich/JustGoal.skill.git`.
 
 ## Product Summary
@@ -42,7 +44,7 @@ MicroGap Radar is a self-use-first AI microtool opportunity radar. The 48-hour M
 
 ## Active Task
 
-- `M3-SERP-ANALYSIS-AGENT-001`: add the SERP Analysis Agent with typed schemas, docs-aligned prompt construction, injected safe JSON completion, and deterministic heuristic fallback. This task must not add opportunity analysis, scoring, scan orchestration, persistence, API routes, UI, auth, cron, deployment, real LLM provider wiring, SERP provider changes, or paid service setup.
+- `M3-OPPORTUNITY-ANALYSIS-AGENT-001`: add the Opportunity Analysis Agent with typed schemas, docs-aligned prompt construction, injected safe JSON completion, deterministic heuristic fallback, and risk-policy guardrails. This task must not add scoring engine, scan orchestration, database persistence, API routes, UI, auth, cron, deployment, real LLM provider wiring, SERP provider changes, or paid service setup.
 
 ## Human Gates
 

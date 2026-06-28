@@ -1,11 +1,11 @@
 {
   "version": 1,
   "created_at": "2026-06-27T19:24:00Z",
-  "updated_at": "2026-06-28T06:49:30Z",
-  "main_commit": "de431deb3bcd98d4abc4b5158c35ee14c2ec25e1",
+  "updated_at": "2026-06-28T06:55:30Z",
+  "main_commit": "a99302810aabfc72478f2bd0b1502cb41b419406",
   "current_milestone": "M3",
-  "current_task": "M3-SERP-ANALYSIS-AGENT-001",
-  "last_integrated_task": "M3-KEYWORD-EXPANSION-AGENT-001",
+  "current_task": null,
+  "last_integrated_task": "M3-SERP-ANALYSIS-AGENT-001",
   "closed_threads": {
     "m0_implementation_engineer": "019f0a11-0493-7fe0-89e9-a21d3b680a67",
     "m0_qa_reviewer": "019f0a2a-70f9-77e0-8f7d-6091b879545a",
@@ -23,30 +23,24 @@
     "m3_llm_json_qa_reviewer": "019f0cb9-40ee-7f20-9aa9-8c384b8812a9",
     "m3_keyword_expansion_implementation_engineer": "019f0cc5-8705-7c83-b19a-c85867608c06",
     "m3_keyword_expansion_systems_architect": "019f0cd0-fdea-7590-b691-4e3643e16331",
-    "m3_keyword_expansion_qa_reviewer": "019f0cd7-56e4-7252-bf05-b82828e5c429"
+    "m3_keyword_expansion_qa_reviewer": "019f0cd7-56e4-7252-bf05-b82828e5c429",
+    "m3_serp_analysis_implementation_engineer": "019f0ce2-fc6f-7ec2-b36e-711df7eca24d",
+    "m3_serp_analysis_systems_architect": "019f0cf0-8876-7d12-84c2-f02e2d0d3106",
+    "m3_serp_analysis_qa_reviewer": "019f0cf6-5173-7332-9078-ed116e704f0b"
   },
-  "active_threads": [
-    {
-      "role": "implementation_engineer",
-      "task_id": "M3-SERP-ANALYSIS-AGENT-001",
-      "thread_id": "019f0ce2-fc6f-7ec2-b36e-711df7eca24d",
-      "status": "accepted"
-    },
-    {
-      "role": "systems_architect",
-      "task_id": "M3-SERP-ANALYSIS-AGENT-001",
-      "thread_id": "019f0cf0-8876-7d12-84c2-f02e2d0d3106",
-      "status": "accepted"
-    },
-    {
-      "role": "qa_reviewer",
-      "task_id": "M3-SERP-ANALYSIS-AGENT-001",
-      "thread_id": "019f0cf6-5173-7332-9078-ed116e704f0b",
-      "status": "accepted"
-    }
+  "active_threads": [],
+  "next_ready_tasks": [
+    "M3-OPPORTUNITY-ANALYSIS-AGENT-001"
   ],
-  "next_ready_tasks": [],
-  "recommended_next_task": null,
+  "recommended_next_task": {
+    "id": "M3-OPPORTUNITY-ANALYSIS-AGENT-001",
+    "summary": "Add the Opportunity Analysis Agent with typed schemas, docs-aligned prompt construction, injected safe JSON completion, deterministic heuristic fallback, and risk-policy guardrails.",
+    "source_docs": [
+      "docs/08_ai_agents_and_prompts.md",
+      "docs/09_codex_implementation_tasks.md",
+      "docs/11_development_plan.md"
+    ]
+  },
   "recent_handoffs": [
     "project/messages/outbox/M3-SERP-ANALYSIS-AGENT-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
     "project/messages/outbox/M3-SERP-ANALYSIS-AGENT-001__MSG-20260628-SYSTEMS_ARCHITECT.json",
@@ -78,5 +72,5 @@
     "required": false,
     "reason": null
   },
-  "next_prompt": "Use $just-goal to integrate M3-SERP-ANALYSIS-AGENT-001, close it after push, queue the next dependency-ready M3 task, and continue until a human gate."
+  "next_prompt": "Use $just-goal to execute M3-OPPORTUNITY-ANALYSIS-AGENT-001 with implementation_engineer, systems_architect, domain_designer, and qa_reviewer gates, then continue to the next task until a human gate."
 }

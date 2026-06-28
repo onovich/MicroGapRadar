@@ -1,0 +1,74 @@
+{
+  "id": "M3-OPPORTUNITY-ANALYSIS-AGENT-001",
+  "summary": "Add the Opportunity Analysis Agent with typed schemas, docs-aligned prompt construction, injected safe JSON completion, deterministic heuristic fallback, and risk-policy guardrails.",
+  "milestone": "M3",
+  "status": "READY",
+  "owner_role": "implementation_engineer",
+  "reviewer_role": "qa_reviewer",
+  "required_reviewers": [
+    "systems_architect",
+    "domain_designer"
+  ],
+  "risk_level": "R2",
+  "dependencies": [
+    "M3-SERP-ANALYSIS-AGENT-001"
+  ],
+  "scope": {
+    "allowed_paths": [
+      "agents/**",
+      "tests/**",
+      "README.md"
+    ],
+    "forbidden_paths": [
+      ".git/**",
+      ".codex/**",
+      ".agents/**",
+      "project/**",
+      "skills/**",
+      "docs/**",
+      "mock-data/**",
+      "app/**",
+      "components/**",
+      "lib/**",
+      "prisma/**",
+      "services/serp/**",
+      "services/llm/**",
+      "services/scan-orchestrator.ts",
+      "package.json",
+      "package-lock.json"
+    ]
+  },
+  "acceptance_criteria": [
+    "A reusable Opportunity Analysis Agent module exists under agents/ with typed input, output, tool concept, monetization, risk, score hint, Zod schemas, and a stable public function for analyzing an opportunity from a Radar task, keyword candidate, SERP analysis, and SERP results.",
+    "The agent builds a prompt aligned with docs/08_ai_agents_and_prompts.md Agent 3 and calls the existing safeJsonCompletion() utility through an injected LlmClient when one is provided.",
+    "The agent provides a deterministic heuristic fallback that creates a structured opportunity from prior agent outputs without external API keys, process.env reads, network calls, database writes, or paid services.",
+    "The output includes title, summary, targetUser, searchIntent, recommendedToolType, toolConcept, monetization, risk, buildComplexity, scoreHints, and killCriteria, with score hint values clamped to 0-100.",
+    "Risk guardrails prevent promises about revenue, rankings, legal compliance, medical outcomes, financial outcomes, or guaranteed business results; legal, tax, medical, and financial topics are constrained to checklist/self-assessment framing or high/excluded risk; adult, gambling, gray-market, or harmful topics are excluded.",
+    "Focused automated tests cover LLM success, malformed or rejected LLM output falling back to heuristics, score hint clamping/normalization, risk guardrails, monetization/user-fit inference, and deterministic fallback output.",
+    "README documents the Opportunity Analysis Agent slice, heuristic fallback behavior, risk guardrails, no-secret/no-network/no-persistence policy, and the test command.",
+    "No scoring engine, scan orchestration, database persistence, API route, UI, auth, cron, deployment, real LLM provider wiring, SERP provider changes, or paid service setup is implemented."
+  ],
+  "required_tests": [
+    "npm test",
+    "npm run build"
+  ],
+  "branch_or_worktree": "main",
+  "threads": {},
+  "route_to": "implementation_engineer",
+  "notes": [
+    "Derived from docs/08_ai_agents_and_prompts.md Agent 3 prompt/schema and docs/11_development_plan.md M3 agent foundation.",
+    "docs/09_codex_implementation_tasks.md mentions saving Opportunity for Task 9; this smaller M3 slice deliberately defers persistence to the later scan orchestrator/API task to keep the agent foundation verifiable and side-effect free.",
+    "systems_architect is required because this extends the agents/ boundary and feeds later scoring and scan orchestration work.",
+    "domain_designer is required because this task owns opportunity framing, monetization language, risk policy, and no-guarantee product claims.",
+    "Keep scoreHints as structured LLM or fallback hints only. The final calculateOpportunityScore() function belongs to M4."
+  ],
+  "non_goals": [
+    "No scoring engine, calculateOpportunityScore(), score breakdown persistence, MVP Spec Agent, or scan orchestrator.",
+    "No Opportunity database writes and no Prisma/lib changes.",
+    "No /api/scans/run route, dashboard integration, opportunity list/detail UI, or status update UI.",
+    "No real LLM provider configuration, environment-variable secret loading, real network calls in tests, or paid service setup.",
+    "No changes to services/llm, services/serp, or existing SERP Analysis Agent contracts unless required for type-only imports from public exports."
+  ],
+  "created_at": "2026-06-28T06:55:30Z",
+  "updated_at": "2026-06-28T06:55:30Z"
+}
