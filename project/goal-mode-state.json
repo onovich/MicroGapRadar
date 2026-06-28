@@ -1,16 +1,35 @@
 {
   "version": 1,
   "enabled": true,
-  "current_milestone": "M6",
-  "current_task": null,
+  "current_milestone": "M7",
+  "current_task": "M7-LOCAL-ADMIN-GATE-001",
   "active_threads": [],
-  "last_integrated_task": "M6-RELEASE-READINESS-SMOKE-001",
-  "last_main_commit": "3eb7743",
-  "next_ready_tasks": [],
+  "last_integrated_task": "M7-PHASE0B-SCOPE-STATE-001",
+  "last_main_commit": "e166da1",
+  "next_ready_tasks": [
+    "M7-LOCAL-ADMIN-GATE-001"
+  ],
   "unresolved_risks": [],
   "human_gate": {
-    "required": true,
-    "reason": "Phase 0 scope reconciliation is required. The original docs still list login/admin gate, Radar Task admin UI creation, real provider/deployment readiness, and public deployment items, while the accepted task graph and README intentionally keep this MVP local, single-admin/unauthenticated, mock-provider-first, and production auth/deployment/provider/CI/CD decisions human-gated."
+    "required": false,
+    "reason": null
   },
-  "last_updated_at": "2026-06-28T14:32:00Z"
+  "approved_scope": {
+    "name": "Phase 0B local backfill",
+    "accepted_at": "2026-06-28T19:20:39Z",
+    "allowed": [
+      "Record Phase 0A as complete.",
+      "Implement a local-only single-admin password gate and session cookie.",
+      "Protect /dashboard, /radar-tasks, and /opportunities.",
+      "Implement protected Radar Task list/create/detail/edit/delete UI and mock Run Scan control.",
+      "Add final local smoke/docs for the approved Phase 0B flow."
+    ],
+    "human_gated": [
+      "Production auth/session policy.",
+      "Public deployment, CI/CD, DNS, store listing, or commercial release.",
+      "Paid provider setup, real external accounts, budgets, or real secrets.",
+      "Multi-user ownership, billing, telemetry, cron, or email."
+    ]
+  },
+  "last_updated_at": "2026-06-28T19:40:00Z"
 }

@@ -1,11 +1,11 @@
 {
   "version": 1,
   "created_at": "2026-06-27T19:24:00Z",
-  "updated_at": "2026-06-28T14:32:00Z",
-  "main_commit": "3eb7743",
-  "current_milestone": "M6",
-  "current_task": null,
-  "last_integrated_task": "M6-RELEASE-READINESS-SMOKE-001",
+  "updated_at": "2026-06-28T19:20:39Z",
+  "main_commit": "e166da1",
+  "current_milestone": "M7",
+  "current_task": "M7-LOCAL-ADMIN-GATE-001",
+  "last_integrated_task": "M7-PHASE0B-SCOPE-STATE-001",
   "closed_threads": {
     "m0_implementation_engineer": "019f0a11-0493-7fe0-89e9-a21d3b680a67",
     "m0_qa_reviewer": "019f0a2a-70f9-77e0-8f7d-6091b879545a",
@@ -59,9 +59,12 @@
     "m6_release_readiness_smoke_qa_reviewer": "019f0e8c-c067-7d33-96ed-675b3c497125"
   },
   "active_threads": [],
-  "next_ready_tasks": [],
-  "recommended_next_task": null,
+  "next_ready_tasks": [
+    "M7-LOCAL-ADMIN-GATE-001"
+  ],
+  "recommended_next_task": "M7-LOCAL-ADMIN-GATE-001",
   "recent_handoffs": [
+    "project/messages/outbox/M7-PHASE0B-SCOPE-STATE-001__MSG-20260628-QA_REVIEWER.json",
     "project/messages/outbox/M6-RELEASE-READINESS-SMOKE-001__MSG-20260628-RELEASE_ENGINEER.json",
     "project/messages/outbox/M6-RELEASE-READINESS-SMOKE-001__MSG-20260628-SECURITY_REVIEWER.json",
     "project/messages/outbox/M6-RELEASE-READINESS-SMOKE-001__MSG-20260628-QA_REVIEWER.json"
@@ -119,8 +122,25 @@
     }
   ],
   "human_gate": {
-    "required": true,
-    "reason": "Phase 0 scope reconciliation is required. The original docs still list login/admin gate, Radar Task admin UI creation, real provider/deployment readiness, and public deployment items, while the accepted task graph and README intentionally keep this MVP local, single-admin/unauthenticated, mock-provider-first, and production auth/deployment/provider/CI/CD decisions human-gated."
+    "required": false,
+    "reason": null
   },
-  "next_prompt": "Ask the human to choose the next scope: accept the current local MVP as complete, or approve a new autonomous backfill scope such as local admin gate, Radar Task admin UI, real provider adapter setup, or public deployment preparation."
+  "approved_scope": {
+    "name": "Phase 0B local backfill",
+    "accepted_at": "2026-06-28T19:20:39Z",
+    "allowed": [
+      "Record Phase 0A as complete.",
+      "Implement a local-only single-admin password gate and session cookie.",
+      "Protect /dashboard, /radar-tasks, and /opportunities.",
+      "Implement protected Radar Task list/create/detail/edit/delete UI and mock Run Scan control.",
+      "Add final local smoke/docs for the approved Phase 0B flow."
+    ],
+    "human_gated": [
+      "Production auth/session policy.",
+      "Public deployment, CI/CD, DNS, store listing, or commercial release.",
+      "Paid provider setup, real external accounts, budgets, or real secrets.",
+      "Multi-user ownership, billing, telemetry, cron, or email."
+    ]
+  },
+  "next_prompt": "Continue autonomous Phase 0B local backfill. Execute M7-LOCAL-ADMIN-GATE-001, then M7-RADAR-TASK-UI-001, then M7-PHASE0B-RELEASE-SMOKE-001 unless a real blocker or human gate appears."
 }

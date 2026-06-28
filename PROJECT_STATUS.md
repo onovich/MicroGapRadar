@@ -1,14 +1,19 @@
 # Project Status
 
-Updated at: 2026-06-28T14:32:00Z
+Updated at: 2026-06-28T19:20:39Z
 
 ## Current Milestone
 
-`M6`: local 48-hour MVP release-readiness is integrated.
+`M7`: Phase 0B local backfill is in progress.
 
 ## Current Outcome
 
-The autonomous JustGoal task graph through local release-readiness is complete and pushed.
+The autonomous JustGoal task graph through Phase 0A local release-readiness is complete and pushed. On 2026-06-29 Asia/Shanghai, the human accepted the recommended scope split:
+
+- Phase 0A is accepted as the completed local MVP baseline.
+- Phase 0B is approved for autonomous local-only backfill: simple single-admin gate plus protected Radar Task management UI.
+- The project remains mock-provider-first and local-only by default.
+- Real provider accounts, paid API usage, production auth, public deployment, CI/CD, DNS, commercial release, and real secrets remain human-gated.
 
 - M0 scaffold, M1 database/schema/seed, M1 Radar Task API, M3 provider/LLM/agent foundation, M4 scoring/run-scan API, M5 dashboard/opportunity detail/status, and M6 MVP Spec generation are integrated.
 - `M6-MVP-SPEC-GENERATION-001` is closed and pushed at `5fcc9b0` plus close/queue state at `4e2d407`.
@@ -25,18 +30,20 @@ Latest validation evidence:
 - `node .agents/skills/just-goal/scripts/taskctl.mjs validate --repo-root .`: 14 task files valid.
 - `git diff --check`: passed with LF-to-CRLF warnings only.
 
+## Phase 0B Scope
+
+The previous Phase 0 scope reconciliation gate is resolved for the following autonomous scope only:
+
+1. Record Phase 0A as complete and Phase 0B as approved. Done in `M7-PHASE0B-SCOPE-STATE-001`.
+2. Add a local-only single-admin password gate with session cookie and protected admin routes.
+3. Add protected Radar Task list/create/detail/edit/delete UI and mock Run Scan control using existing local APIs.
+4. Add final Phase 0B local smoke/docs proving login, Radar Task creation, mock scan, opportunity detail, and MVP Spec readiness.
+
+Phase 0B must not silently add production auth, multi-user ownership, public deployment, paid provider usage, CI/CD, DNS, real accounts, billing, telemetry, cron, email, or real secrets.
+
 ## Human Gate
 
-Human decision is required before expanding beyond the accepted local MVP task graph.
-
-Reason: the original planning docs still list Phase 0 items such as login/admin gate, creating Radar Tasks through an admin UI, real provider or deployment readiness, and public deployment. The accepted task graph and README now deliberately keep the current MVP local, single-admin/unauthenticated, mock-provider-first, and public deployment/auth/provider/CI/CD decisions human-gated.
-
-Decision needed:
-
-1. Accept the current local MVP as the completed autonomous scope.
-2. Or approve a next autonomous backfill scope, such as local admin gate, Radar Task admin UI, real provider adapter setup, or public deployment preparation.
-
-Until that decision is made, JustGoal should stop rather than silently changing auth/session, public deployment, paid provider, CI/CD, DNS, commercial release, or product-scope policy.
+No human gate is currently active inside the approved Phase 0B local-only scope. JustGoal should stop again if work would require production auth/session policy, public deployment, paid provider setup, CI/CD, DNS, commercial release, external accounts, real secrets, destructive data migration, or any scope beyond the Phase 0B local backfill above.
 
 ## Product Summary
 
@@ -55,4 +62,4 @@ MicroGap Radar is a self-use-first AI microtool opportunity radar. The local MVP
 
 ## Active Task
 
-None. The current autonomous loop is stopped at the human gate above.
+`M7-LOCAL-ADMIN-GATE-001`: implement the local-only single-admin password gate and protected admin routes.

@@ -1,0 +1,76 @@
+{
+  "id": "M7-LOCAL-ADMIN-GATE-001",
+  "summary": "Add a local-only single-admin password gate with session cookie and protected admin routes.",
+  "milestone": "M7",
+  "status": "READY",
+  "owner_role": "implementation_engineer",
+  "reviewer_role": "security_reviewer",
+  "required_reviewers": [
+    "qa_reviewer"
+  ],
+  "risk_level": "R3",
+  "dependencies": [
+    "M7-PHASE0B-SCOPE-STATE-001"
+  ],
+  "scope": {
+    "allowed_paths": [
+      "app/login/**",
+      "app/api/auth/**",
+      "app/page.tsx",
+      "middleware.ts",
+      "lib/auth.ts",
+      "lib/env.ts",
+      "tests/**",
+      "README.md",
+      ".env.example",
+      "PROJECT_STATUS.md",
+      "project/goal-mode-state.json",
+      "project/messages/outbox/**",
+      "project/tasks/active/M7-LOCAL-ADMIN-GATE-001.json",
+      "project/tasks/thread-registry.json"
+    ],
+    "forbidden_paths": [
+      ".git/**",
+      ".codex/**",
+      ".agents/**",
+      "skills/**",
+      "docs/**",
+      "mock-data/**",
+      "services/**",
+      "agents/**",
+      "prisma/**",
+      "package.json",
+      "package-lock.json"
+    ]
+  },
+  "acceptance_criteria": [
+    "A /login page exists for the local single-admin workflow and does not create users, accounts, signup, OAuth, email login, or multi-tenant ownership.",
+    "A server-side auth helper validates a local admin password from environment configuration and issues/verifies a session cookie without exposing secrets to client bundles or logs.",
+    "Middleware protects /dashboard, /radar-tasks, and /opportunities and redirects unauthenticated requests to /login while allowing login/auth API routes and static assets.",
+    "Logout is available and clears the local session cookie.",
+    "README and .env.example document the local-only admin variables and keep production auth/deployment decisions human-gated.",
+    "Focused automated tests cover password validation, session signing/verification or equivalent cookie behavior, middleware route classification, and no-secret defaults.",
+    "npm test and npm run build pass."
+  ],
+  "required_tests": [
+    "npm test",
+    "npm run build",
+    "node .agents/skills/just-goal/scripts/taskctl.mjs validate --repo-root ."
+  ],
+  "branch_or_worktree": "main",
+  "threads": {},
+  "route_to": "implementation_engineer",
+  "notes": [
+    "Derived from docs/11_development_plan.md M2 and the 2026-06-29 human-approved Phase 0B backfill scope.",
+    "Security review is the primary reviewer because this task introduces session cookies and route protection.",
+    "Keep this local-only and reversible. Do not introduce external auth providers or new dependencies."
+  ],
+  "non_goals": [
+    "No production-grade multi-user auth, OAuth, email login, signup, account management, team permissions, or ownership checks.",
+    "No public deployment, DNS, CI/CD, paid provider, real account, billing, telemetry, cron, or email work.",
+    "No Prisma schema migration, seed change, provider change, scan orchestration change, scoring change, or package dependency change.",
+    "No Radar Task CRUD UI beyond links needed for protected navigation."
+  ],
+  "created_at": "2026-06-29T00:00:00Z",
+  "updated_at": "2026-06-28T19:30:07.377Z"
+}

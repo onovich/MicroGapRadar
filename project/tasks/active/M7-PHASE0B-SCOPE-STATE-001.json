@@ -1,0 +1,69 @@
+{
+  "id": "M7-PHASE0B-SCOPE-STATE-001",
+  "summary": "Record the approved Phase 0A/0B scope split and clear the prior human gate for local-only backfill execution.",
+  "milestone": "M7",
+  "status": "CLOSED",
+  "owner_role": "lead_orchestrator",
+  "reviewer_role": "qa_reviewer",
+  "risk_level": "R1",
+  "dependencies": [
+    "M6-RELEASE-READINESS-SMOKE-001"
+  ],
+  "scope": {
+    "allowed_paths": [
+      "PROJECT_STATUS.md",
+      "project/goal-mode-state.json",
+      "project/messages/outbox/GOAL-MODE-CONTINUATION.json",
+      "project/tasks/active/M7-PHASE0B-SCOPE-STATE-001.json",
+      "project/tasks/active/M7-LOCAL-ADMIN-GATE-001.json",
+      "project/tasks/active/M7-RADAR-TASK-UI-001.json",
+      "project/tasks/active/M7-PHASE0B-RELEASE-SMOKE-001.json",
+      "project/tasks/thread-registry.json"
+    ],
+    "forbidden_paths": [
+      ".git/**",
+      ".codex/**",
+      ".agents/**",
+      "skills/**",
+      "docs/**",
+      "app/**",
+      "components/**",
+      "lib/**",
+      "services/**",
+      "agents/**",
+      "prisma/**",
+      "tests/**",
+      "package.json",
+      "package-lock.json",
+      "README.md",
+      ".env.example"
+    ]
+  },
+  "acceptance_criteria": [
+    "PROJECT_STATUS records that the human accepted the current local MVP as Phase 0A complete and approved Phase 0B local-only backfill.",
+    "The prior human gate is cleared only for the approved local admin gate and Radar Task UI backfill scope.",
+    "Production auth, public deployment, paid providers, CI/CD, DNS, commercial release, and real account decisions remain human-gated.",
+    "Goal-mode state points at M7/Phase 0B and lists the newly approved ready tasks.",
+    "Follow-up M7 task packets and thread registry state are consistent with dependency order.",
+    "No product code, runtime behavior, dependencies, or deployment configuration is changed."
+  ],
+  "required_tests": [
+    "node .agents/skills/just-goal/scripts/taskctl.mjs validate --repo-root ."
+  ],
+  "branch_or_worktree": "main",
+  "threads": {},
+  "route_to": "lead_orchestrator",
+  "notes": [
+    "Derived from the human decision on 2026-06-29 approving the recommended scope split: Phase 0A complete, Phase 0B local admin gate plus Radar Task UI, mock-provider/default local-only policy retained.",
+    "This is a short reconciliation task so the autonomous loop can safely continue without silently crossing the previous human gate.",
+    "Pauli requested changes because M7-LOCAL-ADMIN-GATE-001 had briefly been marked IN_PROGRESS before this prerequisite closed and because the task packet did not list follow-up task packets/thread registry as allowed paths. The task was moved back to READY, the UI prereview thread was detached from the DRAFT task, admin-gate product edits were stashed out of this reconciliation diff, and this packet now lists the coordination files it owns."
+  ],
+  "non_goals": [
+    "No auth/session implementation.",
+    "No Radar Task UI implementation.",
+    "No real provider, deployment, CI/CD, DNS, public release, or paid service setup.",
+    "No docs rewrite beyond current project status and goal-mode state."
+  ],
+  "created_at": "2026-06-29T00:00:00Z",
+  "updated_at": "2026-06-28T19:37:14.929Z"
+}

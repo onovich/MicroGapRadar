@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-06-28T14:29:24.537Z",
+  "updated_at": "2026-06-28T19:36:49.617Z",
   "threads": {
     "019f0a11-0493-7fe0-89e9-a21d3b680a67": {
       "role": "implementation_engineer",
@@ -313,6 +313,30 @@
       "task_id": "M6-RELEASE-READINESS-SMOKE-001",
       "status": "closed",
       "updated_at": "2026-06-28T14:29:24.537Z"
+    },
+    "019f0fae-a889-7383-8d22-3e343ae5d97d": {
+      "role": "security_reviewer",
+      "task_id": "M7-LOCAL-ADMIN-GATE-001",
+      "status": "closed",
+      "updated_at": "2026-06-28T19:30:07.381Z"
+    },
+    "019f0fae-aaed-77f1-9885-aefaa7fb513f": {
+      "role": "systems_architect",
+      "task_id": "M7-RADAR-TASK-UI-001",
+      "status": "closed",
+      "updated_at": "2026-06-28T19:28:40.351Z"
+    },
+    "019f0fae-88c8-7311-a4d7-a2db85e85c06": {
+      "role": "qa_reviewer",
+      "task_id": "M7-PHASE0B-SCOPE-STATE-001",
+      "status": "closed",
+      "updated_at": "2026-06-28T19:33:00Z"
+    },
+    "019f0fb7-9f1a-7550-80ff-6bad8777676c": {
+      "role": "qa_reviewer",
+      "task_id": "M7-PHASE0B-SCOPE-STATE-001",
+      "status": "closed",
+      "updated_at": "2026-06-28T19:36:49.617Z"
     }
   }
 }

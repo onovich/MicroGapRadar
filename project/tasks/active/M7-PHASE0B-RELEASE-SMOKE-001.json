@@ -1,0 +1,71 @@
+{
+  "id": "M7-PHASE0B-RELEASE-SMOKE-001",
+  "summary": "Add Phase 0B local release smoke and documentation proving login, Radar Task UI, mock scan, opportunity, and MVP Spec flow.",
+  "milestone": "M7",
+  "status": "DRAFT",
+  "owner_role": "release_engineer",
+  "reviewer_role": "qa_reviewer",
+  "required_reviewers": [
+    "security_reviewer"
+  ],
+  "risk_level": "R2",
+  "dependencies": [
+    "M7-RADAR-TASK-UI-001"
+  ],
+  "scope": {
+    "allowed_paths": [
+      "tests/**",
+      "README.md",
+      ".env.example",
+      "PROJECT_STATUS.md",
+      "project/goal-mode-state.json",
+      "project/messages/outbox/**",
+      "project/tasks/active/M7-PHASE0B-RELEASE-SMOKE-001.json",
+      "project/tasks/thread-registry.json"
+    ],
+    "forbidden_paths": [
+      ".git/**",
+      ".codex/**",
+      ".agents/**",
+      "skills/**",
+      "docs/**",
+      "mock-data/**",
+      "app/**",
+      "components/**",
+      "lib/**",
+      "services/**",
+      "agents/**",
+      "prisma/**",
+      "package.json",
+      "package-lock.json"
+    ]
+  },
+  "acceptance_criteria": [
+    "A deterministic no-network Phase 0B smoke path covers local admin auth helpers, Radar Task create/update/delete/read model behavior, mock scan request shape, existing opportunity flow readiness, and MVP Spec readiness.",
+    "README documents the Phase 0A/0B split, local-only admin gate, Radar Task UI workflow, fresh-checkout validation, and human-gated provider/deployment boundaries.",
+    ".env.example documents only placeholder local admin variables and no real secrets.",
+    "PROJECT_STATUS and goal-mode state record Phase 0B completion and no active machine-creatable tasks in the approved scope.",
+    "npm test, npm run build, taskctl validate, git diff --check, and the autonomous stop gate pass."
+  ],
+  "required_tests": [
+    "npx tsx --test tests/*.test.ts",
+    "npm test",
+    "npm run build",
+    "node .agents/skills/just-goal/scripts/taskctl.mjs validate --repo-root .",
+    "git diff --check",
+    "node .agents/skills/just-goal/scripts/verify-autonomous-stop.mjs"
+  ],
+  "branch_or_worktree": "main",
+  "threads": {},
+  "route_to": "release_engineer",
+  "notes": [
+    "This is the closing task for the approved Phase 0B autonomous scope.",
+    "If final stop gate blocks because additional approved work is machine-visible, create the next smallest task instead of stopping."
+  ],
+  "non_goals": [
+    "No actual public deployment, CI/CD, DNS, store listing, paid provider, account creation, real secret, production auth, ownership model, billing, telemetry, cron, or email sending.",
+    "No runtime product code changes unless a release smoke defect is found and separately tasked."
+  ],
+  "created_at": "2026-06-29T00:00:00Z",
+  "updated_at": "2026-06-29T00:00:00Z"
+}
