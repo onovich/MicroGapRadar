@@ -135,6 +135,39 @@ The required build check is:
 npm run build
 ```
 
+## Opportunity Analysis Agent
+
+The M3 Opportunity Analysis Agent slice lives under `agents/` and turns a Radar Task, keyword candidate, SERP weakness analysis, and SERP results into a structured opportunity brief.
+
+- `analyzeOpportunity()` is the stable public entry point.
+- `OpportunityAnalysisInputSchema`, `OpportunityAnalysisOutputSchema`, and nested schemas validate the agent contract with Zod.
+- `buildOpportunityAnalysisMessages()` centralizes the prompt aligned with Agent 3 in `docs/08_ai_agents_and_prompts.md`.
+- When an injected `LlmClient` is provided, the agent calls `safeJsonCompletion()` and validates JSON before returning it.
+- When no client is provided, or LLM output is malformed or rejected after repair, the agent uses a deterministic heuristic fallback.
+
+The output includes `title`, `summary`, `targetUser`, `searchIntent`, `recommendedToolType`, `toolConcept`, `monetization`, `risk`, `buildComplexity`, `scoreHints`, and `killCriteria`. Score hints are normalized and clamped to 0-100.
+
+Risk guardrails are enforced after LLM or fallback output:
+
+- No promises about revenue, search rankings, legal compliance, medical outcomes, financial outcomes, or assured business results.
+- Legal, tax, medical, and financial topics are constrained to checklist or self-assessment framing, or marked high/excluded risk.
+- Adult, gambling, gray-market, and harmful topics are excluded.
+- Configured `excludedTopics` from the Radar Task are honored.
+
+This slice does not read `process.env`, load secrets, call the network, write to the database, create scoring-engine totals, or persist opportunities. Tests use fake LLM clients only.
+
+Run the focused automated coverage with:
+
+```bash
+npm test
+```
+
+The required build check is:
+
+```bash
+npm run build
+```
+
 ## Local Radar Task API
 
 The MVP exposes a single-admin, unauthenticated local API slice for Radar Task management. It is intended for local development and later admin UI integration; it does not add sessions, public auth, scans, SERP providers, or LLM calls.

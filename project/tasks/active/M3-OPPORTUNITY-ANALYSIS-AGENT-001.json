@@ -2,7 +2,7 @@
   "id": "M3-OPPORTUNITY-ANALYSIS-AGENT-001",
   "summary": "Add the Opportunity Analysis Agent with typed schemas, docs-aligned prompt construction, injected safe JSON completion, deterministic heuristic fallback, and risk-policy guardrails.",
   "milestone": "M3",
-  "status": "IN_PROGRESS",
+  "status": "ACCEPTED",
   "owner_role": "implementation_engineer",
   "reviewer_role": "qa_reviewer",
   "required_reviewers": [
@@ -54,7 +54,10 @@
   ],
   "branch_or_worktree": "main",
   "threads": {
-    "implementation_engineer": "019f0d03-720b-7d93-a8d9-e3537087239b"
+    "implementation_engineer": "019f0d03-720b-7d93-a8d9-e3537087239b",
+    "systems_architect": "019f0d15-83a8-7b50-a149-8273ddfbe116",
+    "domain_designer": "019f0d15-a618-7da0-84d7-0334b0ffcbcc",
+    "qa_reviewer": "019f0d45-b9c3-7002-86e0-826b5fb655b5"
   },
   "route_to": "implementation_engineer",
   "notes": [
@@ -72,5 +75,5 @@
     "No changes to services/llm, services/serp, or existing SERP Analysis Agent contracts unless required for type-only imports from public exports."
   ],
   "created_at": "2026-06-28T06:55:30Z",
-  "updated_at": "2026-06-28T06:56:11.171Z"
+  "updated_at": "2026-06-28T08:14:51.606Z"
 }
