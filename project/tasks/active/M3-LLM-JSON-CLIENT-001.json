@@ -2,7 +2,7 @@
   "id": "M3-LLM-JSON-CLIENT-001",
   "summary": "Add an OpenAI-compatible LLM client boundary plus safe JSON parse, Zod validation, and one-step repair flow.",
   "milestone": "M3",
-  "status": "IN_PROGRESS",
+  "status": "ACCEPTED",
   "owner_role": "implementation_engineer",
   "reviewer_role": "qa_reviewer",
   "required_reviewers": [
@@ -53,7 +53,10 @@
   ],
   "branch_or_worktree": "main",
   "threads": {
-    "implementation_engineer": "019f0ca3-cd06-7100-aedd-34e155e298c2"
+    "implementation_engineer": "019f0ca3-cd06-7100-aedd-34e155e298c2",
+    "security_reviewer": "019f0cad-88bf-7252-9512-37f5923b8935",
+    "systems_architect": "019f0cad-8090-7672-a1f4-3fb50a67cd2a",
+    "qa_reviewer": "019f0cb9-40ee-7f20-9aa9-8c384b8812a9"
   },
   "route_to": "implementation_engineer",
   "notes": [
@@ -71,5 +74,5 @@
     "No changes to the existing SERP provider contract."
   ],
   "created_at": "2026-06-28T05:05:21Z",
-  "updated_at": "2026-06-28T05:11:44.446Z"
+  "updated_at": "2026-06-28T05:41:53.519Z"
 }

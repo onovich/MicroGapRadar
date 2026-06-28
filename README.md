@@ -67,6 +67,26 @@ The mock provider does not read environment variables, secrets, paid APIs, or ne
 npm test
 ```
 
+## LLM JSON Utility
+
+The M3 LLM utility slice lives under `services/llm/` and is intentionally limited to reusable boundaries:
+
+- `LlmClient` defines typed chat input, assistant output, token usage, and structured error results.
+- `OpenAICompatibleClient` accepts explicit `baseUrl`, `apiKey`, `model`, and optional `fetchImplementation` configuration. It fails fast when required configuration is blank and does not read `process.env` directly.
+- `safeJsonCompletion()` asks an injected `LlmClient` for assistant text, extracts only plain top-level JSON or a single fenced JSON block, validates with a caller-provided Zod schema, and makes at most one repair completion after parse or validation failure.
+
+Tests for this slice use fake clients and fake fetch transports only. They do not load secrets, read environment variables, or call the network. Run the focused automated coverage with:
+
+```bash
+npm test
+```
+
+The required build check is:
+
+```bash
+npm run build
+```
+
 ## Local Radar Task API
 
 The MVP exposes a single-admin, unauthenticated local API slice for Radar Task management. It is intended for local development and later admin UI integration; it does not add sessions, public auth, scans, SERP providers, or LLM calls.

@@ -1,0 +1,74 @@
+{
+  "message_id": "MSG-20260628-SECURITY_REVIEWER-M3-LLM-JSON-CLIENT-001",
+  "task_id": "M3-LLM-JSON-CLIENT-001",
+  "from_role": "security_reviewer",
+  "status": "REQUEST_CHANGES",
+  "summary": "Security review found one required change: the OpenAI-compatible adapter returns the raw provider HTTP error response body in structured error details, which can leak credentials or request material if a provider or proxy echoes them.",
+  "artifacts": [
+    "PROJECT_STATUS.md",
+    "README.md",
+    "docs/08_ai_agents_and_prompts.md",
+    "docs/11_development_plan.md",
+    "project/tasks/active/M3-LLM-JSON-CLIENT-001.json",
+    "project/messages/outbox/M3-LLM-JSON-CLIENT-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+    "services/llm/types.ts",
+    "services/llm/openai-compatible-client.ts",
+    "services/llm/json-output.ts",
+    "services/llm/index.ts",
+    "tests/llm-json-client.test.ts",
+    "package.json"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "decisions": [
+    "Requested changes because raw provider HTTP error response text is returned through the reusable adapter error surface.",
+    "Accepted the explicit-configuration boundary, absence of process.env reads in services/llm, injected fake-fetch testing, and strict prose-wrapped JSON rejection as security-positive implementation choices."
+  ],
+  "findings": [
+    {
+      "severity": "medium",
+      "file": "services/llm/openai-compatible-client.ts",
+      "line": 84,
+      "title": "Raw provider HTTP error body is returned to callers",
+      "description": "The non-OK response path stores await safeReadText(response) in LlmCompletionError.details. OpenAI-compatible providers, gateways, or local proxies can include echoed API keys, authorization failures, prompt snippets, request bodies, or upstream diagnostics in error text. Because this boundary will later run server-side with real credentials and callers may log or forward structured errors, the adapter should not expose raw provider error bodies.",
+      "requested_change": "Return only sanitized, predictable HTTP error metadata such as status and a generic message, or add a narrowly scoped redaction/sanitization function with tests proving fake secrets and request material are not exposed."
+    }
+  ],
+  "checks": {
+    "no_process_env_reads_in_llm_slice": true,
+    "no_env_file_edits_observed": true,
+    "no_real_credentials_observed": true,
+    "tests_use_fake_llm_and_fake_fetch": true,
+    "json_extraction_rejects_prose_wrapped_output": true,
+    "no_package_dependency_changes_observed": true
+  },
+  "risks": [
+    "Until fixed, a future server-only caller could log or forward LlmCompletionError.details containing provider/proxy error text with echoed credentials or request material.",
+    "The current build emits existing @next/swc-win32-x64-msvc warnings despite successful completion."
+  ],
+  "tests_run": [
+    {
+      "command": "node .agents\\skills\\just-goal\\scripts\\validate-handoff.mjs project\\messages\\outbox\\M3-LLM-JSON-CLIENT-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+      "exit_code": 0,
+      "result": "Passed: implementation handoff JSON is valid."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "Passed: 10 tests across 4 suites."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "result": "Passed: Next.js production build completed; existing @next/swc-win32-x64-msvc invalid Win32 application warnings were emitted but did not fail the build."
+    }
+  ],
+  "requested_changes": [
+    "Remove or sanitize raw HTTP provider error bodies from LlmCompletionError.details in the OpenAI-compatible adapter.",
+    "Add a focused fake-fetch test for a non-OK provider response whose body contains a fake secret, and assert the returned structured error does not expose that body or secret."
+  ],
+  "blockers": [],
+  "route_to": "implementation_engineer",
+  "requested_action": "Please address the HTTP error detail leak risk, rerun npm test and npm run build, then return the task for security review.",
+  "created_at": "2026-06-28T05:26:57.352Z"
+}

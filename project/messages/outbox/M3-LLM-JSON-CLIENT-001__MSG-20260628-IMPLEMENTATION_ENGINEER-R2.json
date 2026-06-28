@@ -1,0 +1,42 @@
+{
+  "message_id": "MSG-20260628-IMPLEMENTATION_ENGINEER-R2-M3-LLM-JSON-CLIENT-001",
+  "task_id": "M3-LLM-JSON-CLIENT-001",
+  "from_role": "implementation_engineer",
+  "status": "REVIEW",
+  "summary": "Addressed security review feedback by removing raw provider HTTP error-body exposure from OpenAICompatibleClient and adding a regression test proving fake provider secrets/request material are not returned in structured HTTP errors.",
+  "artifacts": [
+    "services/llm/openai-compatible-client.ts",
+    "tests/llm-json-client.test.ts"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "tests_run": [
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "Passed: 11 tests across 4 suites, including the new non-OK fake-fetch provider body non-exposure regression."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "result": "Passed: Next.js production build completed. Build emitted the existing @next/swc-win32-x64-msvc invalid Win32 application warnings but exited successfully."
+    }
+  ],
+  "security_fix": {
+    "finding": "OpenAICompatibleClient HTTP error path returned raw provider error body in LlmCompletionError.details.",
+    "resolution": "HTTP errors now return only predictable metadata: code http_error, generic message, status, and details.providerError=true. The raw response body is not read or exposed.",
+    "regression_test": "tests/llm-json-client.test.ts verifies a 401 fake provider body containing sk-test-secret-do-not-leak and request material is absent from the serialized structured error."
+  },
+  "decisions": [
+    "Did not attempt redaction of provider bodies; removed body exposure entirely to avoid partial sanitization risk.",
+    "Kept status code available for caller handling while making details deterministic and non-sensitive."
+  ],
+  "risks": [
+    "Provider-specific HTTP error diagnostics are intentionally no longer surfaced through the client result; future debugging should use controlled server-side logging with explicit redaction if needed.",
+    "Next build still reports the pre-existing SWC Windows binary warning despite successful exit."
+  ],
+  "blockers": [],
+  "route_to": "security_reviewer",
+  "requested_action": "Re-review the HTTP error handling path and regression test for acceptance.",
+  "created_at": "2026-06-28T05:30:03.7335174Z"
+}
