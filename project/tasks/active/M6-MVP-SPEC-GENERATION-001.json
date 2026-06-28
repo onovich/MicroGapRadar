@@ -1,0 +1,89 @@
+{
+  "id": "M6-MVP-SPEC-GENERATION-001",
+  "summary": "Add the MVP Spec generation slice with a Codex-ready Markdown agent, persisted MvpSpec API, and copyable detail-page UI.",
+  "milestone": "M6",
+  "status": "READY",
+  "owner_role": "implementation_engineer",
+  "reviewer_role": "qa_reviewer",
+  "risk_level": "R3",
+  "dependencies": [
+    "M5-OPPORTUNITY-DETAIL-STATUS-001"
+  ],
+  "scope": {
+    "allowed_paths": [
+      "agents/mvp-spec-agent.ts",
+      "agents/index.ts",
+      "app/api/opportunities/[id]/mvp-spec/**",
+      "app/opportunities/[id]/**",
+      "components/**",
+      "lib/opportunities.ts",
+      "tests/**",
+      "README.md"
+    ],
+    "forbidden_paths": [
+      ".git/**",
+      ".codex/**",
+      ".agents/**",
+      "project/**",
+      "skills/**",
+      "docs/**",
+      "mock-data/**",
+      "services/**",
+      "prisma/**",
+      "package.json",
+      "package-lock.json",
+      "lib/db.ts",
+      "lib/env.ts",
+      "lib/radar-tasks.ts",
+      "lib/scoring.ts",
+      "lib/schemas.ts",
+      "app/api/scans/**",
+      "app/api/radar-tasks/**",
+      "app/api/opportunities/[id]/route.ts",
+      "app/api/opportunities/[id]/_api.ts",
+      "app/opportunities/page.tsx",
+      "app/dashboard/**",
+      "app/page.tsx",
+      "app/layout.tsx",
+      "app/globals.css"
+    ]
+  },
+  "acceptance_criteria": [
+    "An MVP Spec Agent exists at agents/mvp-spec-agent.ts and turns a persisted opportunity detail view model into deterministic, Codex-ready Markdown containing page structure, form fields, API routes, monetization entry points, risk notes, acceptance criteria, and kill criteria.",
+    "The agent supports injected LLM/safe-JSON dependencies or deterministic local generation without requiring secrets, provider setup, network access, package changes, or environment reads in this slice.",
+    "A POST /api/opportunities/[id]/mvp-spec route exists and loads one persisted Opportunity, generates Markdown, saves it to the existing MvpSpec table, and returns a safe success envelope with the persisted Markdown and timestamps.",
+    "The API safely handles invalid/missing opportunity ids, agent validation failures, and unexpected errors without leaking provider errors, stack traces, secrets, raw prompt payloads, or internal database details.",
+    "The /opportunities/[id] detail UI exposes a restrained Generate MVP Spec and Copy Markdown experience. It shows loading, error, empty, and already-generated states, and copy behavior works from the generated Markdown without adding unrelated status or scan behavior.",
+    "Reopening an opportunity detail can display an already-generated persisted MVP Spec when one exists.",
+    "Focused automated tests cover agent Markdown content, persistence/upsert behavior, API validation and sanitized errors, persisted spec serialization, copy panel rendering where practical, and non-goal boundaries.",
+    "README documents the MVP Spec slice, local data dependency, validation commands, local single-admin assumption, and explicit non-goals.",
+    "No Prisma schema migration, package dependency, real provider setup, env secret loading, scan orchestration, scoring formula change, auth/session system, deployment, GitHub Actions, status workflow expansion, or public release behavior is implemented."
+  ],
+  "required_tests": [
+    "npm test",
+    "npm run build"
+  ],
+  "branch_or_worktree": "main",
+  "threads": {},
+  "route_to": "implementation_engineer",
+  "notes": [
+    "Derived from docs/09_codex_implementation_tasks.md Task 14, docs/11_development_plan.md M6, docs/05_ui_ux_plan.md Copy MVP Spec, and docs/10_acceptance_criteria_and_test_plan.md Flow 5.",
+    "The Prisma MvpSpec model already exists; this task must use it without schema or migration changes.",
+    "systems_architect is required because this adds an agent/API/persistence/UI boundary.",
+    "domain_designer is required because generated Markdown must be useful for Codex while preserving risk and monetization caveats.",
+    "security_reviewer is required because this route persists generated text and may later be connected to real model providers."
+  ],
+  "non_goals": [
+    "No Prisma schema changes, migrations, seed changes, package changes, real provider setup, LLM credential setup, env secret loading, auth/session, deployment, or GitHub Actions.",
+    "No scan orchestration changes, SERP provider changes, scoring formula changes, Radar Task CRUD changes, status workflow expansion, discard reason workflow, built-performance tracking, or recommendation-learning loop.",
+    "No public sharing, billing, telemetry, multi-user ownership, irreversible deletes, external file export, or deployment policy.",
+    "No broad rewrite of Opportunity Detail, Dashboard, Opportunity List, existing status API, or existing scan APIs beyond the minimal hooks needed to display/generate/copy MVP Spec."
+  ],
+  "created_at": "2026-06-28T13:20:00Z",
+  "updated_at": "2026-06-28T13:20:00Z",
+  "required_reviewers": [
+    "systems_architect",
+    "domain_designer",
+    "security_reviewer"
+  ]
+}

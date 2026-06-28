@@ -62,7 +62,12 @@
     "m5_dashboard_opportunity_list_implementation_engineer": "019f0e26-be4e-7ad2-b00f-d536cc0f02a1",
     "m5_dashboard_opportunity_list_systems_architect": "019f0e26-d257-78a3-8d78-b4f594c511a3",
     "m5_dashboard_opportunity_list_domain_designer": "019f0e26-e716-78c0-b1fc-b1196006cae1",
-    "m5_dashboard_opportunity_list_qa_reviewer": "019f0e26-ee4f-7973-967a-3c934f7bd3bb"
+    "m5_dashboard_opportunity_list_qa_reviewer": "019f0e26-ee4f-7973-967a-3c934f7bd3bb",
+    "m5_opportunity_detail_status_implementation_engineer": "019f0e47-c4c4-73c3-9fdf-dca48e487bb0",
+    "m5_opportunity_detail_status_systems_architect": "019f0e47-d8d3-7bc1-9c74-47578dccb2cd",
+    "m5_opportunity_detail_status_domain_designer": "019f0e47-ed90-7562-8bcb-3a3fd464ef1f",
+    "m5_opportunity_detail_status_security_reviewer": "019f0e48-0286-7c83-a3aa-05a6b158fb57",
+    "m5_opportunity_detail_status_qa_reviewer": "019f0e48-0a02-7b42-9430-e65e13a5849f"
   },
   "roles": {
     "lead_orchestrator": {
@@ -73,38 +78,28 @@
     "implementation_engineer": {
       "model": "gpt-5.5",
       "effort": "high",
-      "status": "active",
-      "thread_id": "019f0e47-c4c4-73c3-9fdf-dca48e487bb0",
-      "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001"
+      "status": "idle"
     },
     "systems_architect": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "active",
-      "thread_id": "019f0e47-d8d3-7bc1-9c74-47578dccb2cd",
-      "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001"
+      "status": "idle"
     },
     "domain_designer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "active",
-      "thread_id": "019f0e47-ed90-7562-8bcb-3a3fd464ef1f",
-      "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001"
+      "status": "idle"
     },
     "qa_reviewer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "active",
-      "thread_id": "019f0e48-0a02-7b42-9430-e65e13a5849f",
-      "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001"
+      "status": "idle"
     },
     "security_reviewer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "active",
-      "thread_id": "019f0e48-0286-7c83-a3aa-05a6b158fb57",
-      "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001"
+      "status": "idle"
     }
   },
-  "last_updated_at": "2026-06-28T13:00:00Z"
+  "last_updated_at": "2026-06-28T13:20:00Z"
 }

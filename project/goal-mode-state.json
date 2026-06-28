@@ -1,47 +1,18 @@
 {
   "version": 1,
   "enabled": true,
-  "current_milestone": "M5",
-  "current_task": "M5-OPPORTUNITY-DETAIL-STATUS-001",
-  "active_threads": [
-    {
-      "role": "implementation_engineer",
-      "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001",
-      "thread_id": "019f0e47-c4c4-73c3-9fdf-dca48e487bb0",
-      "status": "active"
-    },
-    {
-      "role": "systems_architect",
-      "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001",
-      "thread_id": "019f0e47-d8d3-7bc1-9c74-47578dccb2cd",
-      "status": "active"
-    },
-    {
-      "role": "domain_designer",
-      "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001",
-      "thread_id": "019f0e47-ed90-7562-8bcb-3a3fd464ef1f",
-      "status": "active"
-    },
-    {
-      "role": "security_reviewer",
-      "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001",
-      "thread_id": "019f0e48-0286-7c83-a3aa-05a6b158fb57",
-      "status": "active"
-    },
-    {
-      "role": "qa_reviewer",
-      "task_id": "M5-OPPORTUNITY-DETAIL-STATUS-001",
-      "thread_id": "019f0e48-0a02-7b42-9430-e65e13a5849f",
-      "status": "active"
-    }
+  "current_milestone": "M6",
+  "current_task": "M6-MVP-SPEC-GENERATION-001",
+  "active_threads": [],
+  "last_integrated_task": "M5-OPPORTUNITY-DETAIL-STATUS-001",
+  "last_main_commit": "03b93ce",
+  "next_ready_tasks": [
+    "M6-MVP-SPEC-GENERATION-001"
   ],
-  "last_integrated_task": "M5-DASHBOARD-OPPORTUNITY-LIST-001",
-  "last_main_commit": "1ebe85f",
-  "next_ready_tasks": [],
   "unresolved_risks": [],
   "human_gate": {
     "required": false,
     "reason": null
   },
-  "last_updated_at": "2026-06-28T13:00:00Z"
+  "last_updated_at": "2026-06-28T13:20:00Z"
 }
