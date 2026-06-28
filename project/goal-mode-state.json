@@ -3,16 +3,21 @@
   "enabled": true,
   "current_milestone": "M3",
   "current_task": "M3-KEYWORD-EXPANSION-AGENT-001",
-  "active_threads": [],
+  "active_threads": [
+    {
+      "role": "implementation_engineer",
+      "task_id": "M3-KEYWORD-EXPANSION-AGENT-001",
+      "thread_id": "019f0cc5-8705-7c83-b19a-c85867608c06",
+      "status": "active"
+    }
+  ],
   "last_integrated_task": "M3-LLM-JSON-CLIENT-001",
   "last_main_commit": "b4c13084e6235fac66bca2277d58db2ff7cd1d39",
-  "next_ready_tasks": [
-    "M3-KEYWORD-EXPANSION-AGENT-001"
-  ],
+  "next_ready_tasks": [],
   "unresolved_risks": [],
   "human_gate": {
     "required": false,
     "reason": null
   },
-  "last_updated_at": "2026-06-28T05:45:22Z"
+  "last_updated_at": "2026-06-28T05:48:46Z"
 }
