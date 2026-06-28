@@ -1,0 +1,213 @@
+{
+  "message_id": "MSG-20260628-DOMAIN_DESIGNER",
+  "task_id": "M5-DASHBOARD-OPPORTUNITY-LIST-001",
+  "from_role": "domain_designer",
+  "status": "ACCEPT",
+  "summary": "Domain/product review accepts the M5 Dashboard and Opportunity List slice. The implemented pages preserve the intended 30-second operator decision surface: today's dashboard is scoped to same-day persisted opportunities/runs, Top 5 and list rows are score-sorted, score is presented as a 0-100 ranking aid rather than proof, risk is visible on every card and filterable, monetization cues are present without revenue promises, mock/local scan output is not overstated as market validation, and detail/status mutation non-goals are kept out of scope.",
+  "artifacts": [
+    "app/dashboard/page.tsx",
+    "app/opportunities/page.tsx",
+    "components/OpportunityCard.tsx",
+    "components/ScoreBadge.tsx",
+    "lib/opportunities.ts",
+    "tests/opportunities.test.ts",
+    "README.md",
+    "project/messages/outbox/M5-DASHBOARD-OPPORTUNITY-LIST-001__MSG-20260628-DOMAIN_DESIGNER.json"
+  ],
+  "artifacts_reviewed": [
+    "project/tasks/active/M5-DASHBOARD-OPPORTUNITY-LIST-001.json",
+    "project/messages/outbox/M5-DASHBOARD-OPPORTUNITY-LIST-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+    "docs/05_ui_ux_plan.md",
+    "docs/09_codex_implementation_tasks.md",
+    "docs/11_development_plan.md",
+    "README.md",
+    "app/dashboard/page.tsx",
+    "app/opportunities/page.tsx",
+    "components/OpportunityCard.tsx",
+    "components/ScoreBadge.tsx",
+    "lib/opportunities.ts",
+    "tests/opportunities.test.ts"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "acceptance_criteria_review": [
+    {
+      "criterion": "Dashboard Top 5 meaning and today's wording.",
+      "status": "PASS",
+      "notes": "getDashboardData scopes opportunities and runs to the local day via createdAt/startedAt bounds, and the dashboard labels the section as Today's Top 5. buildDashboardViewModel filters to the same local day, sorts by totalScore descending, and slices the first five.",
+      "evidence": [
+        "lib/opportunities.ts:193",
+        "lib/opportunities.ts:214",
+        "lib/opportunities.ts:307",
+        "lib/opportunities.ts:311",
+        "app/dashboard/page.tsx:44",
+        "app/dashboard/page.tsx:73"
+      ]
+    },
+    {
+      "criterion": "Opportunity list and filter semantics.",
+      "status": "PASS",
+      "notes": "The list defaults to score-sorted results and exposes query-string filters for radarTaskId/task, minScore, toolType, riskLevel/risk, and status. Invalid risk/status/minScore values are normalized away instead of creating misleading filter states.",
+      "evidence": [
+        "app/opportunities/page.tsx:55",
+        "app/opportunities/page.tsx:63",
+        "app/opportunities/page.tsx:105",
+        "app/opportunities/page.tsx:186",
+        "lib/opportunities.ts:263",
+        "lib/opportunities.ts:273",
+        "lib/opportunities.ts:480",
+        "lib/opportunities.ts:499",
+        "tests/opportunities.test.ts:58",
+        "tests/opportunities.test.ts:139"
+      ]
+    },
+    {
+      "criterion": "Score meaning.",
+      "status": "PASS",
+      "notes": "ScoreBadge clamps and labels scores as out of 100. The UI does not present score as demand validation, revenue probability, SEO certainty, or low-competition proof.",
+      "evidence": [
+        "components/ScoreBadge.tsx:39",
+        "components/ScoreBadge.tsx:44",
+        "components/ScoreBadge.tsx:51",
+        "tests/opportunities.test.ts:158"
+      ]
+    },
+    {
+      "criterion": "Risk visibility and high/excluded risk handling.",
+      "status": "PASS",
+      "notes": "Risk level is derived from raw analysis, risk summary, or riskPenalty; every OpportunityCard renders a risk badge; risk is filterable; no high/excluded opportunity is silently hidden by the card surface.",
+      "evidence": [
+        "lib/opportunities.ts:398",
+        "lib/opportunities.ts:502",
+        "lib/opportunities.ts:548",
+        "components/OpportunityCard.tsx:87",
+        "components/OpportunityCard.tsx:94",
+        "app/opportunities/page.tsx:154",
+        "app/opportunities/page.tsx:167",
+        "lib/opportunities.ts:468",
+        "tests/opportunities.test.ts:166"
+      ]
+    },
+    {
+      "criterion": "Monetization and risk copy.",
+      "status": "PASS",
+      "notes": "Cards expose monetization badges on dashboard/list and monetizationSummary on the full list, while risk is shown as a visible tier cue. The reviewed changed surfaces do not introduce revenue, ranking, legal compliance, or market-proof promises.",
+      "evidence": [
+        "components/OpportunityCard.tsx:72",
+        "components/OpportunityCard.tsx:84",
+        "components/OpportunityCard.tsx:87",
+        "components/OpportunityCard.tsx:99",
+        "README.md:290",
+        "README.md:302"
+      ]
+    },
+    {
+      "criterion": "Mock-not-market-proof framing.",
+      "status": "PASS",
+      "notes": "README describes the slice as backed by persisted local Prisma data and says opportunities are created by the scan API or another persisted scan flow. No changed app copy claims validated demand, no competitors, guaranteed low competition, revenue proof, ranking proof, or compliance proof.",
+      "evidence": [
+        "README.md:287",
+        "README.md:290",
+        "README.md:302",
+        "README.md:311"
+      ]
+    },
+    {
+      "criterion": "Detail/status mutation non-goals.",
+      "status": "PASS",
+      "notes": "The cards render stable detail targets, but no /opportunities/[id] route exists and no Save/Discard/Build Next/status mutation UI was added. README explicitly documents these non-goals.",
+      "evidence": [
+        "components/OpportunityCard.tsx:48",
+        "components/OpportunityCard.tsx:64",
+        "lib/opportunities.ts:409",
+        "README.md:311"
+      ]
+    },
+    {
+      "criterion": "30-second decision goal.",
+      "status": "PASS",
+      "notes": "The first dashboard/list card view includes rank, score, title, keyword, radar task, market/language, tool type, summary, monetization cues, risk cue, build complexity, status, and a detail target without marketing hero content or decorative visual noise.",
+      "evidence": [
+        "app/dashboard/page.tsx:39",
+        "app/dashboard/page.tsx:66",
+        "components/OpportunityCard.tsx:34",
+        "components/OpportunityCard.tsx:47",
+        "components/OpportunityCard.tsx:68",
+        "components/OpportunityCard.tsx:78",
+        "app/opportunities/page.tsx:57"
+      ]
+    },
+    {
+      "criterion": "Empty states.",
+      "status": "PASS",
+      "notes": "Dashboard and list empty states give operational next steps without implying provider proof or a broken market conclusion.",
+      "evidence": [
+        "app/dashboard/page.tsx:95",
+        "app/dashboard/page.tsx:103",
+        "app/opportunities/page.tsx:80",
+        "app/opportunities/page.tsx:88"
+      ]
+    }
+  ],
+  "findings": [],
+  "decisions": [
+    "ACCEPT: Dashboard Today's Top 5 is honestly backed by same-day persisted Opportunity rows and sorted by totalScore descending.",
+    "ACCEPT: /opportunities filter semantics match the task packet and remain deep-linkable through query parameters.",
+    "ACCEPT: Score is framed as a ranking aid out of 100, not a guarantee or market proof.",
+    "ACCEPT: Risk is visible on every card and filterable; high/excluded risk is not silently suppressed from the list surface.",
+    "ACCEPT: Stable detail links are present without implementing the detail route, MVP spec, Save/Discard/Build Next, or status mutations reserved for later tasks.",
+    "ACCEPT: README documents local data dependency, query parameters, validation commands, and explicit non-goals.",
+    "No product/source files were edited by domain_designer; only this review handoff was created."
+  ],
+  "risks": [
+    "The dashboard Avg risk metric detail says it is across visible top opportunities, while lib/opportunities.ts currently derives it from the fetched same-day opportunity window rather than only the Top 5. This is not blocking because each visible card carries its own risk badge, but a later polish pass should either compute the metric from topOpportunities or adjust the metric copy.",
+    "Risk filtering is derived from JSON/text/scoreBreakdown because there is no dedicated risk column in this slice. This is acceptable for the MVP/local operator workflow, but larger datasets may need an indexed risk field so high/excluded items remain easy to audit.",
+    "Detail links intentionally 404 until the separately scoped opportunity-detail task lands. This is acceptable under the task packet's detail-target requirement and README non-goal, but QA should not treat the future route as implemented."
+  ],
+  "blockers": [],
+  "tests_run": [
+    {
+      "command": "C:\\Users\\Administrator\\.codex\\skills\\project-git-workflow\\scripts\\git\\Status.cmd",
+      "exit_code": 0,
+      "result": "Read-only git status showed main...origin/main with modified README.md and task JSON plus untracked M5 dashboard/list implementation files and implementation handoff."
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS: no whitespace errors; Git printed existing LF-to-CRLF warnings for README.md and the task JSON."
+    },
+    {
+      "command": "npx tsx --test tests/opportunities.test.ts",
+      "exit_code": 0,
+      "result": "PASS: 6 focused tests passed for Top 5 sorting, filter normalization/application, serializable view models, empty states, score badge rendering, and opportunity card risk/monetization/detail-link rendering."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "PASS: 52 tests passed across 12 suites."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "result": "PASS: Next.js production build completed successfully. Nonfatal local @next/swc-win32-x64-msvc native package warnings were printed before fallback compilation completed."
+    },
+    {
+      "command": "Test-Path app\\opportunities\\[id]",
+      "exit_code": 0,
+      "result": "Returned False, confirming this slice did not implement the opportunity detail route."
+    },
+    {
+      "command": "rg -n \"validated demand|market proof|guarantee|guaranteed|will increase|rank #1|revenue|legally compliant|safe to automate|no competitors|low competition\" app\\dashboard app\\opportunities components lib\\opportunities.ts README.md tests\\opportunities.test.ts",
+      "exit_code": 0,
+      "result": "Only the existing README guardrail about no promises was found; no changed UI copy overstates mock/local scan results as proof."
+    },
+    {
+      "command": "node .agents/skills/just-goal/scripts/validate-handoff.mjs project/messages/outbox/M5-DASHBOARD-OPPORTUNITY-LIST-001__MSG-20260628-DOMAIN_DESIGNER.json",
+      "exit_code": 0,
+      "result": "VALID domain_designer handoff JSON."
+    }
+  ],
+  "route_to": "qa_reviewer",
+  "requested_action": "Proceed with QA review for M5-DASHBOARD-OPPORTUNITY-LIST-001. Domain_designer accepts the product/domain semantics with no requested product-code changes.",
+  "created_at": "2026-06-28T20:41:26.8238185+08:00"
+}

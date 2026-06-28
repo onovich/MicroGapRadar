@@ -287,6 +287,37 @@ npm run build
 
 Non-goals for this slice: no dashboard UI, no opportunity list/detail UI, no cron or queue, no auth/session changes, no real SERP provider, no real LLM provider setup, no secret loading, no schema migration, and no package dependency changes.
 
+## Dashboard and Opportunity List
+
+The M5 dashboard/list slice adds server-rendered pages backed by persisted Prisma data:
+
+- `/dashboard` shows today's summary metrics, recent scan runs, and the Top 5 opportunities sorted by `totalScore` descending.
+- `/opportunities` shows the score-sorted opportunity list with reusable `OpportunityCard` and `ScoreBadge` UI.
+- `lib/opportunities.ts` is the shared data helper for Prisma queries, query-filter normalization, view-model serialization, sorting, risk cues, and filter option derivation.
+
+These pages depend on local `Opportunity`, `SearchRun`, and `RadarTask` rows. Seed radar tasks with `npm run db:seed`, then create opportunities by running the scan API or another persisted scan flow.
+
+`/opportunities` supports these query parameters:
+
+```text
+radarTaskId=clx_task_id
+minScore=70
+toolType=generator
+riskLevel=low
+status=new
+```
+
+`task` is also accepted as an alias for `radarTaskId`, and `risk` is accepted as an alias for `riskLevel`. Risk filtering is derived from stored opportunity analysis/risk summaries because risk is not a dedicated database column in this slice.
+
+Validate this slice with:
+
+```bash
+npm test
+npm run build
+```
+
+Non-goals for this slice: no `/opportunities/[id]` implementation, no status mutations, no Run Scan button wiring, no recent-run polling component, no API routes, no scan orchestration changes, no schema or migration changes, and no package dependency changes.
+
 ## Local Radar Task API
 
 The MVP exposes a single-admin, unauthenticated local API slice for Radar Task management. It is intended for local development and later admin UI integration; it does not add sessions, public auth, scans, SERP providers, or LLM calls.

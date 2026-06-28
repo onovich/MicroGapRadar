@@ -1,0 +1,60 @@
+{
+  "message_id": "MSG-20260628-IMPLEMENTATION_ENGINEER",
+  "task_id": "M5-DASHBOARD-OPPORTUNITY-LIST-001",
+  "from_role": "implementation_engineer",
+  "status": "REVIEW",
+  "summary": "Implemented the M5 Dashboard and Opportunity List UI slice. Added server-rendered /dashboard and /opportunities pages, shared Prisma-backed opportunity view-model helpers, reusable OpportunityCard and ScoreBadge components, query-string filters, focused tests, and README documentation. The lead also corrected dashboard metrics so persisted database counts/average scores are not truncated by the visible Top-window query.",
+  "artifacts": [
+    "app/dashboard/page.tsx",
+    "app/opportunities/page.tsx",
+    "components/OpportunityCard.tsx",
+    "components/ScoreBadge.tsx",
+    "lib/opportunities.ts",
+    "tests/opportunities.test.ts",
+    "README.md"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "tests_run": [
+    {
+      "command": "npx tsx --test tests/opportunities.test.ts",
+      "exit_code": 0,
+      "result": "PASS: 6 focused tests passed for Dashboard Top 5 ordering, persisted-count dashboard metrics, query filter normalization/application, serializable view models, empty states, ScoreBadge rendering, and OpportunityCard risk/monetization/detail-link rendering."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "PASS: 52 tests passed across 12 suites."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "result": "PASS: Next.js production build completed successfully. Nonfatal local Windows SWC native-package warnings were printed before fallback build continued."
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS: no new whitespace errors. Git printed the existing README.md line-ending conversion warning; README lines 3-4 intentionally retain Markdown hard-break spaces."
+    }
+  ],
+  "decisions": [
+    "Kept data access in lib/opportunities.ts and used dynamic import of '@/lib/db' inside server-side helper functions so UI components receive plain serializable props and tests can import pure builders without pulling Prisma runtime state.",
+    "Implemented /dashboard as a server-rendered operational page with today's summary metrics, today's Top 5 opportunities sorted by totalScore descending, and recent scan runs from persisted SearchRun rows.",
+    "Implemented /opportunities as a score-sorted server-rendered list with query-string filters for radarTaskId/task, minScore, toolType, riskLevel/risk, and status.",
+    "Derived risk level from stored rawAnalysis, riskSummary, and scoreBreakdown.riskPenalty because this slice does not add a dedicated risk column or schema migration.",
+    "Rendered risk badges on every OpportunityCard, including medium/high/excluded/unknown treatments, instead of hiding risky opportunities in this list slice.",
+    "Added bounded Prisma queries for dashboard opportunities, recent runs, opportunity list rows, and filter option rows; dashboard count and average score metrics use persisted aggregate/count results so the visible query window does not distort summary metrics.",
+    "Rendered stable links to /opportunities/{id} as detail targets while intentionally not implementing the detail route or status mutation behavior reserved for later tasks.",
+    "Kept styling restrained and consistent with the existing Tailwind palette, with no marketing hero, global style changes, decorative backgrounds, nested cards, package changes, API changes, or schema changes."
+  ],
+  "risks": [
+    "The /opportunities list is intentionally bounded for local operator use. Risk filtering is applied after serialization because risk is derived from JSON/text fields, so a very large local dataset may need narrower filters or a later dedicated risk column.",
+    "Opportunity detail links intentionally point to a future route. This satisfies the task's detail-link target requirement but clicking them will 404 until the separate detail task is implemented.",
+    "Dashboard risk average is a cue across the visible top opportunity window, not a full-dataset risk aggregate, because risk is derived rather than stored as an indexed scalar in this slice.",
+    "The dashboard is scoped to today's local-day rows; historical/global analytics remain out of scope for this slice."
+  ],
+  "blockers": [],
+  "route_to": "systems_architect",
+  "requested_action": "Review M5-DASHBOARD-OPPORTUNITY-LIST-001 against architecture/data-boundary requirements, then route to domain_designer and qa_reviewer for independent acceptance.",
+  "created_at": "2026-06-28T12:45:00Z"
+}

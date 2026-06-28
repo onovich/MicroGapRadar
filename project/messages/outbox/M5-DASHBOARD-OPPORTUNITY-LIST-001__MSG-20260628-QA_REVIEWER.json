@@ -1,0 +1,131 @@
+{
+  "message_id": "MSG-20260628-QA_REVIEWER",
+  "task_id": "M5-DASHBOARD-OPPORTUNITY-LIST-001",
+  "from_role": "qa_reviewer",
+  "status": "ACCEPT",
+  "summary": "QA accepts M5-DASHBOARD-OPPORTUNITY-LIST-001. The working tree adds the requested server-rendered dashboard and opportunity list pages, shared Prisma-backed serializable opportunity view-model helper, reusable OpportunityCard and ScoreBadge components, query-string filters, empty states, README documentation, and focused tests. Review found no blocking acceptance or product-scope issue.",
+  "artifacts": [
+    "app/dashboard/page.tsx",
+    "app/opportunities/page.tsx",
+    "components/OpportunityCard.tsx",
+    "components/ScoreBadge.tsx",
+    "lib/opportunities.ts",
+    "tests/opportunities.test.ts",
+    "README.md",
+    "project/messages/outbox/M5-DASHBOARD-OPPORTUNITY-LIST-001__MSG-20260628-QA_REVIEWER.json"
+  ],
+  "artifacts_reviewed": [
+    "project/tasks/active/M5-DASHBOARD-OPPORTUNITY-LIST-001.json",
+    "project/messages/outbox/M5-DASHBOARD-OPPORTUNITY-LIST-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+    "docs/09_codex_implementation_tasks.md",
+    "docs/05_ui_ux_plan.md",
+    "docs/10_acceptance_criteria_and_test_plan.md",
+    "app/dashboard/page.tsx",
+    "app/opportunities/page.tsx",
+    "components/OpportunityCard.tsx",
+    "components/ScoreBadge.tsx",
+    "lib/opportunities.ts",
+    "tests/opportunities.test.ts",
+    "README.md"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "findings": [],
+  "acceptance_criteria_review": [
+    {
+      "criterion": "Dashboard page, persisted metrics, sorting, and Top 5 selection.",
+      "status": "PASS",
+      "notes": "app/dashboard/page.tsx:8 defines the server page and app/dashboard/page.tsx:73 renders Today's Top 5. lib/opportunities.ts:214-229 queries persisted Opportunity/SearchRun counts and aggregate score; lib/opportunities.ts:310-311 sorts serialized opportunities and slices the first 5. Tie-breakers are deterministic by score desc, createdAt desc, id asc at lib/opportunities.ts:630-647."
+    },
+    {
+      "criterion": "Opportunity list query-string filters and invalid parameter behavior.",
+      "status": "PASS",
+      "notes": "app/opportunities/page.tsx:18 defines the list page. The form exposes radarTaskId, minScore, toolType, riskLevel, and status controls at app/opportunities/page.tsx:115,133,143,159,175. lib/opportunities.ts:480-497 normalizes aliases/invalid params; lib/opportunities.ts:559-579 pushes DB-supported filters into Prisma; lib/opportunities.ts:448-476 applies the full filter set, including derived risk."
+    },
+    {
+      "criterion": "Serializable server-side view models.",
+      "status": "PASS",
+      "notes": "lib/opportunities.ts:394-444 serializes Opportunity rows into plain props, encodes detailHref at lib/opportunities.ts:409, and converts Date fields to ISO strings at lib/opportunities.ts:440-444. tests/opportunities.test.ts:118-136 asserts JSON.stringify works for the serialized model."
+    },
+    {
+      "criterion": "Reusable components and risk treatment.",
+      "status": "PASS",
+      "notes": "components/ScoreBadge.tsx:18-47 renders clamped score badges. components/OpportunityCard.tsx:26-98 renders score, title/keyword, tool type, market, summary, monetization, risk, status, build complexity, and detail link. Risk levels are derived at lib/opportunities.ts:502-545, labeled at lib/opportunities.ts:551-556, styled for high/excluded at components/OpportunityCard.tsx:14-18, and always rendered at components/OpportunityCard.tsx:90-93."
+    },
+    {
+      "criterion": "Empty states and restrained operational UI.",
+      "status": "PASS",
+      "notes": "Dashboard empty states render at app/dashboard/page.tsx:98 and app/dashboard/page.tsx:156. Opportunity list empty state renders at app/opportunities/page.tsx:83. The pages use compact operational layouts without marketing hero content, nested cards, package changes, or global style changes."
+    },
+    {
+      "criterion": "Focused automated tests.",
+      "status": "PASS",
+      "notes": "tests/opportunities.test.ts:19,58,118,139,158,166 cover Top 5 ordering, combined filters and aliases, serializable view models, invalid params and empty list inputs, ScoreBadge rendering, and OpportunityCard risk/monetization/detail-link rendering."
+    },
+    {
+      "criterion": "README and scope boundaries.",
+      "status": "PASS",
+      "notes": "README.md:290-319 documents the M5 pages, data dependency, filter parameters, validation commands, and non-goals. Working tree product changes are limited to allowed paths; project/task/message changes are JustGoal coordination state. No API, schema, scoring, services, agents, package, global style, app shell, or detail-route implementation was found."
+    }
+  ],
+  "tests_run": [
+    {
+      "command": "node .agents\\skills\\just-goal\\scripts\\validate-handoff.mjs project\\messages\\outbox\\M5-DASHBOARD-OPPORTUNITY-LIST-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+      "exit_code": 0,
+      "result": "VALID implementation handoff JSON."
+    },
+    {
+      "command": "node .agents\\skills\\just-goal\\scripts\\taskctl.mjs validate project\\tasks\\active\\M5-DASHBOARD-OPPORTUNITY-LIST-001.json",
+      "exit_code": 0,
+      "result": "VALID active task JSON; validated 1 task."
+    },
+    {
+      "command": "C:\\Users\\Administrator\\.codex\\skills\\project-git-workflow\\scripts\\git\\Status.cmd",
+      "exit_code": 0,
+      "result": "Reviewed dirty tree: README.md and task JSON modified; new app/dashboard, app/opportunities, components, lib/opportunities.ts, implementation handoff, and tests/opportunities.test.ts. Product artifacts are within allowed paths."
+    },
+    {
+      "command": "git -c safe.directory=D:/WebProjects/MicroGapRadar diff --check",
+      "exit_code": 0,
+      "result": "PASS: no whitespace errors. Git printed line-ending conversion warnings for README.md and the active task JSON."
+    },
+    {
+      "command": "npx tsx --test tests/opportunities.test.ts",
+      "exit_code": 0,
+      "result": "PASS: 6 focused tests passed across 2 suites."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "PASS: 52 tests passed across 12 suites."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 1,
+      "result": "Initial run compiled and generated pages but failed finalization with ENOENT renaming .next/export/500.html to .next/server/pages/500.html. Treated as transient local build artifact behavior and reran immediately."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "result": "PASS on immediate rerun: Next.js production build completed, including dynamic /dashboard and /opportunities routes. Existing nonfatal local @next/swc-win32-x64-msvc invalid Win32 application warnings were printed before fallback build continued."
+    }
+  ],
+  "decisions": [
+    "ACCEPT: Acceptance criteria are met with no requested product-code changes.",
+    "Accepted derived risk filtering for this slice because risk is not a dedicated database column and risk cues are visible wherever opportunity cards render.",
+    "Accepted stable links to /opportunities/{id} without implementing the detail route, matching the task non-goal split with Task 13.",
+    "Accepted project/* task and message edits as JustGoal coordination state rather than product implementation scope expansion.",
+    "Did not commit or push."
+  ],
+  "risks": [
+    "Risk filtering is applied after fetching a bounded ordered set when riskLevel is present because risk is derived from rawAnalysis/riskSummary/scoreBreakdown rather than indexed as a scalar column; very large local datasets may need a later risk column or pagination.",
+    "Focused component tests assert medium-risk rendering, while high/excluded risk treatment is verified by code review rather than a dedicated high/excluded HTML assertion.",
+    "Top 5 currently ranks by score/date/id and clearly labels risky items if they appear; later ranking policy may still choose to hard-exclude high/excluded opportunities from dashboard Top 5.",
+    "The first npm run build attempt hit a transient .next finalization ENOENT before the immediate rerun passed.",
+    "Next build continues to print existing nonfatal local SWC native-package warnings."
+  ],
+  "blockers": [],
+  "route_to": "lead_orchestrator",
+  "requested_action": "Integrate M5-DASHBOARD-OPPORTUNITY-LIST-001 after remaining required role reviews, if any. QA accepts the implementation with no requested changes.",
+  "created_at": "2026-06-28T20:41:39.0253364+08:00"
+}

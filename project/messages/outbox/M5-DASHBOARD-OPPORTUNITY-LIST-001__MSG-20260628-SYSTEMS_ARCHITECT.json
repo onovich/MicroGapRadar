@@ -1,0 +1,97 @@
+{
+  "message_id": "MSG-20260628-SYSTEMS_ARCHITECT",
+  "task_id": "M5-DASHBOARD-OPPORTUNITY-LIST-001",
+  "from_role": "systems_architect",
+  "status": "ACCEPT",
+  "summary": "Systems architecture review accepts the M5 dashboard/opportunity-list implementation. The slice keeps Prisma-backed query logic in lib/opportunities.ts, renders /dashboard and /opportunities as server components, returns serializable view models, uses deterministic score ordering and bounded queries, and does not introduce API, schema, package, global-style, scan-orchestration, or opportunity-detail creep.",
+  "artifacts": [
+    "project/tasks/active/M5-DASHBOARD-OPPORTUNITY-LIST-001.json",
+    "project/messages/outbox/M5-DASHBOARD-OPPORTUNITY-LIST-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+    "app/dashboard/page.tsx",
+    "app/opportunities/page.tsx",
+    "components/OpportunityCard.tsx",
+    "components/ScoreBadge.tsx",
+    "lib/opportunities.ts",
+    "tests/opportunities.test.ts",
+    "README.md"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "findings": [],
+  "scope_review": {
+    "product_paths_allowed": true,
+    "forbidden_product_creep_found": false,
+    "notes": [
+      "Product changes are confined to allowed task paths: app/dashboard/**, app/opportunities/**, components/**, lib/opportunities.ts, tests/**, and README.md.",
+      "Observed project/** changes are task-management artifacts: the task packet status/timestamp moved to REVIEW and the implementation handoff exists under project/messages/outbox. I did not treat these as product implementation creep.",
+      "No changes were found in app/api/**, prisma/**, package files, services/**, agents/**, lib/scoring.ts, lib/db.ts, lib/env.ts, app/page.tsx, app/layout.tsx, or app/globals.css."
+    ]
+  },
+  "evidence": [
+    "lib/opportunities.ts:187 queries dashboard data through Prisma with date-bounded Opportunity/SearchRun where clauses, deterministic orderBy, aggregate/count metrics, and bounded take limits.",
+    "lib/opportunities.ts:259 centralizes opportunity-list Prisma access, normalizes query filters, applies scalar filters to the Prisma where clause, and bounds result sets.",
+    "lib/opportunities.ts:394 serializes Opportunity rows into plain view models, including ISO date strings, detailHref, score, task/run labels, risk cue, and monetization cue.",
+    "lib/opportunities.ts:448 and lib/opportunities.ts:480 apply deterministic in-memory filtering for derived risk and normalize query-string aliases safely.",
+    "lib/opportunities.ts:630 provides deterministic score sorting with createdAt and id tie-breakers.",
+    "app/dashboard/page.tsx:6 and app/opportunities/page.tsx:10 mark the routes dynamic server-rendered pages; neither adds client-side data fetching.",
+    "app/dashboard/page.tsx:84 renders the Top 5 through the reusable OpportunityCard and app/dashboard/page.tsx:113 renders persisted recent SearchRun rows.",
+    "app/opportunities/page.tsx:21 calls the shared data helper from the server page and app/opportunities/page.tsx:105 renders query-string filters for radarTaskId, minScore, toolType, riskLevel, and status.",
+    "components/OpportunityCard.tsx:26 renders score, title, keyword, task, market/language, tool type, summary, monetization/risk/build/status cues, and a stable detail link without implementing the detail route.",
+    "components/ScoreBadge.tsx:18 clamps and tones scores locally without recalculating scoring semantics.",
+    "tests/opportunities.test.ts:18 covers Top 5 ordering, filters, serialization, empty states, ScoreBadge, and OpportunityCard rendering.",
+    "README.md:290 documents the dashboard/list slice, local data dependency, supported filter parameters, validation commands, and explicit non-goals."
+  ],
+  "tests_run": [
+    {
+      "command": "C:\\Users\\Administrator\\.codex\\skills\\project-git-workflow\\scripts\\git\\Status.cmd",
+      "exit_code": 0,
+      "result": "PASS: working tree inspection showed README.md and the task packet modified, product implementation files untracked under allowed paths, and the implementation handoff present under project/messages/outbox."
+    },
+    {
+      "command": "git diff --name-status",
+      "exit_code": 0,
+      "result": "PASS: tracked diff showed README.md and project/tasks/active/M5-DASHBOARD-OPPORTUNITY-LIST-001.json; untracked product files were inspected directly."
+    },
+    {
+      "command": "npx tsx --test tests/opportunities.test.ts",
+      "exit_code": 0,
+      "result": "PASS: 6 focused tests passed across 2 suites."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "PASS: 52 tests passed across 12 suites."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "result": "PASS: Next.js production build completed and emitted /dashboard and /opportunities as dynamic server-rendered routes. Nonfatal local Windows SWC native-package warnings were printed before fallback compilation succeeded."
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS: no whitespace errors; Git printed existing line-ending conversion warnings for README.md and the task packet."
+    },
+    {
+      "command": "node .agents/skills/just-goal/scripts/validate-handoff.mjs project/messages/outbox/M5-DASHBOARD-OPPORTUNITY-LIST-001__MSG-20260628-SYSTEMS_ARCHITECT.json",
+      "exit_code": 0,
+      "result": "PASS: systems_architect review handoff validates against the JustGoal handoff schema."
+    }
+  ],
+  "decisions": [
+    "ACCEPT: The implementation satisfies the M5 systems acceptance criteria for dashboard/list pages, shared data helper, score-sorted Top 5/list behavior, query-string filters, serializable view models, component reuse, focused tests, and README documentation.",
+    "ACCEPT: The Prisma query shape is bounded and deterministic. Dashboard metrics use persisted aggregate/count queries instead of relying only on the visible Top 5 query window.",
+    "ACCEPT: Risk filtering is derived from existing persisted rawAnalysis, riskSummary, and scoreBreakdown fields without adding a schema column or migration, which is appropriate for this scoped slice.",
+    "ACCEPT: Detail links are stable targets only; no /opportunities/[id] route, status mutation, API route, scan trigger, RunScanButton wiring, RecentRunStatus component, schema change, package change, or global style change was introduced."
+  ],
+  "risks": [
+    "Risk-level filtering is applied after fetching a bounded score-sorted window because risk is not an indexed scalar column. This is acceptable for the local MVP slice, but a future large dataset may need a dedicated persisted risk field or a narrower query strategy.",
+    "Opportunity detail links intentionally 404 until the separate detail task lands. This matches the task packet's non-goal boundary.",
+    "The dashboard average-risk cue is computed from the visible opportunity window rather than a full-dataset indexed aggregate because risk is derived from JSON/text fields."
+  ],
+  "blockers": [],
+  "requested_changes": [],
+  "route_to": "domain_designer",
+  "requested_action": "Proceed with domain_designer and qa_reviewer acceptance; no systems-architecture changes are requested.",
+  "created_at": "2026-06-28T20:40:02.7196815+08:00"
+}
