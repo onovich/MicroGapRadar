@@ -19,7 +19,9 @@
     "implementation_engineer": {
       "model": "gpt-5.5",
       "effort": "high",
-      "status": "available"
+      "status": "active",
+      "thread_id": "019f0c83-99e9-7253-9a60-d62004713813",
+      "task_id": "M3-SERP-MOCK-PROVIDER-001"
     },
     "systems_architect": {
       "model": "gpt-5.5",
@@ -32,5 +34,5 @@
       "status": "available"
     }
   },
-  "last_updated_at": "2026-06-27T20:45:05Z"
+  "last_updated_at": "2026-06-28T04:37:13Z"
 }
