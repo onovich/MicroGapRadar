@@ -1,11 +1,11 @@
 {
   "version": 1,
   "created_at": "2026-06-27T19:24:00Z",
-  "updated_at": "2026-06-28T08:17:53Z",
-  "main_commit": "e2fb492713c85d4e26a70075d72f83906c649fc8",
-  "current_milestone": "M3",
-  "current_task": "M3-OPPORTUNITY-ANALYSIS-AGENT-001",
-  "last_integrated_task": "M3-SERP-ANALYSIS-AGENT-001",
+  "updated_at": "2026-06-28T08:23:52Z",
+  "main_commit": "da1e578",
+  "current_milestone": "M4",
+  "current_task": "M4-SCORING-ENGINE-001",
+  "last_integrated_task": "M3-OPPORTUNITY-ANALYSIS-AGENT-001",
   "closed_threads": {
     "m0_implementation_engineer": "019f0a11-0493-7fe0-89e9-a21d3b680a67",
     "m0_qa_reviewer": "019f0a2a-70f9-77e0-8f7d-6091b879545a",
@@ -26,36 +26,17 @@
     "m3_keyword_expansion_qa_reviewer": "019f0cd7-56e4-7252-bf05-b82828e5c429",
     "m3_serp_analysis_implementation_engineer": "019f0ce2-fc6f-7ec2-b36e-711df7eca24d",
     "m3_serp_analysis_systems_architect": "019f0cf0-8876-7d12-84c2-f02e2d0d3106",
-    "m3_serp_analysis_qa_reviewer": "019f0cf6-5173-7332-9078-ed116e704f0b"
+    "m3_serp_analysis_qa_reviewer": "019f0cf6-5173-7332-9078-ed116e704f0b",
+    "m3_opportunity_analysis_implementation_engineer": "019f0d03-720b-7d93-a8d9-e3537087239b",
+    "m3_opportunity_analysis_systems_architect": "019f0d15-83a8-7b50-a149-8273ddfbe116",
+    "m3_opportunity_analysis_domain_designer": "019f0d15-a618-7da0-84d7-0334b0ffcbcc",
+    "m3_opportunity_analysis_qa_reviewer": "019f0d45-b9c3-7002-86e0-826b5fb655b5"
   },
-  "active_threads": [
-    {
-      "role": "implementation_engineer",
-      "task_id": "M3-OPPORTUNITY-ANALYSIS-AGENT-001",
-      "thread_id": "019f0d03-720b-7d93-a8d9-e3537087239b",
-      "status": "accepted"
-    },
-    {
-      "role": "systems_architect",
-      "task_id": "M3-OPPORTUNITY-ANALYSIS-AGENT-001",
-      "thread_id": "019f0d15-83a8-7b50-a149-8273ddfbe116",
-      "status": "accepted"
-    },
-    {
-      "role": "domain_designer",
-      "task_id": "M3-OPPORTUNITY-ANALYSIS-AGENT-001",
-      "thread_id": "019f0d15-a618-7da0-84d7-0334b0ffcbcc",
-      "status": "accepted"
-    },
-    {
-      "role": "qa_reviewer",
-      "task_id": "M3-OPPORTUNITY-ANALYSIS-AGENT-001",
-      "thread_id": "019f0d45-b9c3-7002-86e0-826b5fb655b5",
-      "status": "accepted"
-    }
+  "active_threads": [],
+  "next_ready_tasks": [
+    "M4-SCORING-ENGINE-001"
   ],
-  "next_ready_tasks": [],
-  "recommended_next_task": null,
+  "recommended_next_task": "M4-SCORING-ENGINE-001",
   "recent_handoffs": [
     "project/messages/outbox/M3-OPPORTUNITY-ANALYSIS-AGENT-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
     "project/messages/outbox/M3-OPPORTUNITY-ANALYSIS-AGENT-001__MSG-20260628-SYSTEMS_ARCHITECT.json",
@@ -64,49 +45,24 @@
   ],
   "validation_evidence": [
     {
-      "command": "node .agents/skills/just-goal/scripts/validate-handoff.mjs project/messages/outbox/M3-OPPORTUNITY-ANALYSIS-AGENT-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+      "command": "node .agents/skills/just-goal/scripts/taskctl.mjs set-status M3-OPPORTUNITY-ANALYSIS-AGENT-001 CLOSED --repo-root .",
       "exit_code": 0,
-      "note": "Implementation handoff is valid after final guardrail fixes."
+      "note": "Opportunity Analysis Agent was accepted, integrated, pushed, and closed."
     },
     {
-      "command": "node .agents/skills/just-goal/scripts/validate-handoff.mjs project/messages/outbox/M3-OPPORTUNITY-ANALYSIS-AGENT-001__MSG-20260628-SYSTEMS_ARCHITECT.json",
+      "command": "node .agents/skills/just-goal/scripts/taskctl.mjs create --id M4-SCORING-ENGINE-001 ...",
       "exit_code": 0,
-      "note": "Systems architect accepted the output-only and no-code guardrail fixes."
+      "note": "Created the next docs-aligned scoring engine task from Task 10 / M4."
     },
     {
-      "command": "node .agents/skills/just-goal/scripts/validate-handoff.mjs project/messages/outbox/M3-OPPORTUNITY-ANALYSIS-AGENT-001__MSG-20260628-DOMAIN_DESIGNER.json",
+      "command": "node .agents/skills/just-goal/scripts/taskctl.mjs set-status M4-SCORING-ENGINE-001 READY --repo-root .",
       "exit_code": 0,
-      "note": "Domain designer accepted the risk-classification behavior."
-    },
-    {
-      "command": "node .agents/skills/just-goal/scripts/validate-handoff.mjs project/messages/outbox/M3-OPPORTUNITY-ANALYSIS-AGENT-001__MSG-20260628-QA_REVIEWER.json",
-      "exit_code": 0,
-      "note": "Final QA accepted the task with 8/8 criteria passed and no findings."
-    },
-    {
-      "command": "node .agents/skills/just-goal/scripts/taskctl.mjs validate --repo-root .",
-      "exit_code": 0,
-      "note": "Task graph valid during final Opportunity Analysis Agent acceptance."
-    },
-    {
-      "command": "git diff --check",
-      "exit_code": 0,
-      "note": "Whitespace check passed; only expected line-ending warnings were emitted."
-    },
-    {
-      "command": "npm test",
-      "exit_code": 0,
-      "note": "32 tests passed across 7 suites, including opportunity guardrail regressions."
-    },
-    {
-      "command": "npm run build",
-      "exit_code": 0,
-      "note": "Build passed with the known nonfatal Windows Next SWC optional native package warning."
+      "note": "Scoring Engine task is ready for autonomous execution."
     }
   ],
   "human_gate": {
     "required": false,
     "reason": null
   },
-  "next_prompt": "Use -goal to integrate and close M3-OPPORTUNITY-ANALYSIS-AGENT-001, then queue the next non-human-gated task if the autonomous stop gate allows continuation."
+  "next_prompt": "Use -goal to start M4-SCORING-ENGINE-001 in goal mode: spawn implementation_engineer first, then route to systems_architect, domain_designer, and qa_reviewer before integration."
 }

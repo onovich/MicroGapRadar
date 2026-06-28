@@ -1,0 +1,70 @@
+{
+  "id": "M4-SCORING-ENGINE-001",
+  "summary": "Add the scoring engine with docs-aligned calculateOpportunityScore(), score breakdown/explanation output, high-risk penalty behavior, and focused tests.",
+  "milestone": "M4",
+  "status": "READY",
+  "owner_role": "implementation_engineer",
+  "reviewer_role": "qa_reviewer",
+  "risk_level": "R2",
+  "dependencies": [
+    "M3-OPPORTUNITY-ANALYSIS-AGENT-001"
+  ],
+  "scope": {
+    "allowed_paths": [
+      "lib/**",
+      "tests/**",
+      "README.md"
+    ],
+    "forbidden_paths": [
+      ".git/**",
+      ".codex/**",
+      ".agents/**",
+      "project/**",
+      "skills/**",
+      "docs/**",
+      "mock-data/**",
+      "app/**",
+      "components/**",
+      "agents/**",
+      "prisma/**",
+      "services/**",
+      "package.json",
+      "package-lock.json"
+    ]
+  },
+  "acceptance_criteria": [
+    "A reusable scoring module exists at lib/scoring.ts and exports calculateOpportunityScore() plus typed input/output contracts for score hints, score breakdown, score explanation, and final total score.",
+    "The scoring formula follows docs/07_data_model_and_scoring.md weights: intent 0.18, monetization 0.16, SERP weakness 0.18, toolability 0.18, user fit 0.14, build speed 0.10, minus risk penalty 0.06, with total_score rounded and clamped to 0-100.",
+    "Inputs from Opportunity Analysis scoreHints are normalized defensively: missing or invalid sub-scores use deterministic defaults, numeric values are clamped to 0-100, and string-like numeric values are handled without throwing.",
+    "High-risk opportunities are penalized strongly enough that an otherwise strong high-risk opportunity is ranked below a comparable low-risk opportunity and is not likely to enter a default Top 5 when safer alternatives exist.",
+    "The output includes score_breakdown-compatible numeric fields and score_explanation-compatible concise explanations for every scoring dimension and risk penalty.",
+    "Focused automated tests cover the formula, 0-100 clamping, high-risk penalty behavior, higher scores for toolable/weak-SERP/user-fit opportunities, missing/invalid hints, deterministic output, and score explanation shape.",
+    "README documents the scoring engine slice, score dimensions, formula behavior, risk penalty behavior, and the test command.",
+    "No scan orchestrator, database persistence, API route, UI, ranking page, provider setup, real network call, cron, auth, or paid service integration is implemented."
+  ],
+  "required_tests": [
+    "npm test",
+    "npm run build"
+  ],
+  "branch_or_worktree": "main",
+  "threads": {},
+  "route_to": "implementation_engineer",
+  "notes": [
+    "Derived from docs/09_codex_implementation_tasks.md Task 10, docs/11_development_plan.md M4, and docs/07_data_model_and_scoring.md score formula.",
+    "This is the narrow scoring-engine slice only. Persisting score_breakdown belongs to the later scan orchestrator/API task; this task only returns a persistence-ready shape.",
+    "systems_architect is required because lib/scoring.ts becomes a shared boundary for later scan orchestration and ranking.",
+    "domain_designer is required because scoring weights, risk penalty behavior, and explanations are product/domain semantics."
+  ],
+  "non_goals": [
+    "No services/scan-orchestrator.ts, /api/scans/run, SearchRun state machine, Prisma writes, or Opportunity persistence.",
+    "No changes to agents, SERP provider, LLM client, database schema, seed data, app routes, components, or UI.",
+    "No real LLM provider configuration, environment-variable secret loading, network calls, paid service setup, auth, cron, deployment, or dashboard work.",
+    "No learned/model-based ranking, user feedback calibration, configurable weights UI, or Top 5 filtering implementation beyond deterministic scoring behavior tests."
+  ],
+  "created_at": "2026-06-28T08:22:11.105Z",
+  "updated_at": "2026-06-28T08:23:00.533Z",
+  "required_reviewers": [
+    "systems_architect",
+    "domain_designer"
+  ]
+}

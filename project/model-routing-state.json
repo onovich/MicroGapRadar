@@ -45,7 +45,11 @@
     "m3_keyword_expansion_qa_reviewer": "019f0cd7-56e4-7252-bf05-b82828e5c429",
     "m3_serp_analysis_implementation_engineer": "019f0ce2-fc6f-7ec2-b36e-711df7eca24d",
     "m3_serp_analysis_systems_architect": "019f0cf0-8876-7d12-84c2-f02e2d0d3106",
-    "m3_serp_analysis_qa_reviewer": "019f0cf6-5173-7332-9078-ed116e704f0b"
+    "m3_serp_analysis_qa_reviewer": "019f0cf6-5173-7332-9078-ed116e704f0b",
+    "m3_opportunity_analysis_implementation_engineer": "019f0d03-720b-7d93-a8d9-e3537087239b",
+    "m3_opportunity_analysis_systems_architect": "019f0d15-83a8-7b50-a149-8273ddfbe116",
+    "m3_opportunity_analysis_domain_designer": "019f0d15-a618-7da0-84d7-0334b0ffcbcc",
+    "m3_opportunity_analysis_qa_reviewer": "019f0d45-b9c3-7002-86e0-826b5fb655b5"
   },
   "roles": {
     "lead_orchestrator": {
@@ -56,30 +60,22 @@
     "implementation_engineer": {
       "model": "gpt-5.5",
       "effort": "high",
-      "status": "accepted",
-      "thread_id": "019f0d03-720b-7d93-a8d9-e3537087239b",
-      "task_id": "M3-OPPORTUNITY-ANALYSIS-AGENT-001"
+      "status": "idle"
     },
     "systems_architect": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "accepted",
-      "thread_id": "019f0d15-83a8-7b50-a149-8273ddfbe116",
-      "task_id": "M3-OPPORTUNITY-ANALYSIS-AGENT-001"
+      "status": "idle"
     },
     "domain_designer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "accepted",
-      "thread_id": "019f0d15-a618-7da0-84d7-0334b0ffcbcc",
-      "task_id": "M3-OPPORTUNITY-ANALYSIS-AGENT-001"
+      "status": "idle"
     },
     "qa_reviewer": {
       "model": "gpt-5.5",
       "effort": "xhigh",
-      "status": "accepted",
-      "thread_id": "019f0d45-b9c3-7002-86e0-826b5fb655b5",
-      "task_id": "M3-OPPORTUNITY-ANALYSIS-AGENT-001"
+      "status": "idle"
     },
     "security_reviewer": {
       "model": "gpt-5.5",
@@ -87,5 +83,5 @@
       "status": "idle"
     }
   },
-  "last_updated_at": "2026-06-28T08:17:53Z"
+  "last_updated_at": "2026-06-28T08:23:52Z"
 }
