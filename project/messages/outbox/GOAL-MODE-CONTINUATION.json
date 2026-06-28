@@ -20,7 +20,19 @@
       "role": "implementation_engineer",
       "task_id": "M3-SERP-MOCK-PROVIDER-001",
       "thread_id": "019f0c83-99e9-7253-9a60-d62004713813",
-      "status": "active"
+      "status": "accepted"
+    },
+    {
+      "role": "systems_architect",
+      "task_id": "M3-SERP-MOCK-PROVIDER-001",
+      "thread_id": "019f0c8b-8da1-7f82-a866-792a96952009",
+      "status": "accepted"
+    },
+    {
+      "role": "qa_reviewer",
+      "task_id": "M3-SERP-MOCK-PROVIDER-001",
+      "thread_id": "019f0c92-caf5-7bd0-b486-81da510b17a7",
+      "status": "accepted"
     }
   ],
   "next_ready_tasks": [],

@@ -39,6 +39,12 @@ Build for production:
 npm run build
 ```
 
+Run automated tests:
+
+```bash
+npm test
+```
+
 Start a production build locally:
 
 ```bash
@@ -46,6 +52,20 @@ npm run start
 ```
 
 The scaffold can build without secrets. When runtime features need configuration, copy `.env.example` to `.env.local` and keep secret reads on the server through `lib/env.ts`.
+
+## Mock SERP Provider
+
+The M3 provider slice lives under `services/serp/` and currently exposes only the deterministic mock provider:
+
+- `SerpProvider`, `SerpSearchInput`, and `SerpResult` define the reusable provider contract.
+- `MockSerpProvider` returns stable SERP-like results for `keyword`, `country`, `language`, and `limit` inputs.
+- `createSerpProvider("mock")` creates the mock provider; unsupported names throw immediately instead of falling back to any external service.
+
+The mock provider does not read environment variables, secrets, paid APIs, or network resources. Focused coverage for deterministic output, limit handling, provider factory behavior, and result shape runs with:
+
+```bash
+npm test
+```
 
 ## Local Radar Task API
 

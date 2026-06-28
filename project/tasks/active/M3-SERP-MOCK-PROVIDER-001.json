@@ -2,7 +2,7 @@
   "id": "M3-SERP-MOCK-PROVIDER-001",
   "summary": "Add the SERP provider interface, deterministic mock provider, provider factory, and focused tests.",
   "milestone": "M3",
-  "status": "READY",
+  "status": "ACCEPTED",
   "owner_role": "implementation_engineer",
   "reviewer_role": "qa_reviewer",
   "required_reviewers": [
@@ -49,7 +49,9 @@
   ],
   "branch_or_worktree": "main",
   "threads": {
-    "implementation_engineer": "019f0c83-99e9-7253-9a60-d62004713813"
+    "implementation_engineer": "019f0c83-99e9-7253-9a60-d62004713813",
+    "systems_architect": "019f0c8b-8da1-7f82-a866-792a96952009",
+    "qa_reviewer": "019f0c92-caf5-7bd0-b486-81da510b17a7"
   },
   "route_to": "implementation_engineer",
   "notes": [
@@ -67,5 +69,5 @@
     "No auth, cron, deployment, or paid service setup."
   ],
   "created_at": "2026-06-27T20:45:05.7603770Z",
-  "updated_at": "2026-06-28T04:36:38.720Z"
+  "updated_at": "2026-06-28T04:58:23.487Z"
 }
