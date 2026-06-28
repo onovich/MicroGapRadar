@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-06-28T14:00:39.859Z",
+  "updated_at": "2026-06-28T14:05:46.124Z",
   "threads": {
     "019f0a11-0493-7fe0-89e9-a21d3b680a67": {
       "role": "implementation_engineer",
@@ -295,6 +295,24 @@
       "task_id": "M6-MVP-SPEC-GENERATION-001",
       "status": "closed",
       "updated_at": "2026-06-28T14:00:39.859Z"
+    },
+    "019f0e8c-b525-7df1-819e-83cd3675c2f1": {
+      "role": "release_engineer",
+      "task_id": "M6-RELEASE-READINESS-SMOKE-001",
+      "status": "active",
+      "updated_at": "2026-06-28T14:05:46.013Z"
+    },
+    "019f0e8c-bf0f-7211-a8b7-0e65331de8cf": {
+      "role": "security_reviewer",
+      "task_id": "M6-RELEASE-READINESS-SMOKE-001",
+      "status": "active",
+      "updated_at": "2026-06-28T14:05:46.070Z"
+    },
+    "019f0e8c-c067-7d33-96ed-675b3c497125": {
+      "role": "qa_reviewer",
+      "task_id": "M6-RELEASE-READINESS-SMOKE-001",
+      "status": "active",
+      "updated_at": "2026-06-28T14:05:46.124Z"
     }
   }
 }

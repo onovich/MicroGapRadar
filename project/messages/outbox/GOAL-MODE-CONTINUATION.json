@@ -1,8 +1,8 @@
 {
   "version": 1,
   "created_at": "2026-06-27T19:24:00Z",
-  "updated_at": "2026-06-28T14:05:00Z",
-  "main_commit": "5fcc9b0",
+  "updated_at": "2026-06-28T14:08:00Z",
+  "main_commit": "4e2d407",
   "current_milestone": "M6",
   "current_task": "M6-RELEASE-READINESS-SMOKE-001",
   "last_integrated_task": "M6-MVP-SPEC-GENERATION-001",
@@ -55,10 +55,27 @@
     "m6_mvp_spec_generation_security_reviewer": "019f0e67-a167-7180-a120-b75c415ff175",
     "m6_mvp_spec_generation_qa_reviewer": "019f0e67-b665-7d10-81b6-378d8197107c"
   },
-  "active_threads": [],
-  "next_ready_tasks": [
-    "M6-RELEASE-READINESS-SMOKE-001"
+  "active_threads": [
+    {
+      "role": "release_engineer",
+      "task_id": "M6-RELEASE-READINESS-SMOKE-001",
+      "thread_id": "019f0e8c-b525-7df1-819e-83cd3675c2f1",
+      "status": "active"
+    },
+    {
+      "role": "security_reviewer",
+      "task_id": "M6-RELEASE-READINESS-SMOKE-001",
+      "thread_id": "019f0e8c-bf0f-7211-a8b7-0e65331de8cf",
+      "status": "active"
+    },
+    {
+      "role": "qa_reviewer",
+      "task_id": "M6-RELEASE-READINESS-SMOKE-001",
+      "thread_id": "019f0e8c-c067-7d33-96ed-675b3c497125",
+      "status": "active"
+    }
   ],
+  "next_ready_tasks": [],
   "recommended_next_task": null,
   "recent_handoffs": [
     "project/messages/outbox/M6-MVP-SPEC-GENERATION-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
@@ -97,11 +114,21 @@
       "command": "node .agents/skills/just-goal/scripts/taskctl.mjs validate M6-RELEASE-READINESS-SMOKE-001 --repo-root .",
       "exit_code": 0,
       "note": "Created the next dependency-ready M6 release-readiness smoke task."
+    },
+    {
+      "command": "C:\\Users\\Administrator\\.codex\\skills\\project-git-workflow\\scripts\\git\\CommitAndPush.cmd -Message \"chore: close mvp spec and queue release smoke\" -Paths .",
+      "exit_code": 0,
+      "note": "Closed M6-MVP-SPEC-GENERATION-001 and queued M6-RELEASE-READINESS-SMOKE-001 at commit 4e2d407."
+    },
+    {
+      "command": "multi_agent_v1.spawn_agent release_engineer/security_reviewer/qa_reviewer",
+      "exit_code": 0,
+      "note": "Spawned Mencius, Hubble, and Ohm for M6 release-readiness smoke execution and review prep."
     }
   ],
   "human_gate": {
     "required": false,
     "reason": null
   },
-  "next_prompt": "Continue JustGoal by executing M6-RELEASE-READINESS-SMOKE-001: spawn/reuse release_engineer plus security/QA reviewers, add final no-network smoke coverage and README/.env deployment-readiness notes, validate, integrate, push, then rerun the autonomous stop gate."
+  "next_prompt": "Continue JustGoal on M6-RELEASE-READINESS-SMOKE-001: wait for Mencius release_engineer handoff, route to Hubble security_reviewer and Ohm qa_reviewer, handle changes, integrate, push, then rerun the autonomous stop gate."
 }
