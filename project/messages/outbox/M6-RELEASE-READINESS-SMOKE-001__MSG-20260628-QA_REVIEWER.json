@@ -1,0 +1,151 @@
+{
+  "message_id": "MSG-20260628-QA_REVIEWER",
+  "task_id": "M6-RELEASE-READINESS-SMOKE-001",
+  "from_role": "qa_reviewer",
+  "status": "ACCEPT",
+  "summary": "QA accepts M6-RELEASE-READINESS-SMOKE-001. The workspace diff adds deterministic local release-readiness smoke coverage plus README and .env.example release-readiness guidance without product runtime, provider, package, package-lock, Prisma, deployment, browser, or public-network changes. The smoke materially verifies the 48-hour MVP happy path from radar task context through mock scan, persisted scored opportunities, opportunity detail readiness, and deterministic MVP Spec generation readiness while blocking global fetch and asserting no network attempts. README commands match package.json and document environment setup, Prisma validate/generate/migrate/seed, focused smoke, test/build/taskctl/diff checks, dev-server/manual demo flow, and human-gated deployment boundaries.",
+  "artifacts": [
+    "tests/release-readiness-smoke.test.ts",
+    "README.md",
+    ".env.example",
+    "project/tasks/active/M6-RELEASE-READINESS-SMOKE-001.json",
+    "project/messages/outbox/M6-RELEASE-READINESS-SMOKE-001__MSG-20260628-RELEASE_ENGINEER.json",
+    "project/messages/outbox/M6-RELEASE-READINESS-SMOKE-001__MSG-20260628-SECURITY_REVIEWER.json",
+    "project/messages/outbox/M6-RELEASE-READINESS-SMOKE-001__MSG-20260628-QA_REVIEWER.json"
+  ],
+  "artifacts_reviewed": [
+    "AGENTS.md",
+    "project/tasks/active/M6-RELEASE-READINESS-SMOKE-001.json",
+    "project/messages/outbox/M6-RELEASE-READINESS-SMOKE-001__MSG-20260628-RELEASE_ENGINEER.json",
+    "project/messages/outbox/M6-RELEASE-READINESS-SMOKE-001__MSG-20260628-SECURITY_REVIEWER.json",
+    "tests/release-readiness-smoke.test.ts",
+    "README.md",
+    ".env.example",
+    "package.json"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "findings": [],
+  "acceptance_criteria_review": [
+    {
+      "criterion": "Deterministic local smoke covers the core 48-hour MVP happy path without real providers, secrets, network, browser, or deployment.",
+      "status": "PASS",
+      "notes": "tests/release-readiness-smoke.test.ts blocks global fetch, calls runScan with useMockSerp=true, verifies radar task lookup/context, asserts completed mock scan counts and opportunity persistence, serializes an opportunity detail view model, generates deterministic MVP Spec Markdown, and asserts zero network attempts."
+    },
+    {
+      "criterion": "Smoke materially verifies radar task context, mock scan producing at least one opportunity, opportunity detail readiness, and MVP Spec generation readiness.",
+      "status": "PASS",
+      "notes": "The smoke verifies task id/name/market/run status, keyword/SERP/opportunity counts, raw keyword/SERP/opportunity analysis, score breakdown consistency, risk summary, detail score/tool/kill-criteria readiness, and the expected MVP Spec sections."
+    },
+    {
+      "criterion": "README fresh-checkout commands match package.json and actual behavior.",
+      "status": "PASS",
+      "notes": "README uses npm run dev, npm run build, npm test, npm run start, npm run db:validate, npm run db:generate, npm run db:migrate -- --name init, and npm run db:seed, matching package.json. The focused smoke, npx tsx --test tests/*.test.ts, npm test, npm run build, taskctl validate, and git diff --check were rerun successfully during QA."
+    },
+    {
+      "criterion": "README covers env setup, DB validation/generation/migration/seed, smoke/tests/build/taskctl/diff, dev server, manual demo flow, and deployment human gates.",
+      "status": "PASS",
+      "notes": "README now documents copying .env.example to .env.local, required local values, optional future provider/admin/email/payment/cron/deployment placeholders, Prisma preparation commands, the full local validation sequence, npm run dev/start, manual dashboard/mock scan/opportunity/detail/MVP Spec demo flow, and human-gated public deployment/auth/provider/CI/CD/commercial decisions."
+    },
+    {
+      "criterion": "README and .env.example distinguish required local values from optional future values without real secrets.",
+      "status": "PASS",
+      "notes": ".env.example sets local APP_URL, NODE_ENV, DATABASE_URL, and SERP_PROVIDER=mock; future LLM, SERP, email, payment, cron, and deployment values are blank. Admin/session entries are clearly local placeholders. Focused scan found only expected placeholder key names and no real-seeming nonblank tokens."
+    },
+    {
+      "criterion": "Scope stays within tests/scripts/README/.env.example/package.json plus project handoff/state; no package-lock/runtime changes.",
+      "status": "PASS",
+      "notes": "Status and protected-path checks found product changes only in tests/release-readiness-smoke.test.ts, README.md, and .env.example. package.json and package-lock.json are unchanged. No app, components, agents, services, lib, prisma, docs, mock-data, .agents, .codex, or skills diff was present; project/** changes are task state and handoff review artifacts."
+    },
+    {
+      "criterion": "Required validations pass.",
+      "status": "PASS",
+      "notes": "QA reran the focused smoke, npx tsx --test tests/*.test.ts, npm test, npm run build, taskctl validate, and git diff --check. All exited 0; build retained only the known nonfatal local Windows Next SWC optional-native warnings, and git diff --check reported only LF-to-CRLF warnings."
+    },
+    {
+      "criterion": "Required reviewer handoffs are consistent.",
+      "status": "PASS",
+      "notes": "The release_engineer handoff validates and accurately describes the implementation. A concurrent security_reviewer ACCEPT handoff is present, validates, and routes to qa_reviewer with no requested changes."
+    }
+  ],
+  "tests_run": [
+    {
+      "command": "C:\\Users\\Administrator\\.codex\\skills\\project-git-workflow\\scripts\\git\\Status.cmd",
+      "exit_code": 0,
+      "result": "Reviewed working tree on main. Relevant changes are .env.example, README.md, project task state, release/security handoffs, and tests/release-readiness-smoke.test.ts."
+    },
+    {
+      "command": "node .agents\\skills\\just-goal\\scripts\\validate-handoff.mjs project\\messages\\outbox\\M6-RELEASE-READINESS-SMOKE-001__MSG-20260628-RELEASE_ENGINEER.json",
+      "exit_code": 0,
+      "result": "PASS: release_engineer handoff validates."
+    },
+    {
+      "command": "node .agents\\skills\\just-goal\\scripts\\validate-handoff.mjs project\\messages\\outbox\\M6-RELEASE-READINESS-SMOKE-001__MSG-20260628-SECURITY_REVIEWER.json",
+      "exit_code": 0,
+      "result": "PASS: security_reviewer handoff validates."
+    },
+    {
+      "command": "git diff -- package.json package-lock.json agents services lib app components prisma docs mock-data skills .codex .agents",
+      "exit_code": 0,
+      "result": "PASS: no protected product, dependency, package-lock, Prisma, docs/mock-data, skill, .agents, or .codex diff output."
+    },
+    {
+      "command": "git status --short -- package.json package-lock.json agents services lib app components prisma docs mock-data skills .codex .agents",
+      "exit_code": 0,
+      "result": "PASS: no protected tracked or untracked path output."
+    },
+    {
+      "command": "rg -n \"sk-|api_key|SECRET|PASSWORD|TOKEN|BEGIN PRIVATE|serpapi|DATAFORSEO|STRIPE|RESEND|OPENAI_API_KEY\" README.md .env.example tests/release-readiness-smoke.test.ts project/messages/outbox/M6-RELEASE-READINESS-SMOKE-001__MSG-20260628-RELEASE_ENGINEER.json",
+      "exit_code": 0,
+      "result": "INFO: matches were expected placeholder/key-name lines in .env.example and README text; no real-seeming nonblank secrets or tokens were found."
+    },
+    {
+      "command": "npx tsx --test tests\\release-readiness-smoke.test.ts",
+      "exit_code": 0,
+      "result": "PASS: 1 focused release-readiness smoke test passed."
+    },
+    {
+      "command": "npx tsx --test tests\\*.test.ts",
+      "exit_code": 0,
+      "result": "PASS: 73 tests passed across 16 suites."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "PASS: package test script completed with 73 tests passing across 16 suites."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "result": "PASS: Next.js production build completed successfully. Local Windows @next/swc-win32-x64-msvc optional-native warnings were printed but nonfatal."
+    },
+    {
+      "command": "node .agents\\skills\\just-goal\\scripts\\taskctl.mjs validate --repo-root .",
+      "exit_code": 0,
+      "result": "PASS: 14 active task JSON files validated."
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS: no whitespace errors. Git printed LF-to-CRLF working-copy warnings only."
+    }
+  ],
+  "decisions": [
+    "ACCEPT: The new smoke test is a meaningful local release-readiness gate for the MVP happy path and composes existing boundaries instead of changing product behavior.",
+    "ACCEPT: The README/.env guidance is accurate for a fresh local checkout and keeps production deployment, auth/session/ownership, paid providers, CI/CD, DNS, and commercial release human-gated.",
+    "ACCEPT: package.json and package-lock.json were not changed; no dependency or runtime behavior change was introduced.",
+    "ACCEPT: Project task/handoff files are coordination state and do not constitute product scope creep for this review.",
+    "No product files were modified during QA; only this QA handoff was added."
+  ],
+  "risks": [
+    "The manual demo flow assumes the developer has intentionally run the documented local Prisma migrate and seed commands before starting the dev server.",
+    "The MVP remains intentionally local/single-admin and unauthenticated; public exposure still requires later production auth/session/ownership decisions.",
+    "Future real provider, email, payment, cron, deployment, and CI/CD setup remains out of scope and must be separately reviewed before execution.",
+    "The local Windows build environment still prints nonfatal Next SWC optional-native warnings before exiting 0."
+  ],
+  "requested_changes": [],
+  "blockers": [],
+  "route_to": "lead_orchestrator",
+  "requested_action": "QA accepts M6-RELEASE-READINESS-SMOKE-001 with no requested changes. Proceed with lead orchestration/integration after any remaining project routing gates.",
+  "created_at": "2026-06-28T22:23:09.9241686+08:00"
+}

@@ -1,0 +1,69 @@
+{
+  "message_id": "MSG-20260628-RELEASE_ENGINEER",
+  "task_id": "M6-RELEASE-READINESS-SMOKE-001",
+  "from_role": "release_engineer",
+  "status": "REVIEW",
+  "summary": "Added final local release-readiness smoke coverage and documentation for the 48-hour MVP without public deployment. The new smoke test exercises the deterministic no-network MVP happy path through the real scan orchestrator boundary with an injected in-memory repository, verifies radar task context, mock SERP scan output with persisted opportunities, serializes an opportunity detail view model, and generates deterministic MVP Spec Markdown. README now documents fresh-checkout local validation, environment setup, Prisma validate/generate/migrate/seed commands, required tests/build/taskctl/diff checks, dev-server manual demo flow, and human-gated deployment notes. .env.example now separates required local MVP values from optional future provider, email, payment, cron, and deployment placeholders with no real secrets.",
+  "artifacts": [
+    "tests/release-readiness-smoke.test.ts",
+    "README.md",
+    ".env.example",
+    "project/messages/outbox/M6-RELEASE-READINESS-SMOKE-001__MSG-20260628-RELEASE_ENGINEER.json"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "tests_run": [
+    {
+      "command": "npx tsx --test tests\\release-readiness-smoke.test.ts",
+      "exit_code": 0,
+      "result": "PASS: 1 focused release-readiness smoke test passed. It blocked global fetch, ran the mock scan path, produced opportunities, serialized opportunity detail readiness, and generated deterministic MVP Spec Markdown."
+    },
+    {
+      "command": "npx tsx --test tests\\*.test.ts",
+      "exit_code": 0,
+      "result": "PASS: 73 tests passed across 16 suites, including the new local release smoke."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "PASS: package test script completed with 73 tests passing across 16 suites."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "result": "PASS: Next.js production build completed successfully. The local Windows build printed nonfatal @next/swc-win32-x64-msvc 'not a valid Win32 application' warnings before continuing and exiting 0."
+    },
+    {
+      "command": "node .agents\\skills\\just-goal\\scripts\\taskctl.mjs validate --repo-root .",
+      "exit_code": 0,
+      "result": "PASS: taskctl validated 14 active task files, including M6-RELEASE-READINESS-SMOKE-001."
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS: no whitespace errors. Git printed LF-to-CRLF working-copy warnings for .env.example and README.md."
+    }
+  ],
+  "decisions": [
+    "Kept the smoke test fully local and deterministic by injecting an in-memory ScanRepository and using the default mock SERP path with explicit global fetch blocking.",
+    "Composed existing production boundaries instead of changing runtime behavior: runScan, serializeOpportunityDetail, and generateMvpSpec.",
+    "Documented the fresh-checkout validation sequence in README rather than adding package scripts, so package.json and package-lock.json remain unchanged.",
+    "Changed .env.example defaults to local mock-safe values and blank future-provider placeholders, removing fake real-looking API-key examples.",
+    "Documented manual demo steps against seeded task id seed-gamedev-microtools while keeping public deployment and account/provider setup out of scope."
+  ],
+  "risks": [
+    "The local Windows build environment still emits nonfatal Next SWC optional-binary warnings even though build exits 0.",
+    "The README manual demo assumes the developer has run the documented local Prisma migrate and seed commands before starting the dev server.",
+    "Public deployment, production auth/session/ownership, paid providers, CI/CD, and commercial release are intentionally deferred and require human review before execution."
+  ],
+  "blockers": [],
+  "non_goal_confirmation": [
+    "No public deployment, DNS, GitHub Actions, CI/CD, store listing, paid provider setup, or account creation was performed.",
+    "No package dependency, package-lock, Prisma schema, migration, seed, database reset, auth/session/ownership, billing, telemetry, public sharing, cron, or email-sending change was made.",
+    "No runtime changes were made to agents, services, lib, app routes, components, API behavior, scoring, scan orchestration, or provider adapters.",
+    "No real secrets were added; .env.example contains only local defaults and blank optional future placeholders."
+  ],
+  "route_to": "security_reviewer",
+  "requested_action": "Review the release-readiness smoke, README, and .env.example for secrets/deployment posture, human-gated production boundaries, and no-network local MVP validation claims.",
+  "created_at": "2026-06-28T14:14:10Z"
+}

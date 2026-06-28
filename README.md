@@ -17,9 +17,42 @@
 - Tailwind CSS
 - `lib/env.ts` 服务端环境变量读取
 
-数据库、admin login、SERP provider、LLM agent、scan orchestration 和部署配置会在后续里程碑实现。
+Local MVP slices now include the SQLite data model, mock SERP provider, LLM JSON/agent utilities, scan orchestration, dashboard/list/detail views, status updates, MVP Spec generation, and local release smoke. Production auth/session policy and public deployment remain human-gated future work.
 
 ## Local Development
+
+This repo is set up for local-only 48-hour MVP validation. The default smoke
+path uses the mock SERP provider and deterministic local agents. It does not
+require real provider accounts, secrets, network access, a running browser, or a
+public deployment.
+
+### Environment Setup
+
+Copy the template and keep local-only values in `.env.local`:
+
+```bash
+cp .env.example .env.local
+```
+
+On Windows PowerShell:
+
+```powershell
+Copy-Item .env.example .env.local
+```
+
+Required local values:
+
+- `APP_URL=http://localhost:3000`
+- `NODE_ENV=development`
+- `DATABASE_URL="file:./dev.db"`
+- `SERP_PROVIDER=mock`
+
+Optional future values should stay blank unless a human intentionally configures
+that surface: admin placeholders, production session/auth settings, LLM keys,
+paid SERP provider keys, email, Stripe, cron, and deployment values. Do not add
+real secrets to `.env.example`, README examples, tests, or committed files.
+
+### Fresh Checkout Local Validation
 
 Install dependencies:
 
@@ -27,22 +60,30 @@ Install dependencies:
 npm install
 ```
 
-Start the development server:
+Validate and prepare the local Prisma client/database:
+
+```bash
+npm run db:validate
+npm run db:generate
+npm run db:migrate -- --name init
+npm run db:seed
+```
+
+Run the deterministic local release smoke and the required automated checks:
+
+```bash
+npx tsx --test tests/release-readiness-smoke.test.ts
+npx tsx --test tests/*.test.ts
+npm test
+npm run build
+node .agents/skills/just-goal/scripts/taskctl.mjs validate --repo-root .
+git diff --check
+```
+
+Start the local development server for manual validation:
 
 ```bash
 npm run dev
-```
-
-Build for production:
-
-```bash
-npm run build
-```
-
-Run automated tests:
-
-```bash
-npm test
 ```
 
 Start a production build locally:
@@ -51,7 +92,33 @@ Start a production build locally:
 npm run start
 ```
 
-The scaffold can build without secrets. When runtime features need configuration, copy `.env.example` to `.env.local` and keep secret reads on the server through `lib/env.ts`.
+### Manual Demo Flow
+
+With `npm run dev` running and the seed data loaded:
+
+1. Open `http://localhost:3000/dashboard` and confirm the local dashboard
+   renders.
+2. Run a mock scan for the seeded GameDev radar task:
+
+   ```powershell
+   Invoke-RestMethod -Method Post -Uri http://localhost:3000/api/scans/run -ContentType application/json -Body '{"radarTaskId":"seed-gamedev-microtools","useMockSerp":true,"keywordLimit":2,"serpLimit":1}'
+   ```
+
+3. Open `http://localhost:3000/opportunities`, verify at least one scored
+   opportunity appears, then open an opportunity detail page.
+4. On the opportunity detail page, confirm score breakdown, SERP weakness,
+   monetization, risk, radar task/run context, and status controls render.
+5. Generate the MVP Spec from the detail page and confirm the Markdown includes
+   Page Structure, Form Fields, Data Model, API Routes, Monetization Entry
+   Points, Risk Notes, 48-Hour Build Checklist, Acceptance Criteria, and Kill
+   Criteria.
+
+### Deployment Readiness Notes
+
+This task prepares local release confidence only. Public deployment,
+production auth/session/ownership policy, paid provider setup, CI/CD, DNS,
+store listings, commercial release decisions, and real account creation remain
+human-gated and are not executed by this repository setup.
 
 ## Mock SERP Provider
 

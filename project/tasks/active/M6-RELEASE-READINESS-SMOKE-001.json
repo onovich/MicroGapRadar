@@ -2,7 +2,7 @@
   "id": "M6-RELEASE-READINESS-SMOKE-001",
   "summary": "Add final local smoke coverage and release-readiness documentation for the 48-hour MVP without performing a public deployment.",
   "milestone": "M6",
-  "status": "IN_PROGRESS",
+  "status": "ACCEPTED",
   "owner_role": "release_engineer",
   "reviewer_role": "qa_reviewer",
   "risk_level": "R2",
@@ -55,7 +55,7 @@
     "security_reviewer": "019f0e8c-bf0f-7211-a8b7-0e65331de8cf",
     "qa_reviewer": "019f0e8c-c067-7d33-96ed-675b3c497125"
   },
-  "route_to": "release_engineer",
+  "route_to": "security_reviewer",
   "notes": [
     "Derived from docs/09_codex_implementation_tasks.md Task 15, docs/11_development_plan.md M6 final acceptance, and docs/10_acceptance_criteria_and_test_plan.md MVP completion definition.",
     "This task is deployment readiness, not deployment. Actual public deployment, production secrets, accounts, DNS, CI/CD, auth/session policy, and commercial release remain human-gated.",
@@ -69,7 +69,7 @@
     "No broad README rewrite beyond final local validation, smoke, environment, and deployment-readiness sections."
   ],
   "created_at": "2026-06-28T14:05:00Z",
-  "updated_at": "2026-06-28T14:05:46.122Z",
+  "updated_at": "2026-06-28T14:26:05.958Z",
   "required_reviewers": [
     "security_reviewer"
   ]
