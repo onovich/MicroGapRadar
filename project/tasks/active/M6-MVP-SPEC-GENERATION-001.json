@@ -2,7 +2,7 @@
   "id": "M6-MVP-SPEC-GENERATION-001",
   "summary": "Add the MVP Spec generation slice with a Codex-ready Markdown agent, persisted MvpSpec API, and copyable detail-page UI.",
   "milestone": "M6",
-  "status": "IN_PROGRESS",
+  "status": "ACCEPTED",
   "owner_role": "implementation_engineer",
   "reviewer_role": "qa_reviewer",
   "risk_level": "R3",
@@ -86,7 +86,7 @@
     "No broad rewrite of Opportunity Detail, Dashboard, Opportunity List, existing status API, or existing scan APIs beyond the minimal hooks needed to display/generate/copy MVP Spec."
   ],
   "created_at": "2026-06-28T13:20:00Z",
-  "updated_at": "2026-06-28T13:25:28.491Z",
+  "updated_at": "2026-06-28T13:58:38.514Z",
   "required_reviewers": [
     "systems_architect",
     "domain_designer",

@@ -11,8 +11,11 @@ import { getScoreTone, ScoreBadge } from "../components/ScoreBadge";
 import {
   buildDashboardViewModel,
   buildOpportunityListViewModel,
+  generateAndPersistMvpSpec,
   normalizeOpportunityFilters,
+  type MvpSpecPersistenceClient,
   OpportunityNotFoundError,
+  type OpportunityDetailRow,
   OpportunityStatusValidationError,
   parseOpportunityStatusUpdate,
   serializeOpportunityDetail,
@@ -176,6 +179,28 @@ describe("opportunity dashboard and list view models", () => {
     assert.deepEqual(detail.killCriteria, [
       "Discard if SERP is already dominated by focused tools.",
     ]);
+    assert.equal(detail.mvpSpec, null);
+    assert.doesNotThrow(() => JSON.stringify(detail));
+  });
+
+  it("serializes an already-generated MVP Spec on opportunity detail", () => {
+    const detail = serializeOpportunityDetail(opportunityRow({
+      id: "detail_with_spec",
+      title: "Steam Short Description Generator",
+      mvpSpec: {
+        markdown: "# MVP Spec\n\n## Page Structure\n- `/` tool page",
+        generatedByModel: "deterministic-mvp-spec-agent-2026-06-28-v1",
+      },
+    }));
+
+    assert.equal(detail.mvpSpec?.opportunityId, "detail_with_spec");
+    assert.equal(detail.mvpSpec?.markdown, "# MVP Spec\n\n## Page Structure\n- `/` tool page");
+    assert.equal(
+      detail.mvpSpec?.generatedByModel,
+      "deterministic-mvp-spec-agent-2026-06-28-v1",
+    );
+    assert.equal(typeof detail.mvpSpec?.createdAt, "string");
+    assert.equal(typeof detail.mvpSpec?.updatedAt, "string");
     assert.doesNotThrow(() => JSON.stringify(detail));
   });
 
@@ -194,6 +219,88 @@ describe("opportunity dashboard and list view models", () => {
     assert.deepEqual(model.items, []);
     assert.deepEqual(model.filterOptions.radarTasks, []);
     assert.equal(model.hasActiveFilters, false);
+  });
+
+  it("loads an opportunity, generates Markdown, and upserts MVP Spec persistence", async () => {
+    const findCalls: unknown[] = [];
+    const upsertCalls: unknown[] = [];
+    const fakeDb: MvpSpecPersistenceClient = {
+      opportunity: {
+        findUnique: async (args) => {
+          findCalls.push(args);
+
+          return opportunityRow({
+            id: "opportunity_1",
+            title: "Steam Short Description Generator",
+          }) as unknown as OpportunityDetailRow;
+        },
+      },
+      mvpSpec: {
+        upsert: async (args) => {
+          upsertCalls.push(args);
+
+          return {
+            id: "spec_1",
+            opportunityId: "opportunity_1",
+            markdown: "## Page Structure\nGenerated markdown",
+            generatedByModel: "test-model",
+            createdAt: new Date("2026-06-28T08:00:00.000Z"),
+            updatedAt: new Date("2026-06-28T08:05:00.000Z"),
+          };
+        },
+      },
+    };
+    const result = await generateAndPersistMvpSpec("opportunity_1", {
+      dbClient: fakeDb,
+      generateSpec: (opportunity) => {
+        assert.equal(opportunity.id, "opportunity_1");
+        assert.equal(opportunity.title, "Steam Short Description Generator");
+
+        return {
+          markdown: "## Page Structure\nGenerated markdown",
+          generatedByModel: "test-model",
+        };
+      },
+    });
+    const findCall = findCalls[0] as {
+      where: { id: string };
+      include: { mvpSpec?: { select?: { markdown?: boolean } } };
+    };
+    const upsertCall = upsertCalls[0] as {
+      where: { opportunityId: string };
+      create: {
+        opportunityId: string;
+        markdown: string;
+        generatedByModel: string;
+      };
+      update: {
+        markdown: string;
+        generatedByModel: string;
+      };
+    };
+
+    assert.equal(findCalls.length, 1);
+    assert.equal(findCall.where.id, "opportunity_1");
+    assert.equal(findCall.include.mvpSpec?.select?.markdown, true);
+    assert.equal(upsertCalls.length, 1);
+    assert.deepEqual(upsertCall.where, { opportunityId: "opportunity_1" });
+    assert.deepEqual(upsertCall.create, {
+      opportunityId: "opportunity_1",
+      markdown: "## Page Structure\nGenerated markdown",
+      generatedByModel: "test-model",
+    });
+    assert.deepEqual(upsertCall.update, {
+      markdown: "## Page Structure\nGenerated markdown",
+      generatedByModel: "test-model",
+    });
+    assert.deepEqual(result, {
+      id: "spec_1",
+      opportunityId: "opportunity_1",
+      markdown: "## Page Structure\nGenerated markdown",
+      generatedByModel: "test-model",
+      createdAt: "2026-06-28T08:00:00.000Z",
+      updatedAt: "2026-06-28T08:05:00.000Z",
+    });
   });
 });
 
@@ -256,6 +363,31 @@ describe("opportunity components", () => {
     assert.match(html, /Status/);
     assert.match(html, /Build next/);
     assert.match(html, /GameDev Radar/);
+    assert.match(html, /MVP Spec/);
+    assert.match(html, /No MVP Spec yet/);
+    assert.match(html, /Generate MVP Spec/);
+    assert.match(html, /Copy Markdown/);
+    assert.match(html, /No Markdown has been generated/);
+  });
+
+  it("renders already-generated MVP Spec Markdown on the detail page", () => {
+    const opportunity = serializeOpportunityDetail(opportunityRow({
+      id: "detail_component_with_spec",
+      mvpSpec: {
+        markdown: "# MVP Spec\n\n## Page Structure\n- `/` tool page",
+        generatedByModel: "deterministic-mvp-spec-agent-2026-06-28-v1",
+      },
+    }));
+    const html = renderToStaticMarkup(
+      createElement(OpportunityDetail, { opportunity }),
+    );
+
+    assert.match(html, /MVP Spec/);
+    assert.match(html, /Generated/);
+    assert.match(html, /Regenerate/);
+    assert.match(html, /Copy Markdown/);
+    assert.match(html, /# MVP Spec/);
+    assert.match(html, /Page Structure/);
   });
 });
 
@@ -461,6 +593,12 @@ function opportunityRow(overrides: {
   monetizationPrimary?: string;
   monetizationSecondary?: string[];
   createdAt?: string;
+  mvpSpec?: {
+    markdown?: string;
+    generatedByModel?: string;
+    createdAt?: string;
+    updatedAt?: string;
+  } | null;
 } = {}): OpportunityRow {
   const riskLevel = overrides.riskLevel ?? "low";
   const totalScore = overrides.totalScore ?? 80;
@@ -468,6 +606,20 @@ function opportunityRow(overrides: {
   const searchRunStartedAt = new Date("2026-06-28T06:30:00.000Z");
   const radarTaskId = overrides.radarTaskId ?? "task_game";
   const searchRunId = overrides.searchRunId ?? "run_1";
+  const mvpSpec = overrides.mvpSpec === undefined
+    ? undefined
+    : overrides.mvpSpec === null
+      ? null
+      : {
+          id: `spec_${overrides.id ?? "opportunity_1"}`,
+          opportunityId: overrides.id ?? "opportunity_1",
+          markdown: overrides.mvpSpec.markdown ?? "# MVP Spec",
+          generatedByModel:
+            overrides.mvpSpec.generatedByModel ??
+            "deterministic-mvp-spec-agent-2026-06-28-v1",
+          createdAt: new Date(overrides.mvpSpec.createdAt ?? "2026-06-28T08:00:00.000Z"),
+          updatedAt: new Date(overrides.mvpSpec.updatedAt ?? "2026-06-28T08:05:00.000Z"),
+        };
 
   return {
     id: overrides.id ?? "opportunity_1",
@@ -536,6 +688,7 @@ function opportunityRow(overrides: {
       startedAt: searchRunStartedAt,
       completedAt: new Date("2026-06-28T06:40:00.000Z"),
     },
+    ...(mvpSpec === undefined ? {} : { mvpSpec }),
   } as OpportunityRow;
 }
 

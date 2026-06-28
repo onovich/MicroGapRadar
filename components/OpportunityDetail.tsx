@@ -3,6 +3,7 @@ import * as React from "react";
 
 import type { OpportunityDetailViewModel } from "@/lib/opportunities";
 
+import { MvpSpecPanel } from "./MvpSpecPanel";
 import { getRiskBadgeClass } from "./OpportunityCard";
 import { OpportunityStatusControls } from "./OpportunityStatusControls";
 import { ScoreBadge } from "./ScoreBadge";
@@ -13,6 +14,8 @@ type OpportunityDetailProps = {
 
 export function OpportunityDetail({ opportunity }: OpportunityDetailProps) {
   const updateUrl = `/api/opportunities/${encodeURIComponent(opportunity.id)}`;
+  const mvpSpecUrl =
+    `/api/opportunities/${encodeURIComponent(opportunity.id)}/mvp-spec`;
 
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-6">
@@ -133,6 +136,12 @@ export function OpportunityDetail({ opportunity }: OpportunityDetailProps) {
               ) : null}
             </div>
           </section>
+
+          <MvpSpecPanel
+            generateUrl={mvpSpecUrl}
+            initialSpec={opportunity.mvpSpec}
+            opportunityId={opportunity.id}
+          />
         </div>
 
         <aside className="space-y-4">

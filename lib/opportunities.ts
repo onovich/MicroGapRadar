@@ -1,4 +1,8 @@
 import { Prisma } from "@prisma/client";
+import type {
+  MvpSpecAgentOutput,
+  MvpSpecOpportunityInput,
+} from "../agents/mvp-spec-agent";
 
 const opportunityInclude = {
   radarTask: {
@@ -14,6 +18,22 @@ const opportunityInclude = {
       startedAt: true,
       completedAt: true,
     },
+  },
+} satisfies Prisma.OpportunityInclude;
+
+const mvpSpecSelect = {
+  id: true,
+  opportunityId: true,
+  markdown: true,
+  generatedByModel: true,
+  createdAt: true,
+  updatedAt: true,
+} satisfies Prisma.MvpSpecSelect;
+
+const opportunityDetailInclude = {
+  ...opportunityInclude,
+  mvpSpec: {
+    select: mvpSpecSelect,
   },
 } satisfies Prisma.OpportunityInclude;
 
@@ -57,6 +77,14 @@ export const TOOL_TYPES = [
 
 export type OpportunityRow = Prisma.OpportunityGetPayload<{
   include: typeof opportunityInclude;
+}>;
+
+export type OpportunityDetailRow = Prisma.OpportunityGetPayload<{
+  include: typeof opportunityDetailInclude;
+}>;
+
+export type MvpSpecRow = Prisma.MvpSpecGetPayload<{
+  select: typeof mvpSpecSelect;
 }>;
 
 export type SearchRunRow = Prisma.SearchRunGetPayload<{
@@ -118,6 +146,15 @@ export type ToolConceptViewModel = {
   outputModules: string[];
 };
 
+export type MvpSpecViewModel = {
+  id: string;
+  opportunityId: string;
+  markdown: string;
+  generatedByModel: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type OpportunityCardViewModel = {
   id: string;
   detailHref: string;
@@ -161,6 +198,7 @@ export type OpportunityDetailViewModel = OpportunityCardViewModel & {
   toolConcept: ToolConceptViewModel | null;
   toolabilitySummary: string | null;
   killCriteria: string[];
+  mvpSpec: MvpSpecViewModel | null;
 };
 
 export type OpportunityStatusUpdateViewModel = {
@@ -244,6 +282,36 @@ export class OpportunityStatusValidationError extends Error {
   }
 }
 
+export class MvpSpecGenerationValidationError extends Error {
+  readonly code = "MVP_SPEC_GENERATION_VALIDATION_ERROR";
+
+  constructor() {
+    super("MVP Spec generation produced invalid output.");
+    this.name = "MvpSpecGenerationValidationError";
+  }
+}
+
+export type GenerateMvpSpecDependency = (
+  opportunity: MvpSpecOpportunityInput,
+) => Promise<MvpSpecAgentOutput> | MvpSpecAgentOutput;
+
+export type MvpSpecPersistenceClient = {
+  opportunity: {
+    findUnique: (args: {
+      where: { id: string };
+      include: typeof opportunityDetailInclude;
+    }) => Promise<OpportunityDetailRow | null>;
+  };
+  mvpSpec: {
+    upsert: (args: Prisma.MvpSpecUpsertArgs) => Promise<MvpSpecRow>;
+  };
+};
+
+export type GenerateAndPersistMvpSpecOptions = {
+  dbClient?: MvpSpecPersistenceClient;
+  generateSpec?: GenerateMvpSpecDependency;
+};
+
 export async function getDashboardData(
   now: Date = new Date(),
 ): Promise<DashboardViewModel> {
@@ -323,10 +391,53 @@ export async function getOpportunityDetailData(
   const { db } = await import("@/lib/db");
   const opportunity = await db.opportunity.findUnique({
     where: { id },
-    include: opportunityInclude,
+    include: opportunityDetailInclude,
   });
 
   return opportunity ? serializeOpportunityDetail(opportunity) : null;
+}
+
+export async function generateAndPersistMvpSpec(
+  idInput: unknown,
+  options: GenerateAndPersistMvpSpecOptions = {},
+): Promise<MvpSpecViewModel> {
+  const id = parseOpportunityId(idInput);
+  const dbClient = options.dbClient ?? await getMvpSpecPersistenceClient();
+  const opportunity = await dbClient.opportunity.findUnique({
+    where: { id },
+    include: opportunityDetailInclude,
+  });
+
+  if (!opportunity) {
+    throw new OpportunityNotFoundError(id);
+  }
+
+  const detail = serializeOpportunityDetail(opportunity);
+  const generateSpec = options.generateSpec ?? await getDefaultMvpSpecGenerator();
+  const generated = await generateSpec(detail);
+
+  assertValidGeneratedMvpSpec(generated);
+
+  const persistedSpec = await dbClient.mvpSpec.upsert({
+    where: { opportunityId: id },
+    create: {
+      opportunityId: id,
+      markdown: generated.markdown,
+      generatedByModel: generated.generatedByModel,
+    },
+    update: {
+      markdown: generated.markdown,
+      generatedByModel: generated.generatedByModel,
+    },
+    select: mvpSpecSelect,
+  });
+  const serializedSpec = serializeMvpSpec(persistedSpec);
+
+  if (!serializedSpec) {
+    throw new MvpSpecGenerationValidationError();
+  }
+
+  return serializedSpec;
 }
 
 export async function getOpportunityListData(
@@ -494,7 +605,7 @@ export function buildOpportunityListViewModel({
 }
 
 export function serializeOpportunityDetail(
-  opportunity: OpportunityRow,
+  opportunity: OpportunityRow | OpportunityDetailRow,
 ): OpportunityDetailViewModel {
   const card = serializeOpportunity(opportunity);
   const scoreExplanation = normalizeScoreExplanation(
@@ -523,6 +634,7 @@ export function serializeOpportunityDetail(
       scoreExplanation,
     ),
     killCriteria: normalizeStringList(opportunity.killCriteria),
+    mvpSpec: serializeMvpSpec(getMvpSpecFromOpportunity(opportunity)),
   };
 }
 
@@ -804,6 +916,21 @@ function serializeOpportunityStatusUpdate(opportunity: {
     status,
     statusLabel: formatStatusLabel(status),
     updatedAt: opportunity.updatedAt.toISOString(),
+  };
+}
+
+function serializeMvpSpec(spec: MvpSpecRow | null | undefined): MvpSpecViewModel | null {
+  if (!spec) {
+    return null;
+  }
+
+  return {
+    id: spec.id,
+    opportunityId: spec.opportunityId,
+    markdown: spec.markdown,
+    generatedByModel: spec.generatedByModel,
+    createdAt: spec.createdAt.toISOString(),
+    updatedAt: spec.updatedAt.toISOString(),
   };
 }
 
@@ -1219,6 +1346,38 @@ function normalizeNumber(value: unknown): number | undefined {
   }
 
   return value;
+}
+
+function getMvpSpecFromOpportunity(
+  opportunity: OpportunityRow | OpportunityDetailRow,
+): MvpSpecRow | null {
+  return "mvpSpec" in opportunity ? opportunity.mvpSpec : null;
+}
+
+function assertValidGeneratedMvpSpec(
+  generated: MvpSpecAgentOutput,
+): asserts generated is MvpSpecAgentOutput {
+  if (
+    !generated ||
+    typeof generated.markdown !== "string" ||
+    normalizeText(generated.markdown).length === 0 ||
+    typeof generated.generatedByModel !== "string" ||
+    normalizeText(generated.generatedByModel).length === 0
+  ) {
+    throw new MvpSpecGenerationValidationError();
+  }
+}
+
+async function getMvpSpecPersistenceClient(): Promise<MvpSpecPersistenceClient> {
+  const { db } = await import("@/lib/db");
+
+  return db;
+}
+
+async function getDefaultMvpSpecGenerator(): Promise<GenerateMvpSpecDependency> {
+  const { generateMvpSpec } = await import("../agents/mvp-spec-agent");
+
+  return generateMvpSpec;
 }
 
 function isSameLocalDay(date: Date, day: Date): boolean {

@@ -1,0 +1,139 @@
+{
+  "message_id": "MSG-20260628-SECURITY_REVIEWER-M6-MVP-SPEC-GENERATION-001",
+  "task_id": "M6-MVP-SPEC-GENERATION-001",
+  "from_role": "security_reviewer",
+  "status": "ACCEPT",
+  "summary": "Security review accepts the M6 MVP Spec generation slice. The POST route ignores request body content and derives generation from one persisted Opportunity id, the default agent path is deterministic with no provider/env/network setup, persistence is a narrow MvpSpec upsert keyed by opportunityId, API errors are sanitized against ids, provider/raw prompt material, stack traces, and database details, and the UI renders persisted Markdown as escaped preformatted text with no dangerous HTML sink. The unauthenticated endpoint remains acceptable only under the documented local single-admin MVP assumption.",
+  "artifacts": [
+    "agents/mvp-spec-agent.ts",
+    "agents/index.ts",
+    "app/api/opportunities/[id]/mvp-spec/_api.ts",
+    "app/api/opportunities/[id]/mvp-spec/route.ts",
+    "components/MvpSpecPanel.tsx",
+    "components/OpportunityDetail.tsx",
+    "lib/opportunities.ts",
+    "tests/mvp-spec-agent.test.ts",
+    "tests/mvp-spec-api.test.ts",
+    "tests/opportunities.test.ts",
+    "README.md",
+    "project/messages/outbox/M6-MVP-SPEC-GENERATION-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+    "project/messages/outbox/M6-MVP-SPEC-GENERATION-001__MSG-20260628-SECURITY_REVIEWER.json"
+  ],
+  "artifacts_reviewed": [
+    "AGENTS.md",
+    "project/tasks/active/M6-MVP-SPEC-GENERATION-001.json",
+    "project/messages/outbox/M6-MVP-SPEC-GENERATION-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+    "agents/mvp-spec-agent.ts",
+    "agents/index.ts",
+    "app/api/opportunities/[id]/mvp-spec/_api.ts",
+    "app/api/opportunities/[id]/mvp-spec/route.ts",
+    "components/MvpSpecPanel.tsx",
+    "components/OpportunityDetail.tsx",
+    "lib/opportunities.ts",
+    "tests/mvp-spec-agent.test.ts",
+    "tests/mvp-spec-api.test.ts",
+    "tests/opportunities.test.ts",
+    "README.md"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "findings": [],
+  "security_checklist": [
+    {
+      "item": "Server-owned generation input",
+      "status": "PASS",
+      "notes": "app/api/opportunities/[id]/mvp-spec/_api.ts names the Request argument _request and never reads JSON or form data. The handler parses only context.params.id, then calls generateAndPersistMvpSpec(opportunityId)."
+    },
+    {
+      "item": "Narrow persistence",
+      "status": "PASS",
+      "notes": "lib/opportunities.ts loads one Opportunity with mvpSpec select, serializes the detail view model, and writes only MvpSpec markdown/generatedByModel through mvpSpec.upsert where opportunityId matches the route id. No delete, broad update, raw SQL, transaction, schema, or migration change was found."
+    },
+    {
+      "item": "No prompt/raw provider leakage",
+      "status": "PASS",
+      "notes": "generateMvpSpec falls back on failed injected safe-JSON completion without copying completion errors, rawText, repairRawText, or provider payloads into Markdown or API results. API tests cover fake secret, raw prompt, and stack-trace strings staying out of responses."
+    },
+    {
+      "item": "Sanitized API responses",
+      "status": "PASS",
+      "notes": "Known not-found and generation validation errors return generic NOT_FOUND or AGENT_VALIDATION_ERROR responses. Unexpected failures log server-side but return a generic INTERNAL_ERROR envelope without exception text."
+    },
+    {
+      "item": "Escaped Markdown rendering",
+      "status": "PASS",
+      "notes": "components/MvpSpecPanel.tsx renders spec.markdown as a React text child inside pre/code. Focused scan found no dangerouslySetInnerHTML or innerHTML usage in the M6 product paths."
+    },
+    {
+      "item": "No default provider, env, network, or secret setup",
+      "status": "PASS",
+      "notes": "The route uses generateMvpSpec with no options, and generateMvpSpec returns deterministic local output when no llmClient is injected. Focused scan found no process.env, lib/env, OpenAICompatibleClient, or createSerpProvider hits in M6 product paths. The only fetch hit is the browser panel POST to the same local route."
+    },
+    {
+      "item": "Local single-admin boundary",
+      "status": "PASS",
+      "notes": "README documents the M6 local data dependency and states the slice remains single local admin only, with sessions, public auth, ownership checks, billing, telemetry, public sharing, deployment, provider setup, schema migrations, scan orchestration changes, scoring changes, and package dependencies out of scope."
+    }
+  ],
+  "tests_run": [
+    {
+      "command": "C:\\Users\\Administrator\\.codex\\skills\\project-git-workflow\\scripts\\git\\Status.cmd",
+      "exit_code": 0,
+      "result": "Reviewed working tree on main: M6 changes are in README.md, agents/index.ts, components/OpportunityDetail.tsx, lib/opportunities.ts, tests/opportunities.test.ts, and untracked M6 agent/API/panel/test/handoff files."
+    },
+    {
+      "command": "npx tsx --test tests\\mvp-spec-agent.test.ts tests\\mvp-spec-api.test.ts tests\\opportunities.test.ts",
+      "exit_code": 0,
+      "result": "PASS: 26 focused tests passed across MVP Spec Agent, MVP Spec API, opportunity view-model/component, persistence/upsert, and existing status suites."
+    },
+    {
+      "command": "git status --short -- package.json package-lock.json prisma lib/env.ts lib/db.ts lib/schemas.ts services app/api/scans app/api/radar-tasks app/api/opportunities/[id]/route.ts app/api/opportunities/[id]/_api.ts",
+      "exit_code": 0,
+      "result": "PASS: no protected package, Prisma schema/migration, env/db/schema helper, services, scan API, radar-task API, or existing opportunity status route changes were present."
+    },
+    {
+      "command": "PowerShell rg no-match scan for dangerouslySetInnerHTML|innerHTML over M6 product paths",
+      "exit_code": 0,
+      "result": "PASS: no dangerous HTML rendering hits in M6 product paths."
+    },
+    {
+      "command": "PowerShell rg no-match scan for process.env, lib/env, OpenAICompatibleClient, and createSerpProvider over M6 product paths",
+      "exit_code": 0,
+      "result": "PASS: no product env, secret, or provider setup hits in M6 product paths."
+    },
+    {
+      "command": "PowerShell rg no-match scan for deleteMany, updateMany, createMany, raw SQL, and filesystem writes/deletes over M6 product paths",
+      "exit_code": 0,
+      "result": "PASS: no broad DB writes, raw SQL, or filesystem write/delete hits in M6 product paths."
+    },
+    {
+      "command": "PowerShell rg no-match scan for literal $transaction over M6 product paths",
+      "exit_code": 0,
+      "result": "PASS: no Prisma transaction usage in M6 product paths."
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS: no whitespace errors. Git printed LF-to-CRLF working-copy warnings for touched tracked files."
+    }
+  ],
+  "decisions": [
+    "ACCEPT: The POST API is server-authoritative and does not accept client-supplied Markdown or opportunity ids from the body.",
+    "ACCEPT: The persistence boundary is limited to the existing MvpSpec table and existing opportunityId unique key.",
+    "ACCEPT: Optional LLM support is dependency-injected and inert on the product route; no default provider, env, secret, or network path is wired.",
+    "ACCEPT: Displaying generated Markdown in pre/code is safe for this slice because React escapes the persisted string and no Markdown-to-HTML renderer was added.",
+    "Accepted the existing pattern of server-side console.error for unexpected failures because public API responses remain generic and the slice does not load configured secrets.",
+    "Did not modify product code."
+  ],
+  "risks": [
+    "The route is intentionally unauthenticated under the local single-admin MVP policy. Public deployment still requires a later auth/session/ownership gate.",
+    "Generated Markdown can contain untrusted-looking text from persisted opportunity fields or future injected LLM output, but it is rendered as escaped text in this slice.",
+    "Server logs may contain unexpected exception details through console.error, matching existing local API style; avoid wiring real provider secrets until a redacted logging policy exists.",
+    "Injected test/future dependencies could perform network calls by design, but the default production route does not inject them."
+  ],
+  "blockers": [],
+  "requested_changes": [],
+  "route_to": "qa_reviewer",
+  "requested_action": "Proceed with QA review for M6-MVP-SPEC-GENERATION-001. Security review accepts the implementation with local-MVP residual risks noted and no requested changes.",
+  "created_at": "2026-06-28T21:53:58.4035833+08:00"
+}

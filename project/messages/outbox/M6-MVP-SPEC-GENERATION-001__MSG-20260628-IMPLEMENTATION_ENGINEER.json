@@ -1,0 +1,65 @@
+{
+  "message_id": "MSG-20260628-IMPLEMENTATION_ENGINEER",
+  "task_id": "M6-MVP-SPEC-GENERATION-001",
+  "from_role": "implementation_engineer",
+  "status": "REVIEW",
+  "summary": "Implemented the M6 MVP Spec generation slice. Added a deterministic Codex-ready Markdown agent with optional injected LLM/safe-JSON dependencies, fixed Markdown sections including Data Model and 48-Hour Build Checklist, POST /api/opportunities/{id}/mvp-spec with safe errors, upsert persistence into the existing MvpSpec table, persisted spec serialization on opportunity detail, a Generate/Regenerate and Copy Markdown detail-page panel, focused tests, and README documentation. No schema, package, provider, env, auth, scan, scoring, deployment, or forbidden product-scope changes were made.",
+  "artifacts": [
+    "agents/mvp-spec-agent.ts",
+    "agents/index.ts",
+    "app/api/opportunities/[id]/mvp-spec/_api.ts",
+    "app/api/opportunities/[id]/mvp-spec/route.ts",
+    "components/MvpSpecPanel.tsx",
+    "components/OpportunityDetail.tsx",
+    "lib/opportunities.ts",
+    "tests/mvp-spec-agent.test.ts",
+    "tests/mvp-spec-api.test.ts",
+    "tests/opportunities.test.ts",
+    "README.md"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "tests_run": [
+    {
+      "command": "npx tsx --test tests/mvp-spec-agent.test.ts tests/mvp-spec-api.test.ts tests/opportunities.test.ts",
+      "exit_code": 0,
+      "result": "PASS: 26 focused tests passed across MVP Spec Agent, MVP Spec API, opportunity view-model/component, persistence/upsert, and existing opportunity status suites."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "PASS: 72 tests passed across 15 suites."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "result": "PASS: Next.js production build completed successfully and included /api/opportunities/[id]/mvp-spec. The local Windows SWC optional native package printed nonfatal 'not a valid Win32 application' warnings before Next continued and exited 0."
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS: no whitespace errors. Git printed LF-to-CRLF working-copy warnings for touched tracked files."
+    }
+  ],
+  "decisions": [
+    "Kept agents/mvp-spec-agent.ts deterministic by default, with optional injected LLM client and safeJsonCompletion dependency for tests/future provider wiring; it does not create providers, read process.env, or call the network on its own.",
+    "Used the persisted Opportunity detail view model as the agent input contract and generated Markdown sections for page structure, form fields, data model, API routes, result behavior, monetization entry points, risk notes, 48-hour build checklist, acceptance criteria, and kill criteria.",
+    "Extended lib/opportunities.ts with a detail-only MvpSpec include, plain MvpSpecViewModel serialization, and generateAndPersistMvpSpec() so API persistence stays out of UI components.",
+    "Persisted specs with Prisma upsert by the existing unique MvpSpec.opportunityId field, saving markdown plus generatedByModel without schema or migration changes.",
+    "Implemented POST /api/opportunities/[id]/mvp-spec through an injectable handler, returning { data } on success and sanitized NOT_FOUND, AGENT_VALIDATION_ERROR, and INTERNAL_ERROR responses.",
+    "Added a restrained client-side MVP Spec panel to the existing detail page so reopening a detail view shows persisted Markdown, while Generate/Regenerate and Copy Markdown are isolated from status and scan behavior.",
+    "Covered persistence/upsert behavior with an injected fake Prisma-like client, and covered API safe errors without using a live database or provider.",
+    "Updated README to document the M6 slice, local Opportunity/RadarTask/SearchRun data dependency, validation commands, single-admin assumption, and explicit non-goals."
+  ],
+  "risks": [
+    "The MVP Spec endpoint remains unauthenticated under the local single-admin MVP assumption; public deployment still needs a later auth/session/ownership slice.",
+    "The deterministic Markdown is intentionally template-based and may need domain-designer tuning before broad real-provider use.",
+    "Generated specs depend on the quality of persisted Opportunity detail fields and older rows may have sparse toolConcept/rawAnalysis context.",
+    "Clipboard fallback uses document.execCommand for browsers without navigator.clipboard; modern browsers should use the primary Clipboard API path.",
+    "The local build environment prints nonfatal Windows SWC optional-binary warnings even though the build exits 0."
+  ],
+  "blockers": [],
+  "route_to": "systems_architect",
+  "requested_action": "Review M6-MVP-SPEC-GENERATION-001 against architecture, persistence, API boundary, and non-goal constraints, then route to domain_designer, security_reviewer, and qa_reviewer for independent acceptance.",
+  "created_at": "2026-06-28T13:40:40Z"
+}

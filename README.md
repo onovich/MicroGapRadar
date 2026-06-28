@@ -347,7 +347,30 @@ npm run build
 git diff --check
 ```
 
-Non-goals for this slice: no MVP Spec generation, no Copy MVP Spec behavior, no `/api/opportunities/{id}/mvp-spec` route, no schema migration, no package dependency change, no scan orchestration change, no scoring formula change, no auth/session system, no provider setup, no deployment, and no GitHub Actions change.
+Non-goals for the detail/status slice: no schema migration, no package dependency change, no scan orchestration change, no scoring formula change, no auth/session system, no provider setup, no deployment, and no GitHub Actions change.
+
+## MVP Spec Generation
+
+The M6 MVP Spec slice turns one persisted opportunity detail view model into copyable, Codex-ready Markdown.
+
+- `agents/mvp-spec-agent.ts` exposes `generateMvpSpec()` and deterministic local Markdown generation. It can use injected LLM and safe-JSON dependencies in tests, but the default path does not create providers, read secrets, read `process.env`, call the network, or require package changes.
+- `POST /api/opportunities/{id}/mvp-spec` loads the persisted opportunity, generates Markdown, upserts the existing `MvpSpec` table by `opportunityId`, and returns `{ "data": { ... } }` with markdown, model id, and timestamps.
+- `/opportunities/{id}` shows an MVP Spec panel with empty, loading, error, already-generated, generate/regenerate, and Copy Markdown states. Reopening the detail page displays the persisted spec when one exists.
+
+The generated Markdown includes page structure, form fields, data model notes, API routes, result behavior, monetization entry points, risk notes, a 48-hour build checklist, acceptance criteria, and kill criteria. It is meant for local build planning, not public publishing.
+
+Local data dependency: the route needs an existing `Opportunity` row with its related `RadarTask` and `SearchRun`. Seed radar tasks with `npm run db:seed`, then create opportunities through the local scan flow before generating a spec.
+
+This MVP still assumes a single local admin. It does not add sessions, public auth, ownership checks, billing, telemetry, public sharing, deployment, provider setup, schema migrations, scan orchestration changes, scoring formula changes, or package dependencies.
+
+Validate this slice with:
+
+```bash
+npx tsx --test tests/mvp-spec-agent.test.ts tests/mvp-spec-api.test.ts tests/opportunities.test.ts
+npm test
+npm run build
+git diff --check
+```
 
 ## Local Radar Task API
 

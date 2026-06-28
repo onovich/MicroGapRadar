@@ -1,0 +1,170 @@
+{
+  "message_id": "MSG-20260628-SYSTEMS_ARCHITECT",
+  "task_id": "M6-MVP-SPEC-GENERATION-001",
+  "from_role": "systems_architect",
+  "status": "ACCEPT",
+  "summary": "Systems architecture review accepts the M6 MVP Spec generation slice. The implementation keeps the MVP Spec agent as a pure generation boundary over the persisted Opportunity detail view model, keeps DB loading/upsert/serialization ownership in lib/opportunities.ts, exposes only the nested POST /api/opportunities/{id}/mvp-spec route, upserts the existing MvpSpec record by opportunityId, returns JSON-safe markdown/model/timestamps, and integrates the detail-page Generate/Regenerate/Copy panel without schema, package, provider, env, auth, scan, scoring, status, list, or dashboard expansion.",
+  "artifacts": [
+    "agents/mvp-spec-agent.ts",
+    "agents/index.ts",
+    "app/api/opportunities/[id]/mvp-spec/_api.ts",
+    "app/api/opportunities/[id]/mvp-spec/route.ts",
+    "components/MvpSpecPanel.tsx",
+    "components/OpportunityDetail.tsx",
+    "lib/opportunities.ts",
+    "tests/mvp-spec-agent.test.ts",
+    "tests/mvp-spec-api.test.ts",
+    "tests/opportunities.test.ts",
+    "README.md",
+    "project/messages/outbox/M6-MVP-SPEC-GENERATION-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json"
+  ],
+  "artifacts_reviewed": [
+    "AGENTS.md",
+    "project/tasks/active/M6-MVP-SPEC-GENERATION-001.json",
+    "project/messages/outbox/M6-MVP-SPEC-GENERATION-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+    "agents/mvp-spec-agent.ts",
+    "agents/index.ts",
+    "app/api/opportunities/[id]/mvp-spec/_api.ts",
+    "app/api/opportunities/[id]/mvp-spec/route.ts",
+    "components/MvpSpecPanel.tsx",
+    "components/OpportunityDetail.tsx",
+    "lib/opportunities.ts",
+    "tests/mvp-spec-agent.test.ts",
+    "tests/mvp-spec-api.test.ts",
+    "tests/opportunities.test.ts",
+    "README.md"
+  ],
+  "branch_or_worktree": "main",
+  "commit": null,
+  "findings": [],
+  "scope_review": {
+    "product_paths_allowed": true,
+    "forbidden_product_creep_found": false,
+    "notes": [
+      "Status wrapper showed product changes limited to README.md, agents/index.ts, agents/mvp-spec-agent.ts, app/api/opportunities/[id]/mvp-spec/**, components/MvpSpecPanel.tsx, components/OpportunityDetail.tsx, lib/opportunities.ts, tests/mvp-spec-agent.test.ts, tests/mvp-spec-api.test.ts, and tests/opportunities.test.ts.",
+      "The implementation handoff under project/messages/outbox is JustGoal coordination state requested by this workflow, not product implementation creep.",
+      "A protected-path diff over package.json, package-lock.json, prisma/**, lib/db.ts, lib/env.ts, lib/radar-tasks.ts, lib/scoring.ts, lib/schemas.ts, services/**, scan APIs, radar-task APIs, the existing opportunity status API files, list/dashboard/root pages, app shell/global CSS, docs/**, mock-data/**, skills/**, .codex/**, and .agents/** produced no product diff."
+    ]
+  },
+  "architecture_review": [
+    {
+      "area": "agent_input_and_generation_boundary",
+      "status": "PASS",
+      "evidence": [
+        "agents/mvp-spec-agent.ts:43 defines MvpSpecOpportunityInputSchema around detail-view fields such as keyword, title, targetUser, scoreBreakdownItems, toolConcept, and killCriteria rather than raw Prisma rows.",
+        "lib/opportunities.ts:415 serializes the persisted opportunity through serializeOpportunityDetail() before calling the generator, so the agent receives the persisted Opportunity detail view model.",
+        "agents/mvp-spec-agent.ts:111 defaults generateMvpSpec() to deterministic Markdown when no llmClient is injected; agents/mvp-spec-agent.ts:125 uses safeJsonCompletion only through explicit injection/default utility and does not construct providers or read env."
+      ]
+    },
+    {
+      "area": "persistence_helper_ownership",
+      "status": "PASS",
+      "evidence": [
+        "lib/opportunities.ts:400 owns generateAndPersistMvpSpec(), including id parsing, persisted opportunity loading, generation, upsert, and serialization.",
+        "app/api/opportunities/[id]/mvp-spec/_api.ts:85 keeps the route handler injectable and thin; app/api/opportunities/[id]/mvp-spec/route.ts:3 exports only POST.",
+        "components/MvpSpecPanel.tsx:30 calls the route with fetch but imports no Prisma/db helper and performs no persistence directly."
+      ]
+    },
+    {
+      "area": "mvp_spec_upsert_shape",
+      "status": "PASS",
+      "evidence": [
+        "lib/opportunities.ts:420 calls dbClient.mvpSpec.upsert with where: { opportunityId: id } against the existing unique field.",
+        "lib/opportunities.ts:423 and lib/opportunities.ts:428 persist only opportunityId, markdown, and generatedByModel on create/update.",
+        "lib/opportunities.ts:24 defines a narrow MvpSpec select for id, opportunityId, markdown, generatedByModel, createdAt, and updatedAt."
+      ]
+    },
+    {
+      "area": "serialization_and_detail_reload",
+      "status": "PASS",
+      "evidence": [
+        "lib/opportunities.ts:33 extends the detail include with mvpSpec select without changing list/dashboard includes.",
+        "lib/opportunities.ts:390 loads detail pages with opportunityDetailInclude, so reopening /opportunities/{id} can display an existing persisted spec.",
+        "lib/opportunities.ts:922 serializes MvpSpec rows into plain JSON-safe strings with ISO createdAt and updatedAt values.",
+        "lib/opportunities.ts:637 adds mvpSpec to OpportunityDetailViewModel through serializeMvpSpec(getMvpSpecFromOpportunity(opportunity))."
+      ]
+    },
+    {
+      "area": "api_error_boundary",
+      "status": "PASS",
+      "evidence": [
+        "app/api/opportunities/[id]/mvp-spec/_api.ts:49 maps missing/malformed ids and missing opportunities to sanitized NOT_FOUND.",
+        "app/api/opportunities/[id]/mvp-spec/_api.ts:53 maps MvpSpecGenerationValidationError to sanitized AGENT_VALIDATION_ERROR.",
+        "app/api/opportunities/[id]/mvp-spec/_api.ts:61 maps Zod errors to issues without raw input payload text, and app/api/opportunities/[id]/mvp-spec/_api.ts:75 logs unexpected errors server-side while returning a generic INTERNAL_ERROR."
+      ]
+    },
+    {
+      "area": "detail_page_minimal_integration",
+      "status": "PASS",
+      "evidence": [
+        "components/OpportunityDetail.tsx:17 builds only the nested mvp-spec URL alongside the existing status URL.",
+        "components/OpportunityDetail.tsx:140 inserts MvpSpecPanel with opportunity.mvpSpec, leaving status controls, score sections, list pages, and dashboard pages untouched.",
+        "components/MvpSpecPanel.tsx:18 keeps generated spec state local to the panel and components/MvpSpecPanel.tsx:98 exposes Generate/Regenerate while components/MvpSpecPanel.tsx:107 exposes Copy Markdown."
+      ]
+    },
+    {
+      "area": "non_goal_boundaries",
+      "status": "PASS",
+      "evidence": [
+        "Searches over the changed M6 surface found no process.env reads, provider construction, auth/session wiring, scan orchestration call, scoring formula call, status mutation change, list/dashboard route change, package change, or Prisma schema change.",
+        "README.md:356 documents the default MVP Spec path as deterministic/local without provider/env/network/package requirements, and README.md:364 lists schema/provider/env/auth/scan/scoring/package/deployment non-goals."
+      ]
+    }
+  ],
+  "decisions": [
+    "ACCEPT: The agent input boundary is the persisted Opportunity detail view model and not Prisma rows or raw scan objects.",
+    "ACCEPT: The route remains under app/api/opportunities/[id]/mvp-spec and the existing app/api/opportunities/[id]/ status files are not changed.",
+    "ACCEPT: Persistence and serialization ownership remain in lib/opportunities.ts, with no DB writes in the agent or client UI.",
+    "ACCEPT: MvpSpec persistence uses upsert by opportunityId and returns a JSON-safe view model with markdown, generatedByModel, createdAt, and updatedAt.",
+    "ACCEPT: Detail serialization loads and displays an already-generated persisted spec.",
+    "ACCEPT: The diff stays within the M6 scope and avoids forbidden schema/package/provider/env/auth/scan/scoring/status/list/dashboard expansion."
+  ],
+  "risks": [
+    "The endpoint remains unauthenticated under the documented local single-admin MVP assumption; public deployment still needs a later auth/session/ownership slice.",
+    "The deterministic Markdown is intentionally template-based. It satisfies the systems boundary, but domain usefulness should still be reviewed by the domain_designer gate.",
+    "generateAndPersistMvpSpec() validates injected generated output for non-empty markdown/model before persistence; the production default generator enforces the required section schema, but a future custom injected generator should preserve that stronger validation contract deliberately.",
+    "The UI renders full Markdown in-page for copyability. Very large future specs may need a more compact preview, but the current panel is bounded by max height and remains acceptable for this MVP."
+  ],
+  "tests_run": [
+    {
+      "command": "C:\\Users\\Administrator\\.codex\\skills\\project-git-workflow\\scripts\\git\\Status.cmd",
+      "exit_code": 0,
+      "result": "PASS: working tree shows only the M6 product files and the implementation handoff before this reviewer handoff."
+    },
+    {
+      "command": "git diff -- package.json package-lock.json prisma lib/db.ts lib/env.ts lib/radar-tasks.ts lib/scoring.ts lib/schemas.ts services app/api/scans app/api/radar-tasks app/api/opportunities/[id]/route.ts app/api/opportunities/[id]/_api.ts app/opportunities/page.tsx app/dashboard app/page.tsx app/layout.tsx app/globals.css docs mock-data skills .codex .agents",
+      "exit_code": 0,
+      "result": "PASS: no forbidden product-path diff output."
+    },
+    {
+      "command": "node .agents\\skills\\just-goal\\scripts\\validate-handoff.mjs project\\messages\\outbox\\M6-MVP-SPEC-GENERATION-001__MSG-20260628-IMPLEMENTATION_ENGINEER.json",
+      "exit_code": 0,
+      "result": "PASS: incoming implementation handoff JSON validated."
+    },
+    {
+      "command": "npx tsx --test tests\\mvp-spec-agent.test.ts tests\\mvp-spec-api.test.ts tests\\opportunities.test.ts",
+      "exit_code": 0,
+      "result": "PASS per main-thread validation evidence supplied with this review request: 26 focused tests passed."
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "PASS per main-thread validation evidence supplied with this review request: 72 tests passed."
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "result": "PASS per main-thread validation evidence supplied with this review request: Next.js production build passed with nonfatal Windows SWC optional native package warnings."
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS per main-thread validation evidence supplied with this review request: no whitespace errors; Git printed LF-to-CRLF warnings for touched tracked files."
+    }
+  ],
+  "blockers": [],
+  "requested_changes": [],
+  "route_to": "lead_orchestrator",
+  "requested_action": "Systems architecture accepts M6-MVP-SPEC-GENERATION-001. Proceed with the remaining reviewer gates or final lead orchestration; no implementation changes are requested from systems architecture.",
+  "created_at": "2026-06-28T21:52:26.3320414+08:00"
+}

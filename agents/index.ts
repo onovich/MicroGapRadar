@@ -86,3 +86,19 @@ export type {
   OpportunityToolConcept,
   OpportunityToolType,
 } from "./opportunity-analysis-agent";
+export {
+  buildMvpSpecMessages,
+  generateDeterministicMvpSpecMarkdown,
+  generateMvpSpec,
+  MVP_SPEC_LOCAL_MODEL,
+  MVP_SPEC_PROMPT_VERSION,
+  MvpSpecAgentResponseSchema,
+  MvpSpecOpportunityInputSchema,
+} from "./mvp-spec-agent";
+export type {
+  MvpSpecAgentOptions,
+  MvpSpecAgentOutput,
+  MvpSpecAgentResponse,
+  MvpSpecOpportunityInput,
+  MvpSpecSafeJsonCompletion,
+} from "./mvp-spec-agent";
