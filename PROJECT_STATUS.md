@@ -1,6 +1,6 @@
 # Project Status
 
-Updated at: 2026-06-28T05:05:21Z
+Updated at: 2026-06-28T05:45:22Z
 
 ## Current Milestone
 
@@ -8,7 +8,7 @@ Updated at: 2026-06-28T05:05:21Z
 
 ## Current Outcome
 
-Completed the M0 scaffold, the M1 database base, the Radar Task API slice, and the mock SERP provider slice:
+Completed the M0 scaffold, the M1 database base, the Radar Task API slice, the mock SERP provider slice, and the LLM JSON client boundary:
 
 - The orchestrator skill is installed globally and in the repository.
 - Project orchestration state exists under `project/`.
@@ -20,6 +20,8 @@ Completed the M0 scaffold, the M1 database base, the Radar Task API slice, and t
 - Local Radar Task API routes now support list/create/read/update/non-destructive delete, with strict Zod validation and structured JSON errors.
 - `M3-SERP-MOCK-PROVIDER-001` is accepted, integrated, and pushed at `73f0ce9435fe75e2282a5ab8d56784ec4ba64eba`.
 - The reusable SERP provider contract, deterministic mock provider, provider factory, README documentation, and focused provider tests are in place.
+- `M3-LLM-JSON-CLIENT-001` is accepted, integrated, and pushed at `b4c13084e6235fac66bca2277d58db2ff7cd1d39`.
+- The reusable LLM client contract, OpenAI-compatible explicit-config adapter, safe JSON parse/Zod validation/one-repair flow, README documentation, and focused no-secret/no-network tests are in place.
 - `JustGoal` is installed at `.agents/skills/just-goal` and its source repository is published at `git@github.com:onovich/JustGoal.skill.git`.
 
 ## Product Summary
@@ -38,7 +40,7 @@ MicroGap Radar is a self-use-first AI microtool opportunity radar. The 48-hour M
 
 ## Active Task
 
-- `M3-LLM-JSON-CLIENT-001`: add an OpenAI-compatible LLM client boundary plus safe JSON parse, Zod validation, and one-step repair flow. This task must not add real LLM calls, environment-variable secret loading, agent implementations, scan orchestration, persistence, API routes, UI, auth, cron, deployment, or paid service setup.
+- `M3-KEYWORD-EXPANSION-AGENT-001`: add the Keyword Expansion Agent with typed schemas, prompt construction, safe JSON completion wiring, and deterministic mock fallback. This task must not add SERP analysis, opportunity analysis, scoring, scan orchestration, persistence, API routes, UI, auth, cron, deployment, real LLM provider wiring, or paid service setup.
 
 ## Human Gates
 

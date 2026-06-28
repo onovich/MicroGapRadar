@@ -1,0 +1,71 @@
+{
+  "id": "M3-KEYWORD-EXPANSION-AGENT-001",
+  "summary": "Add the Keyword Expansion Agent with typed schemas, prompt construction, safe JSON completion wiring, and deterministic mock fallback.",
+  "milestone": "M3",
+  "status": "READY",
+  "owner_role": "implementation_engineer",
+  "reviewer_role": "qa_reviewer",
+  "required_reviewers": [
+    "systems_architect"
+  ],
+  "risk_level": "R2",
+  "dependencies": [
+    "M3-LLM-JSON-CLIENT-001"
+  ],
+  "scope": {
+    "allowed_paths": [
+      "agents/**",
+      "tests/**",
+      "README.md"
+    ],
+    "forbidden_paths": [
+      ".git/**",
+      ".codex/**",
+      ".agents/**",
+      "project/**",
+      "skills/**",
+      "docs/**",
+      "mock-data/**",
+      "app/**",
+      "components/**",
+      "lib/**",
+      "prisma/**",
+      "services/serp/**",
+      "services/llm/**",
+      "services/scan-orchestrator.ts",
+      "package.json",
+      "package-lock.json"
+    ]
+  },
+  "acceptance_criteria": [
+    "A reusable Keyword Expansion Agent module exists under agents/ with typed input, candidate output, Zod schemas, and a stable public function for generating keyword candidates.",
+    "The agent builds a prompt aligned with docs/08_ai_agents_and_prompts.md and calls the existing safeJsonCompletion() utility through an injected LlmClient when one is provided.",
+    "The agent provides a deterministic mock fallback that can generate 20 usable candidates without external API keys, process.env reads, network calls, database writes, or paid services.",
+    "Generated candidates are normalized, limited to the requested count, include country/language/intent/tool/rationale fields, and exclude configured excludedTopics with a case-insensitive guard.",
+    "Focused automated tests cover LLM success, malformed or rejected LLM output falling back to mock candidates, excluded topic filtering, deterministic fallback output, and requested count limits.",
+    "README documents the Keyword Expansion Agent slice, mock fallback behavior, no-secret/no-network policy, and the test command.",
+    "No SERP analysis, opportunity analysis, scoring engine, scan orchestration, database persistence, API route, UI, auth, cron, deployment, real LLM provider wiring, or paid service setup is implemented."
+  ],
+  "required_tests": [
+    "npm test",
+    "npm run build"
+  ],
+  "branch_or_worktree": "main",
+  "threads": {},
+  "route_to": "implementation_engineer",
+  "notes": [
+    "Derived from docs/08_ai_agents_and_prompts.md Agent 1 prompt/schema and docs/11_development_plan.md recommended step 7 after LLM JSON client.",
+    "docs/09_codex_implementation_tasks.md mentions saving candidates to the database for Task 7; this smaller slice deliberately defers persistence to the later scan orchestrator/API task to keep the agent foundation verifiable and no-side-effect.",
+    "systems_architect is required because this introduces the agents/ boundary and will feed the scan pipeline.",
+    "Keep prompts centralized in agents/ and keep components/API routes out of scope."
+  ],
+  "non_goals": [
+    "No SERP Analysis Agent, Opportunity Analysis Agent, scoring engine, MVP Spec Agent, or scan orchestrator.",
+    "No KeywordCandidate database writes or Prisma/lib changes.",
+    "No /api/scans/run route, dashboard integration, or UI changes.",
+    "No real LLM provider configuration, environment-variable secret loading, real network calls in tests, or paid service setup.",
+    "No changes to services/llm or services/serp contracts."
+  ],
+  "created_at": "2026-06-28T05:45:22Z",
+  "updated_at": "2026-06-28T05:45:22Z"
+}
